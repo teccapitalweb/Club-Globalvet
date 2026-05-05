@@ -64,26 +64,8 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 /* PAGE CONTENT */
 .page-content { padding: 32px 40px; flex: 1; }
 .page-content[data-page] { display: none; opacity: 0; transform: translateY(12px); overflow-x: hidden; min-width: 0; }
-.page-content.active { display: block; animation: pageIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
-@keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-/* Staggered children animation */
-.page-content.active .page-header { animation: fadeChild 0.4s 0.05s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .filter-tabs,
-.page-content.active .greeting,
-.page-content.active .feature-row,
-.page-content.active .coupon-wrapper,
-.page-content.active .channel-wrapper { animation: fadeChild 0.4s 0.12s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .stats-strip,
-.page-content.active .lib-grid,
-.page-content.active .webinar-list,
-.page-content.active .pdf-grid,
-.page-content.active .news-full-list,
-.page-content.active .channel-benefits { animation: fadeChild 0.45s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .courses-h-scroll,
-.page-content.active .news-carousel-wrap { animation: fadeChild 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .right-col { animation: fadeChild 0.5s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
-@keyframes fadeChild { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.page-content.active { display: block; animation: pageIn 0.35s cubic-bezier(0.16,1,0.3,1) forwards; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Sidebar link active transition */
 .sidebar__link { transition: all 0.2s ease, background 0.25s ease, color 0.25s ease; }
