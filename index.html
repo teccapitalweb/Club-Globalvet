@@ -62,7 +62,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .topbar__btn:hover { border-color: var(--purple-200); color: var(--purple-600); }
 
 /* PAGE CONTENT */
-.page-content { padding: 32px; max-width: 1100px; flex: 1; }
+.page-content { padding: 32px 40px; flex: 1; }
 .page-content[data-page] { display: none; opacity: 0; transform: translateY(12px); overflow-x: hidden; min-width: 0; }
 .page-content.active { display: block; animation: pageIn 0.4s cubic-bezier(0.16,1,0.3,1) forwards; }
 @keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
@@ -99,7 +99,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .section-header__link { font-size: 0.78rem; color: var(--purple-600); text-decoration: none; font-weight: 500; }
 
 /* ============ INICIO ============ */
-.home-layout { display: grid; grid-template-columns: 1fr 310px; gap: 28px; min-width: 0; }
+.home-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; min-width: 0; }
 .home-layout > * { min-width: 0; }
 .greeting { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--gray-100); }
 .greeting__text h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 4px; }
@@ -148,7 +148,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .stats-strip__val { font-size: 1.3rem; font-weight: 700; color: var(--gray-900); line-height: 1; }
 .stats-strip__lbl { font-size: 0.7rem; color: var(--gray-400); margin-top: 2px; }
 
-.courses-h-scroll { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 28px; }
+.courses-h-scroll { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 28px; }
 .course-h-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 22px; cursor: pointer; transition: all var(--transition); display: flex; flex-direction: column; }
 .course-h-card:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .course-h-card__top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
@@ -207,7 +207,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .filter-tab { padding: 8px 20px; border-radius: 50px; border: 1px solid var(--gray-200); background: var(--white); font-size: 0.8rem; font-weight: 500; color: var(--gray-500); cursor: pointer; transition: all var(--transition); font-family: var(--font-body); }
 .filter-tab:hover { border-color: var(--purple-200); color: var(--purple-600); }
 .filter-tab.active { background: var(--purple-900); color: white; border-color: var(--purple-900); }
-.lib-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .lib-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; transition: all var(--transition); }
 .lib-card:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); transform: translateY(-2px); }
 .lib-card__img { width: 100%; height: 160px; background: linear-gradient(145deg, var(--purple-50), var(--purple-100)); position: relative; }
@@ -239,7 +239,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .btn-sm--done { background: var(--purple-100); color: var(--purple-900); border-color: var(--purple-200); cursor: default; }
 
 /* ============ MATERIAL PDF ============ */
-.pdf-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.pdf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
 .pdf-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 24px; display: flex; align-items: flex-start; gap: 14px; transition: all var(--transition); cursor: pointer; }
 .pdf-card:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); }
 .pdf-card__icon { width: 44px; height: 44px; border-radius: 10px; display: grid; place-items: center; border: 1px solid var(--gray-200); color: var(--gray-400); flex-shrink: 0; }
@@ -263,7 +263,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 
 /* ============ DESCUENTO ============ */
 .coupon-wrapper { display: flex; justify-content: center; padding-top: 20px; }
-.coupon-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 48px; text-align: center; max-width: 440px; width: 100%; }
+.coupon-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 48px; text-align: center; max-width: 520px; width: 100%; }
 .coupon-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em; font-weight: 600; color: var(--purple-600); margin-bottom: 12px; }
 .coupon-pct { font-family: var(--font-display); font-size: 5rem; font-weight: 800; color: var(--purple-900); line-height: 1; margin-bottom: 8px; letter-spacing: -0.04em; }
 .coupon-desc { font-size: 0.92rem; color: var(--gray-600); margin-bottom: 28px; line-height: 1.5; }
@@ -278,14 +278,14 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 
 /* ============ CANAL ============ */
 .channel-wrapper { display: flex; flex-direction: column; align-items: center; gap: 20px; padding-top: 20px; }
-.channel-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 48px; text-align: center; max-width: 480px; width: 100%; }
+.channel-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 48px; text-align: center; max-width: 560px; width: 100%; }
 .channel-icon { width: 64px; height: 64px; margin: 0 auto 16px; background: #e8f5e9; border-radius: 50%; display: grid; place-items: center; }
 .channel-icon svg { width: 32px; height: 32px; color: #25D366; }
 .channel-title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--gray-900); margin-bottom: 8px; }
 .channel-desc { font-size: 0.85rem; color: var(--gray-400); margin-bottom: 24px; line-height: 1.6; }
 .channel-join-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; border-radius: 50px; background: #25D366; color: white; font-size: 0.88rem; font-weight: 600; border: none; cursor: pointer; font-family: var(--font-body); transition: all var(--transition); }
 .channel-join-btn:hover { background: #20bd5a; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,211,102,0.3); }
-.channel-benefits { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 36px; max-width: 480px; width: 100%; }
+.channel-benefits { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 36px; max-width: 560px; width: 100%; }
 .channel-benefits__title { font-family: var(--font-display); font-size: 1rem; font-weight: 700; color: var(--gray-800); text-align: center; margin-bottom: 24px; }
 .channel-benefit { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--gray-50); }
 .channel-benefit:last-child { border-bottom: none; }
@@ -543,7 +543,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
       <div class="coupon-note">Válido en la página oficial y consultas presenciales.<br>Uso ilimitado durante tu suscripción activa.</div>
       <div class="coupon-divider"></div>
       <div class="coupon-help">¿Necesitas ayuda para aplicar tu descuento?</div>
-      <button class="coupon-wa-btn"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;stroke:none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg> Aplicar descuento</button>
+      <a href="https://wa.me/522361130601?text=Hola%2C%20quiero%20aplicar%20mi%20descuento%20de%20miembro%20CLUB20VET%20%C2%BFCu%C3%A1les%20son%20sus%20cursos%20disponibles%3F" target="_blank" class="coupon-wa-btn" style="text-decoration:none"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;stroke:none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg> Aplicar descuento</a>
     </div></div>
   </div>
 
