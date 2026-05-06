@@ -1364,30 +1364,41 @@ body.dark #darkToggle .icon-sun { display: block; }
 <script>
 function downloadFicha(){
   var btn=event.target.closest('button');btn.textContent='Generando...';btn.disabled=true;
+  var wasDark=document.body.classList.contains('dark');
+  if(wasDark)document.body.classList.remove('dark');
   var logo=document.querySelector('.print-logo');
   logo.style.display='flex';
   var cards=document.querySelectorAll('[data-page="ficha"] .s-card');
   var wrap=document.createElement('div');
-  wrap.style.cssText='padding:20px;font-family:Plus Jakarta Sans,sans-serif;max-width:700px;';
-  wrap.appendChild(logo.cloneNode(true));
+  wrap.style.cssText='padding:20px;font-family:Plus Jakarta Sans,sans-serif;max-width:700px;background:#fff;color:#000;';
+  var logoClone=logo.cloneNode(true);
+  logoClone.style.cssText='display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #4b1c71;';
+  logoClone.querySelector('img').style.cssText='width:50px;height:50px;border-radius:8px;';
+  var logoText=logoClone.querySelector('.print-logo__text');
+  if(logoText){logoText.querySelector('h2').style.cssText='font-size:18px;font-weight:700;color:#4b1c71;margin:0;';logoText.querySelector('p').style.cssText='font-size:11px;color:#737373;margin:0;';}
+  wrap.appendChild(logoClone);
   cards.forEach(function(c){
     var cl=c.cloneNode(true);
-    cl.style.cssText='border:none;padding:8px 0;margin-bottom:8px;';
-    cl.querySelectorAll('.form-input,.form-textarea').forEach(function(inp){
-      var p=document.createElement('p');
-      p.style.cssText='font-size:13px;color:#000;padding:4px 0;border-bottom:1px solid #e5e5e5;margin:0 0 8px;min-height:20px;';
-      p.textContent=inp.value||inp.placeholder||'';
-      inp.parentNode.replaceChild(p,inp);
-    });
-    cl.querySelectorAll('.form-label').forEach(function(l){l.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#333;margin-bottom:2px;';});
+    cl.style.cssText='border:none;padding:12px 0;margin-bottom:4px;background:#fff;';
     cl.querySelectorAll('.s-card__title').forEach(function(t){t.style.cssText='font-size:15px;font-weight:700;color:#000;border-bottom:1px solid #d4d4d4;padding-bottom:6px;margin-bottom:12px;';});
     cl.querySelectorAll('.s-card__desc').forEach(function(d){d.remove();});
     cl.querySelectorAll('.ficha-actions').forEach(function(a){a.remove();});
+    cl.querySelectorAll('.ficha-section').forEach(function(s){s.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:12px;';});
+    cl.querySelectorAll('.ficha-full').forEach(function(f){f.style.gridColumn='1/-1';});
+    cl.querySelectorAll('.form-label').forEach(function(l){l.style.cssText='font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#555;margin-bottom:2px;display:block;';});
+    cl.querySelectorAll('.form-input,.form-textarea').forEach(function(inp){
+      var p=document.createElement('p');
+      p.style.cssText='font-size:13px;color:#000;padding:4px 0;border-bottom:1px solid #ddd;margin:0 0 10px;min-height:18px;';
+      p.textContent=inp.value||'';
+      inp.parentNode.replaceChild(p,inp);
+    });
+    cl.querySelectorAll('.form-group').forEach(function(g){g.style.cssText='margin-bottom:4px;';});
     wrap.appendChild(cl);
   });
   logo.style.display='';
   var nombre=document.querySelector('[data-page="ficha"] .form-input').value||'Paciente';
-  html2pdf().set({margin:[10,10,10,10],filename:'Ficha_'+nombre.replace(/\s/g,'_')+'_GlobalVet.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){
+  html2pdf().set({margin:[10,10,10,10],filename:'Ficha_'+nombre.replace(/\s/g,'_')+'_GlobalVet.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){
+    if(wasDark)document.body.classList.add('dark');
     btn.innerHTML='<svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF';
     btn.disabled=false;
   });
