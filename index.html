@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GlobalVet México — Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -1096,7 +1097,8 @@ body.dark #darkToggle .icon-sun { display: block; }
       <div class="form-group"><label class="form-label">Tratamiento indicado</label><textarea class="form-input form-textarea" placeholder="Fármacos, dosis, vía, frecuencia, duración..."></textarea></div>
       <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-input form-textarea" placeholder="Notas adicionales..."></textarea></div>
       <div class="ficha-actions">
-        <button class="btn-save" onclick="window.print()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
+        <button class="btn-save" onclick="downloadFicha()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
+        <button class="btn-outline" onclick="window.print()"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg> Imprimir</button>
         <button class="btn-outline" onclick="document.querySelectorAll('[data-page=ficha] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
       </div>
     </div>
@@ -1360,6 +1362,36 @@ body.dark #darkToggle .icon-sun { display: block; }
 </div>
 
 <script>
+function downloadFicha(){
+  var btn=event.target.closest('button');btn.textContent='Generando...';btn.disabled=true;
+  var logo=document.querySelector('.print-logo');
+  logo.style.display='flex';
+  var cards=document.querySelectorAll('[data-page="ficha"] .s-card');
+  var wrap=document.createElement('div');
+  wrap.style.cssText='padding:20px;font-family:Plus Jakarta Sans,sans-serif;max-width:700px;';
+  wrap.appendChild(logo.cloneNode(true));
+  cards.forEach(function(c){
+    var cl=c.cloneNode(true);
+    cl.style.cssText='border:none;padding:8px 0;margin-bottom:8px;';
+    cl.querySelectorAll('.form-input,.form-textarea').forEach(function(inp){
+      var p=document.createElement('p');
+      p.style.cssText='font-size:13px;color:#000;padding:4px 0;border-bottom:1px solid #e5e5e5;margin:0 0 8px;min-height:20px;';
+      p.textContent=inp.value||inp.placeholder||'';
+      inp.parentNode.replaceChild(p,inp);
+    });
+    cl.querySelectorAll('.form-label').forEach(function(l){l.style.cssText='font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#333;margin-bottom:2px;';});
+    cl.querySelectorAll('.s-card__title').forEach(function(t){t.style.cssText='font-size:15px;font-weight:700;color:#000;border-bottom:1px solid #d4d4d4;padding-bottom:6px;margin-bottom:12px;';});
+    cl.querySelectorAll('.s-card__desc').forEach(function(d){d.remove();});
+    cl.querySelectorAll('.ficha-actions').forEach(function(a){a.remove();});
+    wrap.appendChild(cl);
+  });
+  logo.style.display='';
+  var nombre=document.querySelector('[data-page="ficha"] .form-input').value||'Paciente';
+  html2pdf().set({margin:[10,10,10,10],filename:'Ficha_'+nombre.replace(/\s/g,'_')+'_GlobalVet.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}}).from(wrap).save().then(function(){
+    btn.innerHTML='<svg style="width:16px;height:16px;stroke:white;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF';
+    btn.disabled=false;
+  });
+}
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
