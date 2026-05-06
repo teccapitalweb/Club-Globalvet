@@ -21,6 +21,31 @@
 }
 html { scroll-behavior: smooth; }
 body { font-family: var(--font-body); color: var(--gray-900); background: var(--gray-50); line-height: 1.5; -webkit-font-smoothing: antialiased; display: flex; min-height: 100vh; overflow-x: hidden; width: 100%; }
+/* Subtle scrollbar everywhere */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gray-300); }
+* { scrollbar-width: thin; scrollbar-color: var(--gray-200) transparent; }
+
+/* Print / PDF styles */
+.print-logo { display: none; }
+@media print {
+  body { background: white !important; }
+  .sidebar, .sidebar-overlay, .topbar, .ficha-actions, .page-header { display: none !important; }
+  .main-wrapper { margin-left: 0 !important; }
+  .page-content { padding: 0 !important; }
+  .page-content:not([data-page="ficha"]) { display: none !important; }
+  .page-content[data-page="ficha"] { display: block !important; opacity: 1 !important; }
+  .print-logo { display: flex !important; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #4b1c71; }
+  .print-logo img { width: 60px; height: 60px; border-radius: 10px; }
+  .print-logo__text { font-family: 'Sora', sans-serif; }
+  .print-logo__text h2 { font-size: 1.3rem; font-weight: 700; color: #4b1c71; }
+  .print-logo__text p { font-size: 0.75rem; color: #737373; }
+  .s-card { border: 1px solid #e5e5e5 !important; break-inside: avoid; margin-bottom: 16px !important; padding: 20px !important; }
+  .s-card__title { font-size: 1rem !important; }
+  .form-input { border: 1px solid #d4d4d4 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 .icon { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
 /* SIDEBAR */
@@ -60,6 +85,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .topbar__actions { display: flex; align-items: center; gap: 6px; }
 .topbar__btn { width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--gray-100); background: var(--white); display: grid; place-items: center; cursor: pointer; color: var(--gray-400); transition: all var(--transition); }
 .topbar__btn:hover { border-color: var(--purple-200); color: var(--purple-600); }
+.topbar__btn svg { width: 18px; height: 18px; }
 
 /* PAGE CONTENT */
 .page-content { padding: 32px 40px; flex: 1; }
@@ -822,6 +848,10 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
   <!-- ==================== FICHA PACIENTE ==================== -->
   <div class="page-content" data-page="ficha">
     <div class="page-header"><h1 class="page-header__title">Ficha Paciente</h1><p class="page-header__desc">Formato digital de historial clínico. Llena los datos y descarga como PDF.</p></div>
+    <div class="print-logo">
+      <img src="data:image/jpeg;base64,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" alt="GlobalVet México">
+      <div class="print-logo__text"><h2>GlobalVet México</h2><p>Ficha Clínica del Paciente</p></div>
+    </div>
     <div class="s-card">
       <div class="s-card__title">Datos del paciente</div>
       <div class="s-card__desc">Completa la información clínica del paciente.</div>
@@ -859,7 +889,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
       <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-input form-textarea" placeholder="Notas adicionales..."></textarea></div>
       <div class="ficha-actions">
         <button class="btn-save" onclick="window.print()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
-        <button class="btn-outline">Limpiar campos</button>
+        <button class="btn-outline" onclick="document.querySelectorAll('[data-page=ficha] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
       </div>
     </div>
   </div>
