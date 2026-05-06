@@ -34,17 +34,23 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
   body { background: white !important; }
   .sidebar, .sidebar-overlay, .topbar, .ficha-actions, .page-header { display: none !important; }
   .main-wrapper { margin-left: 0 !important; }
-  .page-content { padding: 0 !important; }
+  .page-content { padding: 10px 20px !important; }
   .page-content:not([data-page="ficha"]) { display: none !important; }
   .page-content[data-page="ficha"] { display: block !important; opacity: 1 !important; }
-  .print-logo { display: flex !important; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #4b1c71; }
-  .print-logo img { width: 60px; height: 60px; border-radius: 10px; }
+  .print-logo { display: flex !important; align-items: center; gap: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #4b1c71; }
+  .print-logo img { width: 50px; height: 50px; border-radius: 8px; }
   .print-logo__text { font-family: 'Sora', sans-serif; }
-  .print-logo__text h2 { font-size: 1.3rem; font-weight: 700; color: #4b1c71; }
-  .print-logo__text p { font-size: 0.75rem; color: #737373; }
-  .s-card { border: 1px solid #e5e5e5 !important; break-inside: avoid; margin-bottom: 16px !important; padding: 20px !important; }
-  .s-card__title { font-size: 1rem !important; }
-  .form-input { border: 1px solid #d4d4d4 !important; background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-logo__text h2 { font-size: 1.1rem; font-weight: 700; color: #4b1c71; }
+  .print-logo__text p { font-size: 0.7rem; color: #737373; }
+  .s-card { border: none !important; box-shadow: none !important; padding: 8px 0 !important; margin-bottom: 8px !important; break-inside: avoid; }
+  .s-card__title { font-size: 0.92rem !important; border-bottom: 1px solid #d4d4d4; padding-bottom: 6px; margin-bottom: 10px !important; }
+  .s-card__desc { display: none !important; }
+  .ficha-section { gap: 8px !important; }
+  .form-group { margin-bottom: 6px !important; gap: 2px !important; }
+  .form-label { font-size: 0.6rem !important; color: #737373 !important; }
+  .form-input, .form-textarea { border: none !important; background: transparent !important; padding: 4px 0 !important; font-size: 0.82rem !important; border-bottom: 1px solid #e5e5e5 !important; border-radius: 0 !important; min-height: auto !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .form-textarea { min-height: 40px !important; }
+  select.form-input { background-image: none !important; }
 }
 .icon { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
 
