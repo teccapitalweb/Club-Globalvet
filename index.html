@@ -552,6 +552,198 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
   .feature-row { gap: 10px; }
   .coupon-pct { font-size: 3rem; }
 }
+/* ============ DARK MODE ============ */
+body, .sidebar, .topbar, .s-card, .stat-card, .side-card, .course-h-card, .news-carousel__card,
+.lib-card, .webinar-item, .pdf-card, .news-full-item, .resume-card, .activity-card,
+.course-item, .news-list-item, .notif-empty, .channel-card, .channel-benefits,
+.coupon-card, .stats-strip, .stats-strip__item, .score-card, .urg-card, .webinar-countdown,
+.topbar__btn, .form-input, .filter-tab, .btn-outline, .streak-badge, .side-card__icon,
+.stats-strip__icon, .course-h-card__icon, .pdf-card__icon, .pdf-card__dl,
+.channel-benefit__icon, .urg-card__icon, .course-item__thumb {
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+body.dark { --dk-bg: #121218; --dk-surface: #1a1a24; --dk-card: #22222e; --dk-border: #2a2a3a; --dk-text: #e4e4ec; --dk-muted: #8888a0; --dk-subtle: #3a3a4e; background: var(--dk-bg) !important; color: var(--dk-text); }
+body.dark .sidebar { background: var(--dk-surface); border-color: var(--dk-border); }
+body.dark .sidebar__logo { border-color: var(--dk-border); color: var(--dk-text); }
+body.dark .sidebar__section-title { color: var(--dk-muted); }
+body.dark .sidebar__link { color: var(--dk-muted); }
+body.dark .sidebar__link:hover { background: var(--dk-card); color: var(--dk-text); }
+body.dark .sidebar__link:hover svg { color: var(--dk-text); }
+body.dark .sidebar__link.active { background: rgba(127,76,165,0.15); color: var(--purple-400); }
+body.dark .sidebar__link.active svg { color: var(--purple-400); }
+body.dark .sidebar__user { border-color: var(--dk-border); }
+body.dark .sidebar__user-info h4 { color: var(--dk-text); }
+body.dark .sidebar__user-info span { color: var(--dk-muted); }
+body.dark .sidebar__logout { color: var(--dk-muted); }
+body.dark .sidebar__logout:hover { background: var(--dk-card); color: var(--dk-text); }
+
+body.dark .topbar { background: var(--dk-surface); border-color: var(--dk-border); }
+body.dark .topbar__btn { border-color: var(--dk-border); background: var(--dk-surface); color: var(--dk-muted); }
+body.dark .topbar__btn:hover { border-color: var(--purple-600); color: var(--purple-400); background: var(--dk-card); }
+body.dark .topbar__hamburger span { background: var(--dk-text); }
+
+body.dark .page-header__title { color: var(--dk-text); }
+body.dark .page-header__desc { color: var(--dk-muted); }
+body.dark .section-header__title { color: var(--dk-text); }
+
+body.dark .greeting { border-color: var(--dk-border); }
+body.dark .greeting__text h1 { color: var(--dk-text); }
+body.dark .greeting__text p { color: var(--dk-muted); }
+body.dark .greeting__streak { background: var(--dk-card); border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .greeting__streak-days { color: var(--dk-text); }
+
+body.dark .hero-card { background: linear-gradient(135deg, #1e1e30, #2a2040, #1e1e30) !important; border-color: var(--dk-border); }
+body.dark .hero-card::after { opacity: 0.15; }
+body.dark .hero-card__greeting { color: var(--purple-400); }
+body.dark .hero-card__title { color: var(--dk-text); }
+body.dark .hero-card__desc { color: var(--dk-muted); }
+body.dark .streak-badge { background: var(--dk-card); border-color: var(--dk-border); color: var(--dk-text); }
+body.dark .streak-badge__sub { color: var(--dk-muted); }
+body.dark .webinar-countdown { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .webinar-countdown__name { color: var(--dk-text); }
+body.dark .webinar-countdown__divider { background: var(--dk-border); }
+body.dark .countdown-unit__value { color: var(--dk-text); }
+
+body.dark .resume-card { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .resume-card:hover { border-color: var(--purple-600); }
+body.dark .resume-card__label { color: var(--dk-muted); }
+body.dark .resume-card__info h3 { color: var(--dk-text); }
+body.dark .resume-card__info span { color: var(--dk-muted); }
+body.dark .resume-card__btn { background: rgba(127,76,165,0.15); border-color: var(--purple-600); color: var(--purple-400); }
+body.dark .ring-bg { stroke: var(--dk-border); }
+
+body.dark .stats-strip { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .stats-strip__item { border-color: var(--dk-border); }
+body.dark .stats-strip__item:hover { background: var(--dk-surface); }
+body.dark .stats-strip__icon { border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .stats-strip__val { color: var(--dk-text); }
+body.dark .stats-strip__lbl { color: var(--dk-muted); }
+
+body.dark .course-h-card, body.dark .lib-card, body.dark .news-carousel__card,
+body.dark .news-full-item, body.dark .webinar-item, body.dark .pdf-card,
+body.dark .side-card, body.dark .activity-card, body.dark .score-card,
+body.dark .urg-card, body.dark .news-list-item, body.dark .course-item { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .course-h-card:hover, body.dark .lib-card:hover, body.dark .news-carousel__card:hover,
+body.dark .news-full-item:hover, body.dark .webinar-item:hover, body.dark .pdf-card:hover,
+body.dark .side-card:hover, body.dark .score-card:hover, body.dark .urg-card:hover,
+body.dark .course-item:hover { border-color: var(--purple-600); box-shadow: 0 4px 16px rgba(127,76,165,0.12); }
+
+body.dark .course-h-card__icon, body.dark .side-card__icon, body.dark .stats-strip__icon,
+body.dark .pdf-card__icon, body.dark .pdf-card__dl, body.dark .channel-benefit__icon,
+body.dark .urg-card__icon, body.dark .course-item__thumb { border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .course-h-card__title, body.dark .side-card__title, body.dark .course-item__title,
+body.dark .news-carousel__title, body.dark .news-full-item__title, body.dark .news-feat__title,
+body.dark .webinar-item__title, body.dark .pdf-card__title, body.dark .lib-card__title,
+body.dark .score-card__label, body.dark .urg-card__title, body.dark .news-list-item__title,
+body.dark .activity-card__title, body.dark .toggle-row__text h4, body.dark .config-row__text h4,
+body.dark .channel-benefit__text h4 { color: var(--dk-text); }
+body.dark .course-h-card__meta, body.dark .side-card__desc, body.dark .course-item__meta,
+body.dark .news-carousel__date, body.dark .news-carousel__excerpt, body.dark .news-full-item__excerpt,
+body.dark .news-full-item__date, body.dark .webinar-item__meta, body.dark .pdf-card__meta,
+body.dark .lib-card__meta, body.dark .score-card__desc, body.dark .urg-card__subtitle,
+body.dark .activity-item__text, body.dark .activity-item__time, body.dark .toggle-row__text p,
+body.dark .config-row__text p, body.dark .channel-benefit__text p { color: var(--dk-muted); }
+body.dark .activity-item__text strong { color: var(--dk-text); }
+body.dark .activity-item { border-color: var(--dk-border); }
+body.dark .side-card__arrow { color: var(--dk-subtle); }
+
+body.dark .course-h-card__badge { background: rgba(127,76,165,0.2); color: var(--purple-400); }
+body.dark .course-h-card__bar-track, body.dark .lib-card__progress-bar,
+body.dark .course-item__progress-bar { background: var(--dk-border); }
+body.dark .lib-card__img { background: linear-gradient(145deg, #2a2040, #1e1e30) !important; }
+body.dark .lib-card__badge { background: rgba(255,255,255,0.1); color: var(--dk-text); }
+body.dark .news-carousel__img, body.dark .news-full-item__img { opacity: 0.85; }
+body.dark .news-carousel__body, body.dark .news-card__body { background: var(--dk-card); }
+
+body.dark .webinar-item__date { background: rgba(127,76,165,0.12); border-color: rgba(127,76,165,0.3); }
+body.dark .webinar-item__date-day { color: var(--purple-400); }
+body.dark .webinar-item__date-month { color: var(--purple-400); }
+body.dark .btn-sm--ghost { background: var(--dk-card); border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .btn-sm--ghost:hover { border-color: var(--purple-600); color: var(--purple-400); }
+body.dark .btn-sm--done { background: rgba(127,76,165,0.15); border-color: rgba(127,76,165,0.3); color: var(--purple-400); }
+
+body.dark .filter-tab { background: var(--dk-card); border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .filter-tab:hover { border-color: var(--purple-600); color: var(--purple-400); }
+body.dark .filter-tab.active { background: var(--purple-600); border-color: var(--purple-600); color: white; }
+
+body.dark .s-card { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .s-card__title { color: var(--dk-text); }
+body.dark .s-card__desc { color: var(--dk-muted); }
+body.dark .form-label { color: var(--dk-muted); }
+body.dark .form-input { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-text); }
+body.dark .form-input:focus { border-color: var(--purple-400); background: var(--dk-bg); }
+body.dark .btn-outline { background: var(--dk-card); border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .btn-outline:hover { border-color: var(--purple-600); color: var(--purple-400); }
+body.dark .btn-outline--danger { color: #f87171; border-color: #7f1d1d; }
+
+body.dark .toggle { background: var(--dk-border); }
+body.dark .toggle.on { background: var(--purple-600); }
+body.dark .toggle-row, body.dark .config-row { border-color: var(--dk-border); }
+
+body.dark .profile-banner { background: linear-gradient(135deg, #2a2040, #1e1e30) !important; border-color: var(--dk-border); }
+body.dark .profile-info h2 { color: var(--dk-text); }
+body.dark .profile-info p { color: var(--dk-muted); }
+
+body.dark .sub-card { background: linear-gradient(135deg, #2a2040, #1e1e30) !important; border-color: rgba(127,76,165,0.2); }
+body.dark .sub-plan { color: var(--dk-text); }
+body.dark .sub-price { color: var(--dk-text); }
+body.dark .sub-price span { color: var(--dk-muted); }
+body.dark .sub-meta { border-color: rgba(127,76,165,0.2); }
+body.dark .sub-meta-item label { color: var(--dk-muted); }
+body.dark .sub-meta-item span { color: var(--dk-text); }
+body.dark .sub-benefit { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .sub-benefit__check { background: rgba(127,76,165,0.15); border-color: rgba(127,76,165,0.3); }
+body.dark .sub-benefit__text h4 { color: var(--dk-text); }
+body.dark .sub-benefit__text p { color: var(--dk-muted); }
+body.dark .sub-footer a { color: var(--dk-muted); }
+
+body.dark .notif-empty { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .notif-empty__icon { background: var(--dk-surface); color: var(--dk-muted); }
+body.dark .notif-empty h3 { color: var(--dk-text); }
+body.dark .notif-empty p { color: var(--dk-muted); }
+
+body.dark .coupon-card { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .coupon-pct { color: var(--purple-400); }
+body.dark .coupon-desc { color: var(--dk-muted); }
+body.dark .coupon-code { background: rgba(127,76,165,0.1); border-color: var(--purple-600); color: var(--dk-text); }
+body.dark .coupon-note { color: var(--dk-muted); }
+body.dark .coupon-divider { background: var(--dk-border); }
+body.dark .coupon-help { color: var(--dk-muted); }
+
+body.dark .channel-card { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .channel-title { color: var(--dk-text); }
+body.dark .channel-desc { color: var(--dk-muted); }
+body.dark .channel-benefits { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .channel-benefits__title { color: var(--dk-text); }
+body.dark .channel-benefit { border-color: var(--dk-border); }
+
+body.dark .score-card__num { color: var(--dk-subtle); }
+body.dark .score-card:hover .score-card__num { color: var(--purple-400); }
+body.dark .score-legend__item { color: var(--dk-muted); }
+
+body.dark .urg-card__header { background: transparent; }
+body.dark .urg-card__toggle { color: var(--dk-subtle); }
+body.dark .urg-card__content { border-color: var(--dk-border); }
+body.dark .urg-step__num { background: rgba(127,76,165,0.15); border-color: rgba(127,76,165,0.3); }
+body.dark .urg-step__text { color: var(--dk-muted); }
+body.dark .urg-step__text strong { color: var(--dk-text); }
+
+body.dark .vac-table { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .vac-table th { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .vac-table td { color: var(--dk-text); border-color: var(--dk-border); }
+body.dark .vac-table tr:hover td { background: rgba(127,76,165,0.08); }
+
+body.dark .radio-opt { border-color: var(--dk-border); color: var(--dk-muted); }
+body.dark .radio-opt.selected { border-color: var(--purple-600); background: rgba(127,76,165,0.15); color: var(--purple-400); }
+
+body.dark .news-carousel__source, body.dark .news-full-item__source,
+body.dark .news-list-item__source { color: var(--purple-400); }
+
+/* Dark mode icon swap */
+body.dark #darkToggle .icon-moon { display: none; }
+body.dark #darkToggle .icon-sun { display: block; }
+#darkToggle .icon-sun { display: none; }
 </style>
 </head>
 <body>
@@ -601,9 +793,9 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
   <header class="topbar">
     <div class="topbar__left"><button class="topbar__hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button></div>
     <div class="topbar__actions">
-      <button class="topbar__btn"><svg class="icon" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg></button>
-      <button class="topbar__btn"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></button>
-      <button class="topbar__btn"><svg class="icon" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
+      <button class="topbar__btn" id="darkToggle" onclick="toggleDark()" title="Modo oscuro"><svg class="icon icon-moon" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg><svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
+      <button class="topbar__btn" onclick="nav('notificaciones')" title="Notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></button>
+      <button class="topbar__btn" onclick="nav('configuracion')" title="Configuración"><svg class="icon" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
   </header>
 
@@ -1008,6 +1200,8 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 </div>
 
 <script>
+function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
+if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
 function scrollC(d){document.getElementById('newsCarousel').scrollBy({left:d*280,behavior:'smooth'})}
 function nav(page){document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));document.querySelector('.page-content[data-page="'+page+'"]').classList.add('active');document.querySelectorAll('.sidebar__link').forEach(l=>{l.classList.remove('active');if(l.dataset.page===page)l.classList.add('active')});window.scrollTo(0,0);closeSidebar()}
