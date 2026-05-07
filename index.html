@@ -761,9 +761,120 @@ body.dark .legal-back { color: var(--dk-muted); }
 body.dark #darkToggle .icon-moon { display: none; }
 body.dark #darkToggle .icon-sun { display: block; }
 #darkToggle .icon-sun { display: none; }
+/* ============ LOGIN SCREEN ============ */
+.login-screen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.login-screen.show { opacity: 1; pointer-events: auto; }
+body.dark .login-screen { background: var(--dk-bg); }
+.login-box {
+  width: 100%; max-width: 380px; padding: 40px 32px; text-align: center;
+}
+.login-box__logo {
+  display: flex; align-items: center; justify-content: center; gap: 11px; margin-bottom: 36px;
+}
+.login-box__logo-icon {
+  width: 42px; height: 42px; background: var(--purple-900); border-radius: 11px;
+  display: grid; place-items: center; color: white; font-size: 14px; font-weight: 700;
+  font-family: var(--font-body);
+}
+.login-box__logo-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--gray-900); }
+.login-box__logo-text span { color: var(--purple-600); font-weight: 400; }
+body.dark .login-box__logo-text { color: var(--dk-text); }
+.login-box__title {
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
+  color: var(--gray-900); margin-bottom: 6px;
+}
+body.dark .login-box__title { color: var(--dk-text); }
+.login-box__desc { font-size: 0.85rem; color: var(--gray-400); margin-bottom: 28px; }
+.login-box .form-group { text-align: left; margin-bottom: 18px; }
+.login-box .form-input { width: 100%; }
+.login-box__btn {
+  width: 100%; padding: 13px; border-radius: 50px; background: var(--purple-900);
+  color: white; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer;
+  font-family: var(--font-body); transition: all var(--transition); margin-top: 8px;
+}
+.login-box__btn:hover { background: var(--purple-600); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(75,28,113,0.25); }
+.login-box__forgot { display: block; margin-top: 16px; font-size: 0.78rem; color: var(--purple-600); text-decoration: none; }
+.login-box__forgot:hover { color: var(--purple-900); }
+.login-box__divider { height: 1px; background: var(--gray-100); margin: 24px 0; }
+body.dark .login-box__divider { background: var(--dk-border); }
+.login-box__register { font-size: 0.82rem; color: var(--gray-500); }
+.login-box__register a { color: var(--purple-600); font-weight: 600; text-decoration: none; }
+
+/* Logout confirmation modal */
+.logout-modal {
+  position: fixed; inset: 0; z-index: 9998;
+  background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+}
+.logout-modal.show { opacity: 1; pointer-events: auto; }
+.logout-modal__box {
+  background: var(--white); border-radius: var(--radius); padding: 32px;
+  max-width: 360px; width: 90%; text-align: center;
+  transform: scale(0.95); transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+.logout-modal.show .logout-modal__box { transform: scale(1); }
+body.dark .logout-modal__box { background: var(--dk-card); }
+.logout-modal__icon {
+  width: 52px; height: 52px; margin: 0 auto 16px; border-radius: 50%;
+  background: var(--purple-50); display: grid; place-items: center; color: var(--purple-600);
+}
+body.dark .logout-modal__icon { background: rgba(127,76,165,0.15); }
+.logout-modal__title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+body.dark .logout-modal__title { color: var(--dk-text); }
+.logout-modal__desc { font-size: 0.82rem; color: var(--gray-400); margin-bottom: 24px; }
+.logout-modal__actions { display: flex; gap: 10px; }
+.logout-modal__actions button { flex: 1; padding: 11px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; cursor: pointer; font-family: var(--font-body); transition: all var(--transition); }
+.logout-modal__cancel { background: var(--white); border: 1px solid var(--gray-200); color: var(--gray-600); }
+.logout-modal__cancel:hover { border-color: var(--purple-200); color: var(--purple-600); }
+body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-muted); }
+.logout-modal__confirm { background: #ef4444; border: none; color: white; }
+.logout-modal__confirm:hover { background: #dc2626; }
 </style>
 </head>
 <body>
+
+<!-- LOGOUT MODAL -->
+<div class="logout-modal" id="logoutModal">
+  <div class="logout-modal__box">
+    <div class="logout-modal__icon"><svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg></div>
+    <div class="logout-modal__title">Cerrar sesión</div>
+    <div class="logout-modal__desc">¿Estás seguro que deseas salir de tu cuenta?</div>
+    <div class="logout-modal__actions">
+      <button class="logout-modal__cancel" onclick="document.getElementById('logoutModal').classList.remove('show')">Cancelar</button>
+      <button class="logout-modal__confirm" onclick="confirmarLogout()">Sí, cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOGIN SCREEN -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-box">
+    <div class="login-box__logo">
+      <div class="login-box__logo-icon">GV</div>
+      <div class="login-box__logo-text">GlobalVet <span>México</span></div>
+    </div>
+    <div class="login-box__title">Bienvenido de vuelta</div>
+    <div class="login-box__desc">Inicia sesión para acceder a tu cuenta del Club.</div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" placeholder="tu@correo.com" id="loginEmail">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" placeholder="••••••••" id="loginPass">
+    </div>
+    <button class="login-box__btn" onclick="iniciarSesion()">Iniciar sesión</button>
+    <a href="#" class="login-box__forgot">¿Olvidaste tu contraseña?</a>
+    <div class="login-box__divider"></div>
+    <div class="login-box__register">¿No tienes cuenta? <a href="#">Regístrate aquí</a></div>
+  </div>
+</div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
 <aside class="sidebar" id="sidebar">
@@ -803,7 +914,7 @@ body.dark #darkToggle .icon-sun { display: block; }
   </div>
   <div class="sidebar__spacer"></div>
   <div class="sidebar__user"><div class="sidebar__avatar">DV</div><div class="sidebar__user-info"><h4>Dr. Veterinario</h4><span>miembro@globalvet.mx</span></div></div>
-  <button class="sidebar__logout"><svg class="icon" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Cerrar sesión</button>
+  <button class="sidebar__logout" onclick="cerrarSesion()"><svg class="icon" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Cerrar sesión</button>
 </aside>
 
 <div class="main-wrapper">
@@ -1414,6 +1525,10 @@ function descargarFicha(e){
     document.head.appendChild(s);
   }
 }
+function cerrarSesion(){document.getElementById('logoutModal').classList.add('show')}
+function confirmarLogout(){document.getElementById('logoutModal').classList.remove('show');document.getElementById('loginScreen').classList.add('show');localStorage.setItem('gv-logged','0');closeSidebar()}
+function iniciarSesion(){var e=document.getElementById('loginEmail').value;var p=document.getElementById('loginPass').value;if(!e||!p){alert('Ingresa correo y contraseña');return;}document.getElementById('loginScreen').classList.remove('show');localStorage.setItem('gv-logged','1');nav('inicio')}
+if(localStorage.getItem('gv-logged')==='0')document.getElementById('loginScreen').classList.add('show');
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
