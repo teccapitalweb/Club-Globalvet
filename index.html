@@ -887,6 +887,10 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
       <label class="form-label">Nombre completo</label>
       <input class="form-input" type="text" placeholder="Dr. / Dra. Nombre" id="loginName">
     </div>
+    <label style="display:flex;align-items:flex-start;gap:10px;font-size:0.78rem;color:var(--gray-500);margin:8px 0 16px;cursor:pointer;text-align:left;line-height:1.5">
+      <input type="checkbox" id="loginTerms" style="margin-top:3px;accent-color:var(--purple-600);flex-shrink:0">
+      Acepto los <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('terminos');document.getElementById('loginScreen').style.opacity='0.2'" style="color:var(--purple-600);font-weight:600;text-decoration:none">Términos y Condiciones</a> y la <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('privacidad');document.getElementById('loginScreen').style.opacity='0.2'" style="color:var(--purple-600);font-weight:600;text-decoration:none">Política de Privacidad</a>
+    </label>
     <button class="login-box__btn" id="loginBtn" onclick="iniciarSesion()">Iniciar sesión</button>
     <div class="login-box__error" id="loginError"></div>
     <div class="login-box__success" id="loginSuccess"></div>
@@ -1705,8 +1709,10 @@ function iniciarSesion(){
   var email=document.getElementById('loginEmail').value.trim();
   var pass=document.getElementById('loginPass').value;
   var name=document.getElementById('loginName').value.trim();
+  var terms=document.getElementById('loginTerms').checked;
   document.getElementById('loginError').classList.remove('show');
   document.getElementById('loginSuccess').classList.remove('show');
+  if(!terms){showLoginError('Debes aceptar los Términos y Condiciones y la Política de Privacidad.');return;}
   if(!email||!pass){showLoginError('Ingresa correo y contraseña.');return;}
   if(isRegisterMode&&!name){showLoginError('Ingresa tu nombre completo.');return;}
   if(pass.length<6){showLoginError('La contraseña debe tener al menos 6 caracteres.');return;}
@@ -1753,6 +1759,8 @@ function resetPassword(){
   });
 }
 function loginGoogle(){
+  var terms=document.getElementById('loginTerms').checked;
+  if(!terms){showLoginError('Debes aceptar los Términos y Condiciones y la Política de Privacidad.');return;}
   var provider=new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(result){
     var user=result.user;
