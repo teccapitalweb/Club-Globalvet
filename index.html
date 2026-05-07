@@ -809,6 +809,18 @@ body.dark .login-box__title { color: var(--dk-text); }
 body.dark .login-box__divider { background: var(--dk-border); }
 .login-box__register { font-size: 0.82rem; color: var(--gray-500); }
 .login-box__register a { color: var(--purple-600); font-weight: 600; text-decoration: none; }
+.login-box__error { display: none; font-size: 0.78rem; color: #ef4444; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-xs); padding: 10px 14px; margin-top: 12px; text-align: left; }
+body.dark .login-box__error { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); }
+.login-box__error.show { display: block; }
+.login-box__success { display: none; font-size: 0.78rem; color: #22c55e; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-xs); padding: 10px 14px; margin-top: 12px; text-align: left; }
+body.dark .login-box__success { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); }
+.login-box__success.show { display: block; }
+.login-box__loading { display: none; text-align: center; margin-top: 12px; font-size: 0.82rem; color: var(--gray-400); }
+.login-box__loading.show { display: block; }
+.login-box__google { width: 100%; padding: 12px; border-radius: 50px; background: var(--white); border: 1px solid var(--gray-200); color: var(--gray-700); font-size: 0.88rem; font-weight: 500; cursor: pointer; font-family: var(--font-body); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all var(--transition); }
+.login-box__google:hover { border-color: var(--gray-400); background: var(--gray-50); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+body.dark .login-box__google { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-text); }
+body.dark .login-box__google:hover { border-color: var(--dk-muted); background: var(--dk-card); }
 
 /* Logout confirmation modal */
 .logout-modal {
@@ -857,24 +869,33 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 </div>
 
 <!-- LOGIN SCREEN -->
-<div class="login-screen" id="loginScreen">
+<div class="login-screen show" id="loginScreen">
   <div class="login-box">
     <img src="data:image/jpeg;base64,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" alt="GlobalVet México" style="width:90px;height:90px;border-radius:16px;margin:0 auto 12px;display:block;object-fit:cover;">
     <div class="login-box__logo-text" style="text-align:center;margin-bottom:8px;">GlobalVet <span>México</span></div>
-    <div class="login-box__title">Bienvenido de vuelta</div>
-    <div class="login-box__desc">Inicia sesión para acceder a tu cuenta del Club.</div>
+    <div class="login-box__title" id="loginTitle">Bienvenido de vuelta</div>
+    <div class="login-box__desc" id="loginDesc">Inicia sesión para acceder a tu cuenta del Club.</div>
     <div class="form-group">
       <label class="form-label">Correo electrónico</label>
       <input class="form-input" type="email" placeholder="tu@correo.com" id="loginEmail">
     </div>
     <div class="form-group">
       <label class="form-label">Contraseña</label>
-      <input class="form-input" type="password" placeholder="••••••••" id="loginPass">
+      <input class="form-input" type="password" placeholder="••••••••" id="loginPass" onkeydown="if(event.key==='Enter')iniciarSesion()">
     </div>
-    <button class="login-box__btn" onclick="iniciarSesion()">Iniciar sesión</button>
-    <a href="#" class="login-box__forgot">¿Olvidaste tu contraseña?</a>
+    <div class="form-group" id="loginNameGroup" style="display:none">
+      <label class="form-label">Nombre completo</label>
+      <input class="form-input" type="text" placeholder="Dr. / Dra. Nombre" id="loginName">
+    </div>
+    <button class="login-box__btn" id="loginBtn" onclick="iniciarSesion()">Iniciar sesión</button>
+    <div class="login-box__error" id="loginError"></div>
+    <div class="login-box__success" id="loginSuccess"></div>
+    <div class="login-box__loading" id="loginLoading">Cargando...</div>
+    <div style="display:flex;align-items:center;gap:12px;margin:18px 0"><div style="flex:1;height:1px;background:var(--gray-200)"></div><span style="font-size:0.75rem;color:var(--gray-400)">o continúa con</span><div style="flex:1;height:1px;background:var(--gray-200)"></div></div>
+    <button class="login-box__google" onclick="loginGoogle()"><svg viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar con Google</button>
+    <a href="#" class="login-box__forgot" id="loginForgot" onclick="event.preventDefault();resetPassword()">¿Olvidaste tu contraseña?</a>
     <div class="login-box__divider"></div>
-    <div class="login-box__register">¿No tienes cuenta? <a href="#">Regístrate aquí</a></div>
+    <div class="login-box__register" id="loginToggle">¿No tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Regístrate aquí</a></div>
   </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -915,7 +936,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     </ul>
   </div>
   <div class="sidebar__spacer"></div>
-  <div class="sidebar__user"><div class="sidebar__avatar">DV</div><div class="sidebar__user-info"><h4>Dr. Veterinario</h4><span>miembro@globalvet.mx</span></div></div>
+  <div class="sidebar__user"><div class="sidebar__avatar"><span class="sidebar__avatar-text">DV</span></div><div class="sidebar__user-info"><h4>Dr. Veterinario</h4><span>miembro@globalvet.mx</span></div></div>
   <button class="sidebar__logout" onclick="cerrarSesion()"><svg class="icon" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg> Cerrar sesión</button>
 </aside>
 
@@ -1593,6 +1614,20 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyD_28_ODOJWqzEgN4kagOf4lszt8Y1Zlog",
+  authDomain:"globalvet-mexico.firebaseapp.com",
+  projectId:"globalvet-mexico",
+  storageBucket:"globalvet-mexico.firebasestorage.app",
+  messagingSenderId:"146292961707",
+  appId:"1:146292961707:web:714454893bfcf3c1b8e2ee"
+});
+var db=firebase.firestore();
+</script>
 <script>
 function descargarFicha(e){
   var btn=e.target.closest('button');
@@ -1649,9 +1684,105 @@ function descargarFicha(e){
   }
 }
 function cerrarSesion(){document.getElementById('logoutModal').classList.add('show')}
-function confirmarLogout(){document.getElementById('logoutModal').classList.remove('show');document.getElementById('loginScreen').classList.add('show');localStorage.setItem('gv-logged','0');closeSidebar()}
-function iniciarSesion(){var e=document.getElementById('loginEmail').value;var p=document.getElementById('loginPass').value;if(!e||!p){alert('Ingresa correo y contraseña');return;}document.getElementById('loginScreen').classList.remove('show');localStorage.setItem('gv-logged','1');nav('inicio')}
-if(localStorage.getItem('gv-logged')==='0')document.getElementById('loginScreen').classList.add('show');
+function confirmarLogout(){document.getElementById('logoutModal').classList.remove('show');firebase.auth().signOut();closeSidebar()}
+
+var isRegisterMode=false;
+function toggleLoginMode(){
+  isRegisterMode=!isRegisterMode;
+  document.getElementById('loginTitle').textContent=isRegisterMode?'Crear cuenta':'Bienvenido de vuelta';
+  document.getElementById('loginDesc').textContent=isRegisterMode?'Regístrate para acceder al Club GlobalVet.':'Inicia sesión para acceder a tu cuenta del Club.';
+  document.getElementById('loginBtn').textContent=isRegisterMode?'Crear cuenta':'Iniciar sesión';
+  document.getElementById('loginNameGroup').style.display=isRegisterMode?'flex':'none';
+  document.getElementById('loginForgot').style.display=isRegisterMode?'none':'';
+  document.getElementById('loginToggle').innerHTML=isRegisterMode?'¿Ya tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Inicia sesión</a>':'¿No tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Regístrate aquí</a>';
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginSuccess').classList.remove('show');
+}
+function showLoginError(msg){var el=document.getElementById('loginError');el.textContent=msg;el.classList.add('show');document.getElementById('loginSuccess').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
+function showLoginSuccess(msg){var el=document.getElementById('loginSuccess');el.textContent=msg;el.classList.add('show');document.getElementById('loginError').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
+
+function iniciarSesion(){
+  var email=document.getElementById('loginEmail').value.trim();
+  var pass=document.getElementById('loginPass').value;
+  var name=document.getElementById('loginName').value.trim();
+  document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginSuccess').classList.remove('show');
+  if(!email||!pass){showLoginError('Ingresa correo y contraseña.');return;}
+  if(isRegisterMode&&!name){showLoginError('Ingresa tu nombre completo.');return;}
+  if(pass.length<6){showLoginError('La contraseña debe tener al menos 6 caracteres.');return;}
+  document.getElementById('loginLoading').classList.add('show');
+  document.getElementById('loginBtn').disabled=true;
+  if(isRegisterMode){
+    firebase.auth().createUserWithEmailAndPassword(email,pass).then(function(cred){
+      return cred.user.updateProfile({displayName:name}).then(function(){
+        return firebase.firestore().collection('miembros').doc(cred.user.uid).set({
+          nombre:name,correo:email,plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:''
+        });
+      });
+    }).then(function(){
+      document.getElementById('loginBtn').disabled=false;
+    }).catch(function(err){
+      document.getElementById('loginBtn').disabled=false;
+      var msg='Error al crear cuenta.';
+      if(err.code==='auth/email-already-in-use')msg='Este correo ya está registrado.';
+      if(err.code==='auth/invalid-email')msg='Correo electrónico inválido.';
+      if(err.code==='auth/weak-password')msg='La contraseña es muy débil.';
+      showLoginError(msg);
+    });
+  }else{
+    firebase.auth().signInWithEmailAndPassword(email,pass).then(function(){
+      document.getElementById('loginBtn').disabled=false;
+    }).catch(function(err){
+      document.getElementById('loginBtn').disabled=false;
+      var msg='Error al iniciar sesión.';
+      if(err.code==='auth/user-not-found')msg='No existe una cuenta con este correo.';
+      if(err.code==='auth/wrong-password')msg='Contraseña incorrecta.';
+      if(err.code==='auth/invalid-email')msg='Correo electrónico inválido.';
+      if(err.code==='auth/invalid-credential')msg='Credenciales incorrectas. Verifica tu correo y contraseña.';
+      showLoginError(msg);
+    });
+  }
+}
+function resetPassword(){
+  var email=document.getElementById('loginEmail').value.trim();
+  if(!email){showLoginError('Ingresa tu correo para recuperar la contraseña.');return;}
+  firebase.auth().sendPasswordResetEmail(email).then(function(){
+    showLoginSuccess('Se envió un enlace de recuperación a '+email);
+  }).catch(function(){
+    showLoginError('No se pudo enviar el correo. Verifica la dirección.');
+  });
+}
+function loginGoogle(){
+  var provider=new firebase.auth.GoogleAuthProvider();
+  firebase.auth().signInWithPopup(provider).then(function(result){
+    var user=result.user;
+    var isNew=result.additionalUserInfo&&result.additionalUserInfo.isNewUser;
+    if(isNew){
+      return firebase.firestore().collection('miembros').doc(user.uid).set({
+        nombre:user.displayName||'',correo:user.email||'',plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:user.photoURL||''
+      });
+    }
+  }).catch(function(err){
+    if(err.code!=='auth/popup-closed-by-user'){
+      showLoginError('Error con Google: '+err.message);
+    }
+  });
+}
+// Firebase Auth state listener
+firebase.auth().onAuthStateChanged(function(user){
+  if(user){
+    document.getElementById('loginScreen').classList.remove('show');
+    // Update sidebar user info
+    var nameEl=document.querySelector('.sidebar__user-info h4');
+    var emailEl=document.querySelector('.sidebar__user-info span');
+    if(nameEl)nameEl.textContent=user.displayName||'Doctor';
+    if(emailEl)emailEl.textContent=user.email||'';
+    var avatarEl=document.querySelector('.sidebar__avatar-text');
+    if(avatarEl&&user.displayName)avatarEl.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+  }else{
+    document.getElementById('loginScreen').classList.add('show');
+  }
+});
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
