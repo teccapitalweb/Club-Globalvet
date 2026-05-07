@@ -1832,19 +1832,29 @@ document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',(
 function saveProfile(){
   var user=firebase.auth().currentUser;if(!user)return;
   var inputs=document.querySelectorAll('[data-page="perfil"] .form-input');
-  var data={nombre:inputs[0]?inputs[0].value:'',correo:inputs[1]?inputs[1].value:'',telefono:inputs[2]?inputs[2].value:'',especialidad:inputs[3]?inputs[3].value:'',ciudad:inputs[4]?inputs[4].value:''};
+  var data={nombre:inputs[0]?inputs[0].value:'',apellido:inputs[1]?inputs[1].value:'',correo:inputs[2]?inputs[2].value:'',telefono:inputs[3]?inputs[3].value:'',ciudad:inputs[4]?inputs[4].value:'',biografia:inputs[5]?inputs[5].value:''};
   db.collection('miembros').doc(user.uid).set(data,{merge:true}).then(function(){
     alert('Perfil actualizado');
-    if(data.nombre){user.updateProfile({displayName:data.nombre});var n=document.querySelector('.sidebar__user-info h4');if(n)n.textContent=data.nombre}
+    var fullName=(data.nombre+' '+data.apellido).trim();
+    if(fullName){user.updateProfile({displayName:fullName});var n=document.querySelector('.sidebar__user-info h4');if(n)n.textContent=fullName;var pb=document.querySelector('.profile-info h2');if(pb)pb.textContent=fullName}
   }).catch(function(e){alert('Error: '+e.message)});
 }
 function loadProfile(){
   var user=firebase.auth().currentUser;if(!user)return;
+  // Update banner with Firebase data
+  var pb=document.querySelector('.profile-info h2');if(pb)pb.textContent=user.displayName||'Doctor';
+  var pe=document.querySelector('.profile-info p');if(pe)pe.textContent=user.email||'';
+  var pa=document.querySelector('.profile-avatar');if(pa&&user.displayName)pa.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+  // Load from Firestore
   db.collection('miembros').doc(user.uid).get().then(function(doc){
     if(!doc.exists)return;var d=doc.data();
     var inputs=document.querySelectorAll('[data-page="perfil"] .form-input');
-    if(inputs[0])inputs[0].value=d.nombre||'';if(inputs[1])inputs[1].value=d.correo||user.email||'';
-    if(inputs[2])inputs[2].value=d.telefono||'';if(inputs[3])inputs[3].value=d.especialidad||'';if(inputs[4])inputs[4].value=d.ciudad||'';
+    if(inputs[0])inputs[0].value=d.nombre||user.displayName||'';
+    if(inputs[1])inputs[1].value=d.apellido||'';
+    if(inputs[2])inputs[2].value=d.correo||user.email||'';
+    if(inputs[3])inputs[3].value=d.telefono||'';
+    if(inputs[4])inputs[4].value=d.ciudad||'';
+    if(inputs[5])inputs[5].value=d.biografia||'';
   });
 }
 
