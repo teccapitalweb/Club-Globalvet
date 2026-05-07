@@ -1097,7 +1097,7 @@ body.dark #darkToggle .icon-sun { display: block; }
       <div class="form-group"><label class="form-label">Tratamiento indicado</label><textarea class="form-input form-textarea" placeholder="Fármacos, dosis, vía, frecuencia, duración..."></textarea></div>
       <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-input form-textarea" placeholder="Notas adicionales..."></textarea></div>
       <div class="ficha-actions">
-        <button class="btn-save" onclick="descargarFicha()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
+        <button class="btn-save" onclick="descargarFicha(event)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
         <button class="btn-outline" onclick="document.querySelectorAll('[data-page=ficha] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
       </div>
     </div>
@@ -1361,81 +1361,37 @@ body.dark #darkToggle .icon-sun { display: block; }
 </div>
 
 <script>
-function descargarFicha(){
-  var btn=event.target.closest('button');
+function descargarFicha(e){
+  var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
   btn.textContent='Generando...';btn.disabled=true;
-  
+  try{
   var doc=new jspdf.jsPDF('p','mm','a4');
-  var W=210,M=15,cw=W-2*M,y=M;
-  
-  // Logo
-  var logoImg=document.querySelector('.print-logo img');
-  if(logoImg){try{doc.addImage(logoImg.src,'JPEG',M,y,14,14);}catch(e){}}
-  doc.setFont('helvetica','bold');doc.setFontSize(16);doc.setTextColor(75,28,113);
-  doc.text('GlobalVet México',M+18,y+6);
-  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(150);
-  doc.text('Ficha Clínica del Paciente',M+18,y+11);
-  y+=18;
-  doc.setDrawColor(75,28,113);doc.setLineWidth(0.6);doc.line(M,y,W-M,y);
-  y+=8;
-  
-  function checkPage(need){if(y+need>280){doc.addPage();y=M;}}
-  function drawSection(title){
-    checkPage(14);
-    doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0);
-    doc.text(title,M,y);y+=2;
-    doc.setDrawColor(200);doc.setLineWidth(0.3);doc.line(M,y,W-M,y);
-    y+=6;
-  }
-  function drawField(label,value,x,w){
-    checkPage(14);
-    doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(100);
-    doc.text(label.toUpperCase(),x,y);
-    doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(0);
-    doc.text(String(value||''),x,y+5);
-    doc.setDrawColor(220);doc.setLineWidth(0.2);doc.line(x,y+7,x+w,y+7);
-  }
-  function drawFieldRow(label,value){
-    drawField(label,value,M,cw);y+=14;
-  }
-  function drawFieldPair(l1,v1,l2,v2){
-    var hw=cw/2-4;
-    drawField(l1,v1,M,hw);
-    drawField(l2,v2,M+cw/2+2,hw);
-    y+=14;
-  }
-  
-  // Collect values
-  var inputs=document.querySelectorAll('[data-page="ficha"] .form-input,[data-page="ficha"] .form-textarea');
-  var v=[];inputs.forEach(function(i){v.push(i.value||'');});
-  
-  // Datos del paciente
-  drawSection('Datos del paciente');
-  drawFieldPair('Nombre del paciente',v[0],'Especie',v[1]);
-  drawFieldPair('Raza',v[2],'Sexo',v[3]);
-  drawFieldPair('Edad',v[4],'Peso (kg)',v[5]);
-  drawFieldPair('Color / Señas',v[6],'Microchip / ID',v[7]);
-  
-  y+=4;
-  // Datos del propietario
-  drawSection('Datos del propietario');
-  drawFieldPair('Nombre del propietario',v[8],'Teléfono',v[9]);
-  drawFieldRow('Dirección',v[10]);
-  
-  y+=4;
-  // Evaluación clínica
-  drawSection('Evaluación clínica');
-  drawFieldRow('Motivo de consulta',v[11]);
-  drawFieldPair('Temperatura (°C)',v[12],'Frecuencia cardíaca',v[13]);
-  drawFieldPair('Frecuencia respiratoria',v[14],'Score corporal (1-9)',v[15]);
-  drawFieldRow('Hallazgos al examen físico',v[16]);
-  drawFieldRow('Diagnóstico presuntivo',v[17]);
-  drawFieldRow('Tratamiento indicado',v[18]);
-  drawFieldRow('Observaciones',v[19]);
-  
+  var M=15,cw=180,y=M;
+  doc.setFont('helvetica','bold');doc.setFontSize(17);doc.setTextColor(75,28,113);
+  doc.text('GlobalVet M\u00e9xico',M,y+6);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(150,150,150);
+  doc.text('Ficha Cl\u00ednica del Paciente',M,y+12);
+  y+=16;doc.setDrawColor(75,28,113);doc.setLineWidth(0.6);doc.line(M,y,M+cw,y);y+=10;
+  function ck(n){if(y+n>280){doc.addPage();y=M;}}
+  function sec(t){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0,0,0);doc.text(t,M,y);y+=2;doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(M,y,M+cw,y);y+=7;}
+  function fld(l,v,x,w){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(120,120,120);doc.text(l.toUpperCase(),x,y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(0,0,0);doc.text(String(v||''),x,y+5);doc.setDrawColor(220,220,220);doc.setLineWidth(0.2);doc.line(x,y+7,x+w,y+7);}
+  function row(l,v){fld(l,v,M,cw);y+=14;}
+  function pair(a,b,c,d){var hw=cw/2-4;fld(a,b,M,hw);fld(c,d,M+cw/2+4,hw);y+=14;}
+  var v=[];document.querySelectorAll('[data-page="ficha"] .form-input,[data-page="ficha"] .form-textarea').forEach(function(i){v.push(i.value||'');});
+  sec('Datos del paciente');
+  pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Sexo',v[3]);
+  pair('Edad',v[4],'Peso (kg)',v[5]);pair('Color / Se\u00f1as',v[6],'Microchip / ID',v[7]);
+  y+=4;sec('Datos del propietario');
+  pair('Nombre del propietario',v[8],'Tel\u00e9fono',v[9]);row('Direcci\u00f3n',v[10]);
+  y+=4;sec('Evaluaci\u00f3n cl\u00ednica');
+  row('Motivo de consulta',v[11]);pair('Temperatura (\u00b0C)',v[12],'Frecuencia card\u00edaca',v[13]);
+  pair('Frecuencia respiratoria',v[14],'Score corporal',v[15]);
+  row('Hallazgos al examen f\u00edsico',v[16]);row('Diagn\u00f3stico presuntivo',v[17]);
+  row('Tratamiento indicado',v[18]);row('Observaciones',v[19]);
   var nombre=v[0]||'Paciente';
   doc.save('Ficha_'+nombre.replace(/\s/g,'_')+'_GlobalVet.pdf');
+  }catch(err){alert('Error: '+err.message);}
   btn.innerHTML=origHTML;btn.disabled=false;
 }
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
