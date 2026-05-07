@@ -768,6 +768,8 @@ body.dark #darkToggle .icon-sun { display: block; }
 /* ============ LOGIN SCREEN ============ */
 .login-screen { position:fixed;inset:0;z-index:9999;background:var(--white);display:flex;opacity:0;pointer-events:none;transition:opacity 0.35s ease }
 .login-screen.show { opacity:1;pointer-events:auto }
+body.not-logged .sidebar,body.not-logged .sidebar-overlay,body.not-logged .topbar { display:none!important }
+body.not-logged .main-wrapper { margin-left:0!important }
 body.dark .login-screen { background:var(--dk-bg) }
 .login-hero { flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px;background:linear-gradient(160deg,#f5eeff 0%,#ece0f5 40%,#dbb6ee 100%);position:relative;overflow:hidden }
 body.dark .login-hero { background:linear-gradient(160deg,#1a1028 0%,#2a1840 40%,#3a1560 100%) }
@@ -775,16 +777,16 @@ body.dark .login-hero { background:linear-gradient(160deg,#1a1028 0%,#2a1840 40%
 .login-hero__logo img { width:36px;height:36px;border-radius:9px }
 .login-hero__logo span { font-family:var(--font-display);font-size:0.85rem;font-weight:600;color:var(--purple-900);letter-spacing:0.08em;text-transform:uppercase }
 body.dark .login-hero__logo span { color:var(--purple-200) }
-.login-hero h1 { font-family:var(--font-display);font-size:2.8rem;font-weight:800;color:var(--purple-900);line-height:1.15;letter-spacing:-0.03em;margin-bottom:20px }
+.login-hero h1 { font-family:var(--font-display);font-size:2.2rem;font-weight:800;color:var(--purple-900);line-height:1.2;letter-spacing:-0.03em;margin-bottom:20px;max-width:480px }
 body.dark .login-hero h1 { color:var(--dk-text) }
-.login-hero p { font-size:1rem;color:var(--gray-600);line-height:1.7;max-width:440px }
+.login-hero p { font-size:0.95rem;color:var(--gray-600);line-height:1.7;max-width:400px }
 body.dark .login-hero p { color:var(--dk-muted) }
 .login-hero__stats { display:flex;gap:40px;margin-top:48px }
 .login-hero__stat-val { font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--purple-900) }
 body.dark .login-hero__stat-val { color:var(--purple-400) }
 .login-hero__stat-lbl { font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--gray-500);margin-top:2px }
 body.dark .login-hero__stat-lbl { color:var(--dk-muted) }
-.login-form-side { width:480px;display:flex;flex-direction:column;justify-content:center;padding:48px 52px;overflow-y:auto }
+.login-form-side { width:520px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:48px 56px;overflow-y:auto;background:var(--white) }
 body.dark .login-form-side { background:var(--dk-surface) }
 .login-tabs { display:flex;background:var(--gray-100);border-radius:50px;padding:4px;margin-bottom:32px }
 body.dark .login-tabs { background:var(--dk-border) }
@@ -855,7 +857,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 .logout-modal__confirm:hover { background: #dc2626; }
 </style>
 </head>
-<body>
+<body class="not-logged">
 
 <!-- LOGOUT MODAL -->
 <div class="logout-modal" id="logoutModal">
@@ -1799,15 +1801,17 @@ function loginGoogle(){
 firebase.auth().onAuthStateChanged(function(user){
   if(user){
     document.getElementById('loginScreen').classList.remove('show');
-    // Update sidebar user info
+    document.body.classList.remove('not-logged');
     var nameEl=document.querySelector('.sidebar__user-info h4');
     var emailEl=document.querySelector('.sidebar__user-info span');
     if(nameEl)nameEl.textContent=user.displayName||'Doctor';
     if(emailEl)emailEl.textContent=user.email||'';
     var avatarEl=document.querySelector('.sidebar__avatar-text');
     if(avatarEl&&user.displayName)avatarEl.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+    nav('inicio');
   }else{
     document.getElementById('loginScreen').classList.add('show');
+    document.body.classList.add('not-logged');
   }
 });
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
