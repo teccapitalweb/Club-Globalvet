@@ -1221,36 +1221,75 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     <div class="filter-tabs" id="vacTabs">
       <button class="filter-tab active" onclick="showVac('canino',this)">Caninos</button>
       <button class="filter-tab" onclick="showVac('felino',this)">Felinos</button>
+      <button class="filter-tab" onclick="showVac('bovino',this)">Bovinos</button>
+      <button class="filter-tab" onclick="showVac('equino',this)">Equinos</button>
+      <button class="filter-tab" onclick="showVac('porcino',this)">Porcinos</button>
+      <button class="filter-tab" onclick="showVac('ovicap',this)">Ovinos/Caprinos</button>
+      <button class="filter-tab" onclick="showVac('aves',this)">Aves</button>
+      <button class="filter-tab" onclick="showVac('conejo',this)">Conejos</button>
     </div>
-    <div id="vac-canino">
-      <div class="s-card" style="padding:0;overflow:hidden">
-        <div class="vac-table-wrap"><table class="vac-table">
-          <thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Parvovirus / Moquillo (Múltiple)</strong></td><td>6-8 semanas</td><td>Cada 2-4 sem hasta 16 sem</td><td>Anual o cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Rabia</strong></td><td>12 semanas</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Leptospirosis</strong></td><td>12 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Bordetella (Tos de las perreras)</strong></td><td>8 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
-            <tr><td><strong>Influenza Canina</strong></td><td>8 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
-            <tr><td><strong>Lyme (Borrelia)</strong></td><td>12 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
-          </tbody>
-        </table></div>
-      </div>
-    </div>
-    <div id="vac-felino" style="display:none">
-      <div class="s-card" style="padding:0;overflow:hidden">
-        <div class="vac-table-wrap"><table class="vac-table">
-          <thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Triple Felina (FVRCP)</strong></td><td>6-8 semanas</td><td>Cada 3-4 sem hasta 16 sem</td><td>Cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Rabia</strong></td><td>12 semanas</td><td>1 año después</td><td>Anual o cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Leucemia Felina (FeLV)</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-            <tr><td><strong>Chlamydia felis</strong></td><td>9 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
-            <tr><td><strong>Bordetella bronchiseptica</strong></td><td>8 semanas</td><td>No necesario</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
-          </tbody>
-        </table></div>
-      </div>
-    </div>
+    <div id="vac-canino" class="vac-panel"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Parvovirus / Moquillo (Múltiple)</strong></td><td>6-8 semanas</td><td>Cada 2-4 sem hasta 16 sem</td><td>Anual o cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rabia</strong></td><td>12 semanas</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Leptospirosis</strong></td><td>12 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Bordetella (Tos de las perreras)</strong></td><td>8 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Influenza Canina</strong></td><td>8 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Lyme (Borrelia)</strong></td><td>12 semanas</td><td>2-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-felino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Triple Felina (FVRCP)</strong></td><td>6-8 semanas</td><td>Cada 3-4 sem hasta 16 sem</td><td>Cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rabia</strong></td><td>12 semanas</td><td>1 año después</td><td>Anual o cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Leucemia Felina (FeLV)</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Chlamydia felis</strong></td><td>9 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Bordetella bronchiseptica</strong></td><td>8 semanas</td><td>No necesario</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-bovino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Carbunco bacteridiano (Ántrax)</strong></td><td>3-6 meses</td><td>Anual</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Carbunco sintomático (Pierna negra)</strong></td><td>3-4 meses</td><td>6 meses después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Brucelosis (Cepa RB51/S19)</strong></td><td>3-8 meses (hembras)</td><td>No necesario</td><td>Dosis única</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rabia</strong></td><td>3 meses</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>IBR / DVB / PI3 (Respiratoria)</strong></td><td>3-6 meses</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Leptospirosis</strong></td><td>4 meses</td><td>3-4 sem después</td><td>Semestral/Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Clostridiosis polivalente</strong></td><td>2-3 meses</td><td>4-6 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-equino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Tétanos</strong></td><td>3-4 meses</td><td>4-6 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Influenza Equina</strong></td><td>6 meses</td><td>3-6 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Encefalomielitis (EEE/WEE/VEE)</strong></td><td>4-6 meses</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rabia</strong></td><td>6 meses</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rinoneumonitis (EHV-1/4)</strong></td><td>6 meses</td><td>4-6 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Estrangles (S. equi)</strong></td><td>6-9 meses</td><td>3 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-porcino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Peste Porcina Clásica (PPC)</strong></td><td>45 días</td><td>6 meses</td><td>Semestral</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Erisipela porcina</strong></td><td>8-10 semanas</td><td>3-4 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Parvovirus porcino</strong></td><td>Hembras previo a monta</td><td>3 sem después</td><td>Cada gestación</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Mycoplasma hyopneumoniae</strong></td><td>7-14 días</td><td>3-4 sem después</td><td>Por lote</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Circovirus porcino (PCV2)</strong></td><td>3-4 semanas</td><td>3 sem después</td><td>Por lote</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Leptospirosis</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-ovicap" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Clostridiosis polivalente</strong></td><td>2-3 meses</td><td>4-6 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Carbunco bacteridiano</strong></td><td>3-6 meses</td><td>Anual</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Brucelosis (B. melitensis Rev1)</strong></td><td>3-5 meses (hembras)</td><td>No necesario</td><td>Dosis única</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Rabia</strong></td><td>3 meses</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Pasteurelosis</strong></td><td>3-4 meses</td><td>3 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Aborto enzoótico (Chlamydia)</strong></td><td>Previo a monta</td><td>Anual</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-aves" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Newcastle</strong></td><td>1 día (ocular)</td><td>7-10 días, luego 4 sem</td><td>Cada 2-3 meses</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Gumboro (IBD)</strong></td><td>7-14 días</td><td>21 días</td><td>Por lote</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Bronquitis Infecciosa (IB)</strong></td><td>1 día</td><td>14-18 días</td><td>Cada 2-3 meses</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Marek</strong></td><td>1 día (incubadora)</td><td>No necesario</td><td>Dosis única</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Viruela aviar</strong></td><td>6-8 semanas</td><td>12-16 semanas</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+      <tr><td><strong>Influenza Aviar (H5/H7)</strong></td><td>2-4 semanas</td><td>4 sem después</td><td>Según riesgo</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
+    <div id="vac-conejo" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
+      <tr><td><strong>Mixomatosis</strong></td><td>6-8 semanas</td><td>6 meses después</td><td>Anual (o semestral en zonas endémicas)</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Enfermedad Hemorrágica (RHDV1)</strong></td><td>8-10 semanas</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>RHDV2 (nueva variante)</strong></td><td>8-10 semanas</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Pasteurelosis</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
+    </tbody></table></div></div></div>
     <div style="margin-top:16px;font-size:0.76rem;color:var(--gray-400);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--purple-600)"></span> Esencial — recomendada para todos</span>
       <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--gray-300)"></span> No esencial — según riesgo y estilo de vida</span>
@@ -1259,24 +1298,106 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
   <!-- ==================== SCORE CORPORAL ==================== -->
   <div class="page-content" data-page="score">
-    <div class="page-header"><h1 class="page-header__title">Score Corporal</h1><p class="page-header__desc">Escala visual 1-9 para evaluar la condición corporal. Referencia para caninos.</p></div>
+    <div class="page-header"><h1 class="page-header__title">Score Corporal</h1><p class="page-header__desc">Escala visual para evaluar la condición corporal por especie.</p></div>
+    <div class="filter-tabs" id="scoreTabs">
+      <button class="filter-tab active" onclick="showScore('canino',this)">Caninos</button>
+      <button class="filter-tab" onclick="showScore('felino',this)">Felinos</button>
+      <button class="filter-tab" onclick="showScore('bovino',this)">Bovinos</button>
+      <button class="filter-tab" onclick="showScore('equino',this)">Equinos</button>
+      <button class="filter-tab" onclick="showScore('porcino',this)">Porcinos</button>
+      <button class="filter-tab" onclick="showScore('ovicap',this)">Ovinos/Caprinos</button>
+      <button class="filter-tab" onclick="showScore('aves',this)">Aves</button>
+      <button class="filter-tab" onclick="showScore('conejo',this)">Conejos</button>
+    </div>
     <div class="score-legend">
-      <div class="score-legend__item"><div class="score-legend__dot" style="background:#ef4444"></div> Bajo peso (1-3)</div>
-      <div class="score-legend__item"><div class="score-legend__dot" style="background:#22c55e"></div> Ideal (4-5)</div>
-      <div class="score-legend__item"><div class="score-legend__dot" style="background:#f59e0b"></div> Sobrepeso (6-7)</div>
-      <div class="score-legend__item"><div class="score-legend__dot" style="background:#ef4444"></div> Obesidad (8-9)</div>
+      <div class="score-legend__item"><div class="score-legend__dot" style="background:#ef4444"></div> Bajo peso</div>
+      <div class="score-legend__item"><div class="score-legend__dot" style="background:#22c55e"></div> Ideal</div>
+      <div class="score-legend__item"><div class="score-legend__dot" style="background:#f59e0b"></div> Sobrepeso</div>
+      <div class="score-legend__item"><div class="score-legend__dot" style="background:#ef4444"></div> Obesidad</div>
     </div>
-    <div class="score-grid">
-      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas, vértebras y huesos pélvicos visibles a distancia. Sin grasa corporal palpable. Pérdida muscular severa.</div></div>
-      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Costillas fácilmente palpables con mínima cobertura grasa. Cintura muy pronunciada vista desde arriba.</div></div>
-      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura evidente vista desde arriba. Pliegue abdominal visible.</div></div>
-      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Bajo peso ideal</div><div class="score-card__desc">Costillas fácilmente palpables con leve cobertura grasa. Cintura visible desde arriba. Pliegue abdominal presente.</div></div>
-      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura observable desde arriba. Abdomen recogido visto de perfil.</div></div>
-      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Sobrepeso leve</div><div class="score-card__desc">Costillas palpables con ligero exceso de grasa. Cintura visible pero no pronunciada. Pliegue abdominal mínimo.</div></div>
-      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar bajo la grasa. Depósitos de grasa en lomo y base de cola. Cintura ausente.</div></div>
+
+    <!-- CANINOS 1-9 -->
+    <div id="score-canino" class="score-panel"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas, vértebras y huesos pélvicos visibles a distancia. Sin grasa palpable. Pérdida muscular severa.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Costillas fácilmente palpables con mínima grasa. Cintura muy pronunciada desde arriba.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura evidente. Pliegue abdominal visible.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Bajo peso ideal</div><div class="score-card__desc">Costillas palpables con leve cobertura grasa. Cintura visible. Pliegue abdominal presente.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura observable desde arriba. Abdomen recogido de perfil.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Sobrepeso leve</div><div class="score-card__desc">Costillas palpables con ligero exceso de grasa. Cintura poco pronunciada. Pliegue abdominal mínimo.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Depósitos de grasa en lomo y base de cola. Cintura ausente.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">8</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Costillas no palpables bajo capa gruesa de grasa. Depósitos en cuello, extremidades y abdomen distendido.</div></div>
-      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">9</div><div class="score-card__label">Obeso mórbido</div><div class="score-card__desc">Depósitos masivos de grasa en tórax, columna y abdomen. Distensión abdominal severa. Movilidad comprometida.</div></div>
-    </div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">9</div><div class="score-card__label">Obeso mórbido</div><div class="score-card__desc">Depósitos masivos en tórax, columna y abdomen. Distensión abdominal severa. Movilidad comprometida.</div></div>
+    </div></div>
+
+    <!-- FELINOS 1-9 -->
+    <div id="score-felino" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas y columna prominentes. Sin grasa palpable. Cintura extrema. Masa muscular muy reducida.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Costillas visibles en pelo corto. Cintura muy marcada. Abdomen tucked. Mínima grasa subcutánea.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas fácilmente palpables. Cintura evidente. Poca grasa abdominal. Forma del cuerpo esbelta.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Bajo peso ideal</div><div class="score-card__desc">Costillas palpables con leve cobertura. Cintura notable. Abdomen mínimo de grasa colgante.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura visible desde arriba. Abdomen sin exceso colgante.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Sobrepeso leve</div><div class="score-card__desc">Costillas palpables con esfuerzo moderado. Cintura poco definida. Grasa abdominal moderada.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Cintura ausente. Depósito graso abdominal evidente. Flancos redondeados.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">8</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Costillas no palpables. Abdomen colgante prominente. Depósitos en lomo y extremidades. Forma redondeada.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">9</div><div class="score-card__label">Obeso mórbido</div><div class="score-card__desc">Grasa masiva en todo el cuerpo. Abdomen péndulo. Dificultad para moverse y acicalarse. Riesgo vital.</div></div>
+    </div></div>
+
+    <!-- BOVINOS 1-5 -->
+    <div id="score-bovino" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Apófisis espinosas y costillas prominentes. Cadera angular. Sin grasa en inserción de cola. Depresión severa en flanco.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">2</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas visibles pero con algo de tejido. Apófisis espinosas identificables. Ligera depresión en lomo.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">3</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables con cobertura grasa moderada. Lomo y cadera redondeados. Buena masa muscular.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">4</div><div class="score-card__label">Gordo</div><div class="score-card__desc">Costillas no visibles. Depósitos grasos en base de cola e inserción de cola. Lomo plano o convexo.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">5</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Estructura ósea no palpable. Grasa excesiva en lomo, costillas, base de cola y pecho. Movilidad reducida.</div></div>
+    </div></div>
+
+    <!-- EQUINOS 1-9 -->
+    <div id="score-equino" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Estructura ósea muy prominente. Sin tejido graso palpable. Cuello, hombros y cuartos sin masa muscular.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Apófisis espinosas prominentes. Costillas, hombros y cuello visibles. Estructura ósea aún evidente.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Apófisis espinosas visibles. Costillas con algo de grasa. Cuello, hombros y cuartos ligeramente discernibles.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Moderadamente delgado</div><div class="score-card__desc">Lomo ligeramente cóncavo. Costillas apenas visibles. Grasa palpable en cresta del cuello.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Lomo plano. Costillas no visibles pero palpables. Grasa esponjosa en hombros y cuello. Cuartos redondeados.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Moderadamente gordo</div><div class="score-card__desc">Ligero surco en lomo. Grasa blanda en costillas y cuello. Depósitos en hombros y cuartos traseros.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Gordo</div><div class="score-card__desc">Surco marcado en lomo. Costillas difíciles de palpar. Grasa evidente en cuello, hombros, rabadilla e ingle.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">8</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Surco profundo en lomo. Costillas no palpables. Cresta de cuello gruesa. Grasa prominente en flancos.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">9</div><div class="score-card__label">Extremadamente obeso</div><div class="score-card__desc">Surco muy profundo. Grasa abultada en cuello, hombros, flancos. Depósitos en base de cola. Riesgo de laminitis.</div></div>
+    </div></div>
+
+    <!-- PORCINOS 1-5 -->
+    <div id="score-porcino" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Caderas, columna y costillas muy visibles. Sin grasa dorsal. Hundimiento en flancos severo.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">2</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Caderas y columna palpables con facilidad. Costillas visibles con algo de cobertura. Grasa dorsal <12mm.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">3</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Caderas y columna palpables con presión firme. Forma redondeada. Grasa dorsal 14-18mm. Buena condición.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">4</div><div class="score-card__label">Gordo</div><div class="score-card__desc">Caderas y columna difíciles de palpar. Forma redondeada pronunciada. Grasa dorsal 20-25mm.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">5</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Estructura ósea no palpable. Pliegues de grasa visibles. Grasa dorsal >25mm. Dificultad para levantarse.</div></div>
+    </div></div>
+
+    <!-- OVINOS/CAPRINOS 1-5 -->
+    <div id="score-ovicap" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Apófisis espinosas y transversas prominentes y filosas. Sin cobertura grasa ni muscular. Depresión lumbar severa.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">2</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Apófisis espinosas prominentes pero suaves. Transversas palpables. Leve cobertura muscular en lomo.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">3</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Apófisis espinosas palpables con presión. Transversas redondeadas. Buena cobertura muscular y grasa moderada.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">4</div><div class="score-card__label">Gordo</div><div class="score-card__desc">Apófisis solo detectables con presión firme. Lomo lleno y redondeado. Grasa palpable sobre costillas.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">5</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Apófisis no detectables. Lomo y cola con depósitos grasos abundantes. Costillas no palpables. Riesgo toxemia.</div></div>
+    </div></div>
+
+    <!-- AVES (pechuga) 0-3 -->
+    <div id="score-aves" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">0</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Quilla del esternón muy prominente y filosa. Sin masa muscular pectoral. Cóncavo a ambos lados.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Quilla palpable y prominente. Músculo pectoral reducido. Leve concavidad a los lados del esternón.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">2</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Quilla palpable pero con buena masa muscular. Pechuga redondeada y firme. Músculos a nivel de la quilla.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">3</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Quilla difícil de palpar. Pechuga convexa con depósito graso. Grasa subcutánea visible en abdomen.</div></div>
+    </div></div>
+
+    <!-- CONEJOS 1-5 -->
+    <div id="score-conejo" class="score-panel" style="display:none"><div class="score-grid">
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas, columna y pelvis muy prominentes. Sin grasa palpable. Caderas angulares. Pérdida muscular evidente.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas y columna fácilmente palpables. Caderas prominentes. Poca cobertura de grasa subcutánea.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">3</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables con leve cobertura grasa. Columna y caderas redondeadas. Forma del cuerpo proporcionada.</div></div>
+      <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">4</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Papada prominente (hembras). Depósitos grasos en abdomen y flancos.</div></div>
+      <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">5</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Costillas no palpables. Papada muy grande. Pliegues de grasa visibles. Dificultad para acicalarse y moverse.</div></div>
+    </div></div>
   </div>
 
   <!-- ==================== GUÍA URGENCIAS ==================== -->
@@ -1537,7 +1658,8 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function scrollC(d){document.getElementById('newsCarousel').scrollBy({left:d*280,behavior:'smooth'})}
 function nav(page){document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));document.querySelector('.page-content[data-page="'+page+'"]').classList.add('active');document.querySelectorAll('.sidebar__link').forEach(l=>{l.classList.remove('active');if(l.dataset.page===page)l.classList.add('active')});window.scrollTo(0,0);closeSidebar()}
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
-function showVac(type,btn){document.getElementById('vac-canino').style.display=type==='canino'?'block':'none';document.getElementById('vac-felino').style.display=type==='felino'?'block':'none';btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function showVac(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('vac-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function showScore(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('score-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();nav(l.dataset.page)}));
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
 (function(){const t=new Date;t.setDate(t.getDate()+2);t.setHours(19,0,0,0);setInterval(()=>{let d=Math.max(0,t-new Date);const dy=Math.floor(d/864e5);d-=dy*864e5;const h=Math.floor(d/36e5);d-=h*36e5;const m=Math.floor(d/6e4);d-=m*6e4;const s=Math.floor(d/1e3);document.getElementById('cd-days').textContent=String(dy).padStart(2,'0');document.getElementById('cd-hrs').textContent=String(h).padStart(2,'0');document.getElementById('cd-min').textContent=String(m).padStart(2,'0');document.getElementById('cd-sec').textContent=String(s).padStart(2,'0')},1000)})();
