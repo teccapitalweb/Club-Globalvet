@@ -906,7 +906,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     </div>
     <div class="login-terms">
       <input type="checkbox" id="loginTerms">
-      <span>Acepto los <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('terminos');document.getElementById('loginScreen').style.opacity='0.15'">Términos y Condiciones</a> y la <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('privacidad');document.getElementById('loginScreen').style.opacity='0.15'">Política de Privacidad</a></span>
+      <span>Acepto los <a href="#" onclick="event.preventDefault();event.stopPropagation();document.getElementById('loginScreen').classList.remove('show');nav('terminos')">Términos y Condiciones</a> y la <a href="#" onclick="event.preventDefault();event.stopPropagation();document.getElementById('loginScreen').classList.remove('show');nav('privacidad')">Política de Privacidad</a></span>
     </div>
     <button class="login-box__btn" id="loginBtn" onclick="iniciarSesion()">Entrar al club</button>
     <div class="login-box__error" id="loginError"></div>
@@ -1491,7 +1491,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
   <!-- ==================== TÉRMINOS Y CONDICIONES ==================== -->
   <div class="page-content" data-page="terminos">
-    <button class="legal-back" onclick="nav('suscripcion')"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg> Volver a Mi Suscripción</button>
+    <button class="legal-back" onclick="if(firebase.auth().currentUser){nav('suscripcion')}else{document.getElementById('loginScreen').classList.add('show')}"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg> Volver</button>
     <div class="page-header"><h1 class="page-header__title">Términos y Condiciones</h1><p class="page-header__desc">Condiciones de uso de la plataforma GlobalVet México.</p></div>
     <div class="legal-card">
       <div class="legal-date">Última actualización: 1 de mayo de 2026</div>
@@ -1552,7 +1552,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
   <!-- ==================== POLÍTICA DE PRIVACIDAD ==================== -->
   <div class="page-content" data-page="privacidad">
-    <button class="legal-back" onclick="nav('suscripcion')"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg> Volver a Mi Suscripción</button>
+    <button class="legal-back" onclick="if(firebase.auth().currentUser){nav('suscripcion')}else{document.getElementById('loginScreen').classList.add('show')}"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg> Volver</button>
     <div class="page-header"><h1 class="page-header__title">Política de Privacidad</h1><p class="page-header__desc">Cómo recopilamos, usamos y protegemos tu información personal.</p></div>
     <div class="legal-card">
       <div class="legal-date">Última actualización: 1 de mayo de 2026</div>
