@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GlobalVet México — Club</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 :root {
@@ -1096,7 +1097,7 @@ body.dark #darkToggle .icon-sun { display: block; }
       <div class="form-group"><label class="form-label">Tratamiento indicado</label><textarea class="form-input form-textarea" placeholder="Fármacos, dosis, vía, frecuencia, duración..."></textarea></div>
       <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-input form-textarea" placeholder="Notas adicionales..."></textarea></div>
       <div class="ficha-actions">
-        <button class="btn-save" onclick="window.print()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
+        <button class="btn-save" onclick="descargarFicha()"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
         <button class="btn-outline" onclick="document.querySelectorAll('[data-page=ficha] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
       </div>
     </div>
@@ -1360,6 +1361,76 @@ body.dark #darkToggle .icon-sun { display: block; }
 </div>
 
 <script>
+function descargarFicha(){
+  var btn=event.target.closest('button');
+  var origHTML=btn.innerHTML;
+  btn.textContent='Generando...';btn.disabled=true;
+  var logoSrc=document.querySelector('.print-logo img').src;
+  var html='<div style="font-family:Arial,Helvetica,sans-serif;color:#000;padding:0;">';
+  html+='<div style="display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2.5px solid #4b1c71;margin-bottom:16px;">';
+  html+='<img src="'+logoSrc+'" style="width:48px;height:48px;border-radius:8px;">';
+  html+='<div><div style="font-size:17px;font-weight:bold;color:#4b1c71;">GlobalVet México</div>';
+  html+='<div style="font-size:10px;color:#999;">Ficha Clínica del Paciente</div></div></div>';
+  document.querySelectorAll('[data-page="ficha"] .s-card').forEach(function(sec){
+    var t=sec.querySelector('.s-card__title');
+    if(!t)return;
+    html+='<div style="font-size:13px;font-weight:bold;color:#000;margin:16px 0 10px;padding-bottom:5px;border-bottom:1px solid #ccc;">'+t.textContent+'</div>';
+    var hasGrid=sec.querySelector('.ficha-section');
+    if(hasGrid)html+='<table style="width:100%;border-collapse:collapse;"><tr>';
+    var col=0;
+    sec.querySelectorAll('.form-group').forEach(function(g){
+      var lbl=g.querySelector('.form-label');
+      var inp=g.querySelector('.form-input,.form-textarea');
+      var isFull=g.classList.contains('ficha-full')||g.closest('.ficha-full')||!hasGrid;
+      var label=lbl?lbl.textContent:'';
+      var val=inp?inp.value:'';
+      if(!val&&inp)val='';
+      var cell='<div style="margin-bottom:10px;">';
+      cell+='<div style="font-size:8px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:2px;">'+label+'</div>';
+      cell+='<div style="font-size:12px;color:#000;padding:3px 0;border-bottom:1px solid #ddd;min-height:16px;">'+val+'</div></div>';
+      if(hasGrid&&!isFull){
+        if(col%2===0)html+='<tr>';
+        html+='<td style="width:50%;padding:0 8px 0 0;vertical-align:top;">'+cell+'</td>';
+        col++;
+        if(col%2===0)html+='</tr>';
+      }else if(hasGrid&&isFull){
+        if(col%2!==0)html+='<td></td></tr>';
+        html+='<tr><td colspan="2" style="padding:0;">'+cell+'</td></tr>';
+        col=0;
+      }else{
+        html+=cell;
+      }
+    });
+    if(hasGrid){
+      if(col%2!==0)html+='<td></td></tr>';
+      html+='</table>';
+    }
+  });
+  html+='</div>';
+  var wrap=document.createElement('div');
+  wrap.style.cssText='position:absolute;left:-9999px;top:0;width:180mm;background:#fff;padding:0;';
+  wrap.innerHTML=html;
+  document.body.appendChild(wrap);
+  var nombre=document.querySelector('[data-page="ficha"] .form-input').value||'Paciente';
+  setTimeout(function(){
+    html2pdf().set({
+      margin:[12,12,12,12],
+      filename:'Ficha_'+nombre.replace(/\s/g,'_')+'_GlobalVet.pdf',
+      image:{type:'jpeg',quality:0.95},
+      html2canvas:{scale:2,backgroundColor:'#ffffff',useCORS:true},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['avoid-all','css','legacy']}
+    }).from(wrap).save().then(function(){
+      document.body.removeChild(wrap);
+      btn.innerHTML=origHTML;
+      btn.disabled=false;
+    }).catch(function(){
+      document.body.removeChild(wrap);
+      btn.innerHTML=origHTML;
+      btn.disabled=false;
+    });
+  },100);
+}
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
