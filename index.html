@@ -766,61 +766,63 @@ body.dark #darkToggle .icon-moon { display: none; }
 body.dark #darkToggle .icon-sun { display: block; }
 #darkToggle .icon-sun { display: none; }
 /* ============ LOGIN SCREEN ============ */
-.login-screen {
-  position: fixed; inset: 0; z-index: 9999;
-  background: var(--white);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.35s ease;
-}
-.login-screen.show { opacity: 1; pointer-events: auto; }
-body.dark .login-screen { background: var(--dk-bg); }
-.login-box {
-  width: 100%; max-width: 380px; padding: 40px 32px; text-align: center;
-}
-.login-box__logo {
-  display: flex; align-items: center; justify-content: center; gap: 11px; margin-bottom: 36px;
-}
-.login-box__logo-icon {
-  width: 42px; height: 42px; background: var(--purple-900); border-radius: 11px;
-  display: grid; place-items: center; color: white; font-size: 14px; font-weight: 700;
-  font-family: var(--font-body);
-}
-.login-box__logo-text { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; color: var(--gray-900); }
-.login-box__logo-text span { color: var(--purple-600); font-weight: 400; }
-body.dark .login-box__logo-text { color: var(--dk-text); }
-.login-box__title {
-  font-family: var(--font-display); font-size: 1.3rem; font-weight: 700;
-  color: var(--gray-900); margin-bottom: 6px;
-}
-body.dark .login-box__title { color: var(--dk-text); }
-.login-box__desc { font-size: 0.85rem; color: var(--gray-400); margin-bottom: 28px; }
-.login-box .form-group { text-align: left; margin-bottom: 18px; }
-.login-box .form-input { width: 100%; }
-.login-box__btn {
-  width: 100%; padding: 13px; border-radius: 50px; background: var(--purple-900);
-  color: white; font-size: 0.9rem; font-weight: 600; border: none; cursor: pointer;
-  font-family: var(--font-body); transition: all var(--transition); margin-top: 8px;
-}
-.login-box__btn:hover { background: var(--purple-600); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(75,28,113,0.25); }
-.login-box__forgot { display: block; margin-top: 16px; font-size: 0.78rem; color: var(--purple-600); text-decoration: none; }
-.login-box__forgot:hover { color: var(--purple-900); }
-.login-box__divider { height: 1px; background: var(--gray-100); margin: 24px 0; }
-body.dark .login-box__divider { background: var(--dk-border); }
-.login-box__register { font-size: 0.82rem; color: var(--gray-500); }
-.login-box__register a { color: var(--purple-600); font-weight: 600; text-decoration: none; }
-.login-box__error { display: none; font-size: 0.78rem; color: #ef4444; background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-xs); padding: 10px 14px; margin-top: 12px; text-align: left; }
-body.dark .login-box__error { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.2); }
-.login-box__error.show { display: block; }
-.login-box__success { display: none; font-size: 0.78rem; color: #22c55e; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-xs); padding: 10px 14px; margin-top: 12px; text-align: left; }
-body.dark .login-box__success { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); }
-.login-box__success.show { display: block; }
-.login-box__loading { display: none; text-align: center; margin-top: 12px; font-size: 0.82rem; color: var(--gray-400); }
-.login-box__loading.show { display: block; }
-.login-box__google { width: 100%; padding: 12px; border-radius: 50px; background: var(--white); border: 1px solid var(--gray-200); color: var(--gray-700); font-size: 0.88rem; font-weight: 500; cursor: pointer; font-family: var(--font-body); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all var(--transition); }
-.login-box__google:hover { border-color: var(--gray-400); background: var(--gray-50); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-body.dark .login-box__google { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-text); }
-body.dark .login-box__google:hover { border-color: var(--dk-muted); background: var(--dk-card); }
+.login-screen { position:fixed;inset:0;z-index:9999;background:var(--white);display:flex;opacity:0;pointer-events:none;transition:opacity 0.35s ease }
+.login-screen.show { opacity:1;pointer-events:auto }
+body.dark .login-screen { background:var(--dk-bg) }
+.login-hero { flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px;background:linear-gradient(160deg,#f5eeff 0%,#ece0f5 40%,#dbb6ee 100%);position:relative;overflow:hidden }
+body.dark .login-hero { background:linear-gradient(160deg,#1a1028 0%,#2a1840 40%,#3a1560 100%) }
+.login-hero__logo { display:flex;align-items:center;gap:10px;position:absolute;top:36px;left:40px }
+.login-hero__logo img { width:36px;height:36px;border-radius:9px }
+.login-hero__logo span { font-family:var(--font-display);font-size:0.85rem;font-weight:600;color:var(--purple-900);letter-spacing:0.08em;text-transform:uppercase }
+body.dark .login-hero__logo span { color:var(--purple-200) }
+.login-hero h1 { font-family:var(--font-display);font-size:2.8rem;font-weight:800;color:var(--purple-900);line-height:1.15;letter-spacing:-0.03em;margin-bottom:20px }
+body.dark .login-hero h1 { color:var(--dk-text) }
+.login-hero p { font-size:1rem;color:var(--gray-600);line-height:1.7;max-width:440px }
+body.dark .login-hero p { color:var(--dk-muted) }
+.login-hero__stats { display:flex;gap:40px;margin-top:48px }
+.login-hero__stat-val { font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--purple-900) }
+body.dark .login-hero__stat-val { color:var(--purple-400) }
+.login-hero__stat-lbl { font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--gray-500);margin-top:2px }
+body.dark .login-hero__stat-lbl { color:var(--dk-muted) }
+.login-form-side { width:480px;display:flex;flex-direction:column;justify-content:center;padding:48px 52px;overflow-y:auto }
+body.dark .login-form-side { background:var(--dk-surface) }
+.login-tabs { display:flex;background:var(--gray-100);border-radius:50px;padding:4px;margin-bottom:32px }
+body.dark .login-tabs { background:var(--dk-border) }
+.login-tab { flex:1;padding:10px;border-radius:50px;font-size:0.85rem;font-weight:600;text-align:center;cursor:pointer;border:none;background:none;font-family:var(--font-body);color:var(--gray-500);transition:all var(--transition) }
+.login-tab.active { background:var(--purple-900);color:white;box-shadow:0 2px 8px rgba(75,28,113,0.2) }
+body.dark .login-tab.active { background:var(--purple-600) }
+.login-box__title { font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--gray-900);margin-bottom:6px }
+body.dark .login-box__title { color:var(--dk-text) }
+.login-box__desc { font-size:0.85rem;color:var(--gray-400);margin-bottom:28px }
+.login-box__logo-text { font-family:var(--font-display);font-size:1.2rem;font-weight:700;color:var(--gray-900) }
+.login-box__logo-text span { color:var(--purple-600);font-weight:400 }
+body.dark .login-box__logo-text { color:var(--dk-text) }
+.login-form-side .form-group { text-align:left;margin-bottom:18px }
+.login-form-side .form-input { width:100% }
+.login-box__btn { width:100%;padding:14px;border-radius:50px;background:var(--purple-900);color:white;font-size:0.92rem;font-weight:600;border:none;cursor:pointer;font-family:var(--font-body);transition:all var(--transition) }
+.login-box__btn:hover { background:var(--purple-600);transform:translateY(-1px);box-shadow:0 4px 16px rgba(75,28,113,0.25) }
+.login-box__btn:disabled { opacity:0.6;cursor:not-allowed;transform:none }
+.login-box__forgot { display:block;margin-top:14px;font-size:0.78rem;color:var(--purple-600);text-decoration:none;text-align:center }
+.login-box__forgot:hover { color:var(--purple-900) }
+.login-box__register { font-size:0.82rem;color:var(--gray-500);text-align:center;margin-top:20px }
+.login-box__register a { color:var(--purple-600);font-weight:600;text-decoration:none }
+.login-box__error { display:none;font-size:0.78rem;color:#ef4444;background:#fef2f2;border:1px solid #fecaca;border-radius:var(--radius-xs);padding:10px 14px;margin-top:12px;text-align:left }
+body.dark .login-box__error { background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.2) }
+.login-box__error.show { display:block }
+.login-box__success { display:none;font-size:0.78rem;color:#22c55e;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:var(--radius-xs);padding:10px 14px;margin-top:12px;text-align:left }
+body.dark .login-box__success { background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.2) }
+.login-box__success.show { display:block }
+.login-box__loading { display:none;text-align:center;margin-top:12px;font-size:0.82rem;color:var(--gray-400) }
+.login-box__loading.show { display:block }
+.login-box__google { width:100%;padding:12px;border-radius:50px;background:var(--white);border:1px solid var(--gray-200);color:var(--gray-700);font-size:0.88rem;font-weight:500;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:10px;transition:all var(--transition) }
+.login-box__google:hover { border-color:var(--gray-400);background:var(--gray-50);box-shadow:0 2px 8px rgba(0,0,0,0.06) }
+body.dark .login-box__google { background:var(--dk-card);border-color:var(--dk-border);color:var(--dk-text) }
+body.dark .login-box__google:hover { border-color:var(--dk-muted) }
+.login-terms { display:flex;align-items:flex-start;gap:10px;font-size:0.75rem;color:var(--gray-500);margin:8px 0 18px;text-align:left;line-height:1.5 }
+.login-terms input { margin-top:3px;accent-color:var(--purple-600);flex-shrink:0 }
+.login-terms a { color:var(--purple-600);font-weight:600;text-decoration:none }
+@media (max-width:900px) { .login-hero{display:none} .login-form-side{width:100%;padding:32px 24px} }
+@media (max-width:480px) { .login-form-side{padding:24px 20px} }
 
 /* Logout confirmation modal */
 .logout-modal {
@@ -870,11 +872,26 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
 <!-- LOGIN SCREEN -->
 <div class="login-screen show" id="loginScreen">
-  <div class="login-box">
-    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAC0ALQDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD19WxwelPqPFOU44PSgB1FLijFACYoxS4oxQAmKMUuKWgBtGKdSHAGTQAhwBk1GSWNKSWPNGKAExRS0oGaABV5zT+lHSmM2aABmzTaKUDNAABk1IBigDFLQAtFJRmgBaKaWooAZRilB7UtACKccHpT6ZSqccHpQA+jFLRQAmKMUtISAMmgBCQBk1GSWNKcscnpS4oATFGKXFJ1NABjNO6UdKYTmgAJzSGijGaAADNSAYpAMU6gAooooAKaTQTRQAlFFFACdaUHsaQjbyOlHWgB9GKRTng9adigBAccdqfTcUDigBScCmH5jzTjyaMUAJijFLTSc8DpQAhOeB0pelHSmk0AKTTaWkoAUDNOAoApaACiiigApCaKKACiikoAKKTk0UAPphG3kdKeDmigBnWnq2eD1phG3kdKOtAEtFNVs8HrT6AEopajZt3A6UADNngdKOgpOlFAAaSlNJQAU4DFAFFAC0UlLQAUlL1ooASiiigApOtGM/SloAKKaW5ooAOnIp4ORUYODg0vTkUAPphGDxTgciuW+IN1dQaJaQW1zJbfbL+G3kkibawRic4PbpVRjzOwHQx3lrNcyW0VzC9xCAZIlcF0+o6inS6haW0sMNzdQwyTttiWRwpkPoAeteXxtp/hnxy+meFba71XV5E8ud7iTdFbg4LFiMFjwCckAfXirHi8QLrumDxkIRCyMEvNPmMQUZGQ0bkkgEg7lOR6VqqceZK+gaHpzMTwKToK4TTNTg8I6n4gtrvULmbStOt4Z0M7+Y6lh0U98kgAfSudt/iB4+8VzTS+F9ChS0ibbuZQx+hdiBn2ApOi09Ngeh67S1xFrr3i208A6xquvWcFpqVmrmBPL4YBQdxAYg8k9D2qf4a+J9R8VeHJ7/UvJ85Lpoh5SbRtCqemT6mocGk2K51x60oFef8Ajz4i3OganDoOhWi3eqzbc7wWEZb7qhR1Y9fQcVhS/EPxv4Q1K2TxfpcLWtxzmJVDYHXaykgkZ6Gmqcmrhc9eorzb4kfEDVPDz6SdCe2eHUIDKJJI9+4ZG0jn0NZsvxC8aeFdftLDxXp9m8VztP7gANtLYypUkZB7EUKlJq4XPW6AM1yfxH8V3HhLw0Lyz8s3c06xRCRdw7ljj6D9axvhv481fxDreoaRrscEdzBGJI1jj2EYOGB5Oeq/rSUG48wXPRqK858ReOdZ0z4naf4et/s/2K5eBX3RZfDtg4Oa9GNJxatcYlGMn2oAzTqkBKYTngUpOeBSdKADFFLtJ5ooACMimgkHBpynsaUjIoAb05Fcp8QiPsGjE9P7Yts/ma6oEg4NZPibQR4h0sWq3LW00UqzwTKM7JF6EjuKuDSkmxrc4nVrrVdB8FPrehsiaha3kkeqFgG3ATOTlT33MDnrtb0qTxpp1t4q+HKeJtYspLG+trN5YYklyF3EYDZAzng47ZqPUpb2zuZYPEwOmveARy6jbwiazvAMY82M/dYY6jB7dBVm/wBWuNWv10+1uv8AhJZ42V/s9tAILJCDkNK2SXwcHbu21uoSumvv/wCCTY5HXbG/fw5q8Uiubi307TXuF74VRuz9Mgn6VqeENUt9R+Fo0PTdeh0XVrWRmeR5fLYjeWyDkE5Bxx6V2/hrTo4b7ULnU9WtNR1a9ULcxRMpWNFGNgXqffIrmpPh/wDDrXbe61WyuJYLaAkzm2lKpGQMn5WU449Kqc03btb8gaOa8K65qus+AfGf9p6jc3nlWaeX58hfbkNnGenQflW/8HNa0nTvCNzDfanZ2spvnYJPOqMRsTnBPSr9nYfDzQfD9xYx6i8VrrUJDyvI5aVFJXIO3AwSR0rFk8F/C2O3huJNYuRFOWEbeefmKkBv4O2RSa5rqz+4LMytUvLfSfjnDqt9MhsZpo547jOUMbx7VcH0B7+1a3xt1rTLvS9MsLa6huLgTGY+U4fam0jkjpkn9K6ddC8EeM9It9HglF4NLhWOKWNissSdB82BnOOmMVWtvh14I8GMusXzSyLC67HvH3ojE8fKqjJ+uaXMlJXTuhWZ5/8AEWynsdF8HWlzlJo9O2uD1U5Xj8P6VF4lspfAni3Tr99Wg8RyqBLtucuyYPAPzHHqpz26V6X4w0vwZ4psbDWNY1SWK2w0dtNA+0Pk5PBUn+E1hz+GfAPg1YL+DF9fPGtxZx31wQjAnhjhQMd+RVRk2krPqHKzK+MOqyar4o0jSLe2luDBEsrWyA7neQg7cDvtUfnWVZ6/eWPxctdb1DSptH+2yqJbeUEYRx5ZbkDIzz06ivQLSz8HP4isPF13qZbUr2QiIiVjA0gAjKrlR0yAM49aseK9K8F+Kr2WXVL+VZ9HjKztA5Xy13D7x2nofT3pJ2XLyhZnG+OZY7f436VNPIkUcb2rO7sAqgMckk9BXr1nrWk6lMYbHVLO6kC7ikE6uwHrgHpzXG+JvCngrXEh8R6xqc6RSwokcwn2iQAcYG3JNN8HaN4E0B7rX9F1SRkhj8maSeX5EDEHGCo54GKiS5orR6Dsz0Oo2bJwKzdJ8U6HrkzQ6bqMVxKoyUGVbHrggZrTZe461g007NDEAxSqueT0pAc0AlTkUgJKKQHIyKKAIqcDng9aGXPI602gB5AIpnIODTlOeD1pSARQBQ1uNJdDv0dFdTbSZVhkH5TXHadK2nfBU3VniGc2LMXQYJYkjJPrjvXdTRLNDJBKMpIpRh6gjBrhx4M8SjSv+EbGr2f9h52+Z5R+0eVnOz0/H/8AVW9Jq1m+qY0ZGv23h/w3omiy2AS21lfIuFdMmRlON5Y+h56/hWbqt0dKu9f0awIkg1t4ZbMpyrK7Z49uSPwrqvFfw4fW9Qt7vT7yO38uFIHjmBI2rwpBHt2rpNO8LaVY2lhHJaw3M9hGqR3MsYLjBJyD25JPtXR7aCim3djucD4xsRpOv+GrG3mtYPs9oYxLdrmIEHksD2Jz+Jrb1CGG5+Gt/NPJpd7cQRybZ7GJQiHI4Xjg4xmuuv8ARNK1SRJNQ0+3unQbVaWMMVHXApYtG0yGwk0+Kwt0tJcl4FjARs9cj8BWPtlZX3QrnL+HJb3TfCGkT6RoEd/LPb/v3WZIWGDxkkfNnn8qT4nuzeEbZZE2NNewhkznHUkV2NtbQWdulvbQpDDGNqRoMBR6AVHe6dZalEkV9axXKI4dVlXcAw6H61HtFz81uoXPGri2nkttQ0SQHyfD4u5QfUs6hP0yat6tK76n4TeO4tLdv7JQCW9UNCv3h8wP+c4r1iTStOl+0l7G3Y3YxcExjMo/2vWoJfDeh3SwpcaTaSCBPLiDRA7F64HoK3+srS6Hc4jxPNZyfDy2gnuLK8v5LoLavpwCp5u7sB6KcH3Iqlprwp8OPE1tMrLqscjG98w5Zju4P06j659a9GTw5osRgKaVaL9mYvDiIfu2JBJHocgflTpNB0iWW4lk022aS6XbOxjGZRxw3r0H5VHto2t53Fc8tle2h1HwZLrK50kWK/fGU35bOfx2Z9q1PiFPplxYaXLp728umJfj7b9lxtzgY3be+3divQZdI02fT00+Wxt3tEACQtGCi46YHao7fQdIs7OWzt9Nto7eY5liEY2v9R3o9tG6l2C5wuqTaZd/ELw8fDrQO6HM7WoG0R5744+7u/AivSwcis/TtD0rSC50/T7e1Z+GaKMAn2zV7oc1lUmpWS6CEZe4pAaeDmmsO4rIBCKKM0UAOpGXPI60tLQBHT1bPB60jLnkdabQBIVDCmcqcGnK2eD1pWUMKAG0tN5U4NLQAtFFFABRRRQAUlLRQAoOeD1paZTgc8HrQAUUUUAJRRRQAnTmlzmim9DQApUE0Uuc0UAFLSUtAC01lzyOtOooAip6tng9aHTPI60ygCVlDCo+VODT1bPB60rKGGKAGUtN5U4NLQAtFFFABRRRQAUlLRQAA5+tLTaUHNABRRRQAUUUUANIopaKAFpaSloAWiiigBaZIBx60rvt+tR+5oAKlXOOetNVe5pxIUZNACOBt5pgNISWOTS0AOopAaWgAooooAKKKKACkpaKAAGikNAOaAFoopCaAAmijb60UALS0lLQAtNZtv1oZtv1qP3NAB7mnovc0Kvc04kKMmgBSQoyaiJLHJoJLHJpaACiiigApQaSigB1FIDS0AFFFFABRSUdfpQAdaWig0AIaUDFAGKCcUAFFMPPJooAfQThSaKKAI+vJpyDJPtRRQBJUTEljntRRQAUUUUALRRRQAUUUUAFKKKKAFooooAQ9ad2oooASlA70UUAFR9Tk0UUAOooooA//9k=" alt="GlobalVet México" style="width:90px;height:90px;border-radius:16px;margin:0 auto 12px;display:block;object-fit:cover;">
-    <div class="login-box__logo-text" style="text-align:center;margin-bottom:8px;">GlobalVet <span>México</span></div>
-    <div class="login-box__title" id="loginTitle">Bienvenido de vuelta</div>
-    <div class="login-box__desc" id="loginDesc">Inicia sesión para acceder a tu cuenta del Club.</div>
+  <div class="login-hero">
+    <div class="login-hero__logo">
+      <img src="data:image/png;base64,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" alt="GV">
+      <span>GlobalVet México</span>
+    </div>
+    <h1>Te damos la bienvenida al club de miembros GlobalVet.</h1>
+    <p>Acceso exclusivo a cursos online, webinars con expertos, material descargable y beneficios diseñados para profesionales de la medicina veterinaria.</p>
+    <div class="login-hero__stats">
+      <div><div class="login-hero__stat-val">18+</div><div class="login-hero__stat-lbl">Cursos</div></div>
+      <div><div class="login-hero__stat-val">24/7</div><div class="login-hero__stat-lbl">Acceso</div></div>
+      <div><div class="login-hero__stat-val">20%</div><div class="login-hero__stat-lbl">Descuento</div></div>
+    </div>
+  </div>
+  <div class="login-form-side">
+    <div class="login-tabs">
+      <button class="login-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="login-tab" id="tabRegister" onclick="switchTab('register')">Registrarme</button>
+    </div>
+    <div class="login-box__title" id="loginTitle">Hola de nuevo</div>
+    <div class="login-box__desc" id="loginDesc">Ingresa tus datos para entrar al club.</div>
     <div class="form-group">
       <label class="form-label">Correo electrónico</label>
       <input class="form-input" type="email" placeholder="tu@correo.com" id="loginEmail">
@@ -887,19 +904,18 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
       <label class="form-label">Nombre completo</label>
       <input class="form-input" type="text" placeholder="Dr. / Dra. Nombre" id="loginName">
     </div>
-    <label style="display:flex;align-items:flex-start;gap:10px;font-size:0.78rem;color:var(--gray-500);margin:8px 0 16px;cursor:pointer;text-align:left;line-height:1.5">
-      <input type="checkbox" id="loginTerms" style="margin-top:3px;accent-color:var(--purple-600);flex-shrink:0">
-      Acepto los <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('terminos');document.getElementById('loginScreen').style.opacity='0.2'" style="color:var(--purple-600);font-weight:600;text-decoration:none">Términos y Condiciones</a> y la <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('privacidad');document.getElementById('loginScreen').style.opacity='0.2'" style="color:var(--purple-600);font-weight:600;text-decoration:none">Política de Privacidad</a>
-    </label>
-    <button class="login-box__btn" id="loginBtn" onclick="iniciarSesion()">Iniciar sesión</button>
+    <div class="login-terms">
+      <input type="checkbox" id="loginTerms">
+      <span>Acepto los <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('terminos');document.getElementById('loginScreen').style.opacity='0.15'">Términos y Condiciones</a> y la <a href="#" onclick="event.preventDefault();event.stopPropagation();nav('privacidad');document.getElementById('loginScreen').style.opacity='0.15'">Política de Privacidad</a></span>
+    </div>
+    <button class="login-box__btn" id="loginBtn" onclick="iniciarSesion()">Entrar al club</button>
     <div class="login-box__error" id="loginError"></div>
     <div class="login-box__success" id="loginSuccess"></div>
     <div class="login-box__loading" id="loginLoading">Cargando...</div>
-    <div style="display:flex;align-items:center;gap:12px;margin:18px 0"><div style="flex:1;height:1px;background:var(--gray-200)"></div><span style="font-size:0.75rem;color:var(--gray-400)">o continúa con</span><div style="flex:1;height:1px;background:var(--gray-200)"></div></div>
+    <div style="display:flex;align-items:center;gap:12px;margin:20px 0"><div style="flex:1;height:1px;background:var(--gray-200)"></div><span style="font-size:0.75rem;color:var(--gray-400)">o continúa con</span><div style="flex:1;height:1px;background:var(--gray-200)"></div></div>
     <button class="login-box__google" onclick="loginGoogle()"><svg viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar con Google</button>
-    <a href="#" class="login-box__forgot" id="loginForgot" onclick="event.preventDefault();resetPassword()">¿Olvidaste tu contraseña?</a>
-    <div class="login-box__divider"></div>
-    <div class="login-box__register" id="loginToggle">¿No tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Regístrate aquí</a></div>
+    <a href="#" class="login-box__forgot" id="loginForgot" onclick="event.preventDefault();resetPassword()" style="margin-top:14px">¿Olvidaste tu contraseña?</a>
+    <div class="login-box__register" id="loginToggle">¿Aún no tienes cuenta? <a href="#" onclick="event.preventDefault();switchTab('register')">Crea tu cuenta</a></div>
   </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -1691,17 +1707,20 @@ function cerrarSesion(){document.getElementById('logoutModal').classList.add('sh
 function confirmarLogout(){document.getElementById('logoutModal').classList.remove('show');firebase.auth().signOut();closeSidebar()}
 
 var isRegisterMode=false;
-function toggleLoginMode(){
-  isRegisterMode=!isRegisterMode;
-  document.getElementById('loginTitle').textContent=isRegisterMode?'Crear cuenta':'Bienvenido de vuelta';
-  document.getElementById('loginDesc').textContent=isRegisterMode?'Regístrate para acceder al Club GlobalVet.':'Inicia sesión para acceder a tu cuenta del Club.';
-  document.getElementById('loginBtn').textContent=isRegisterMode?'Crear cuenta':'Iniciar sesión';
+function switchTab(mode){
+  isRegisterMode=(mode==='register');
+  document.getElementById('tabLogin').classList.toggle('active',!isRegisterMode);
+  document.getElementById('tabRegister').classList.toggle('active',isRegisterMode);
+  document.getElementById('loginTitle').textContent=isRegisterMode?'Crear cuenta':'Hola de nuevo';
+  document.getElementById('loginDesc').textContent=isRegisterMode?'Regístrate para acceder al Club GlobalVet.':'Ingresa tus datos para entrar al club.';
+  document.getElementById('loginBtn').textContent=isRegisterMode?'Crear cuenta':'Entrar al club';
   document.getElementById('loginNameGroup').style.display=isRegisterMode?'flex':'none';
   document.getElementById('loginForgot').style.display=isRegisterMode?'none':'';
-  document.getElementById('loginToggle').innerHTML=isRegisterMode?'¿Ya tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Inicia sesión</a>':'¿No tienes cuenta? <a href="#" onclick="event.preventDefault();toggleLoginMode()">Regístrate aquí</a>';
+  document.getElementById('loginToggle').innerHTML=isRegisterMode?'¿Ya tienes cuenta? <a href="#" onclick="event.preventDefault();switchTab(\'login\')">Inicia sesión</a>':'¿Aún no tienes cuenta? <a href="#" onclick="event.preventDefault();switchTab(\'register\')">Crea tu cuenta</a>';
   document.getElementById('loginError').classList.remove('show');
   document.getElementById('loginSuccess').classList.remove('show');
 }
+function toggleLoginMode(){switchTab(isRegisterMode?'login':'register')}
 function showLoginError(msg){var el=document.getElementById('loginError');el.textContent=msg;el.classList.add('show');document.getElementById('loginSuccess').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 function showLoginSuccess(msg){var el=document.getElementById('loginSuccess');el.textContent=msg;el.classList.add('show');document.getElementById('loginError').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 
