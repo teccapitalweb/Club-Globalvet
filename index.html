@@ -771,26 +771,26 @@ body.dark #darkToggle .icon-sun { display: block; }
 body.not-logged .sidebar,body.not-logged .sidebar-overlay,body.not-logged .topbar { display:none!important }
 body.not-logged .main-wrapper { margin-left:0!important }
 body.dark .login-screen { background:var(--dk-bg) }
-.login-hero { flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px;background:linear-gradient(160deg,#f5eeff 0%,#ece0f5 40%,#dbb6ee 100%);position:relative;overflow:hidden }
+.login-hero { flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:60px 60px 80px;background:linear-gradient(180deg,#faf5ff 0%,#ece0f5 50%,#dbb6ee 100%);position:relative;overflow:hidden }
 body.dark .login-hero { background:linear-gradient(160deg,#1a1028 0%,#2a1840 40%,#3a1560 100%) }
-.login-hero__logo { display:flex;align-items:center;gap:10px;position:absolute;top:36px;left:40px }
+.login-hero__logo { display:flex;align-items:center;gap:10px;position:absolute;top:40px;left:60px }
 .login-hero__logo img { width:36px;height:36px;border-radius:9px }
 .login-hero__logo span { font-family:var(--font-display);font-size:0.85rem;font-weight:600;color:var(--purple-900);letter-spacing:0.08em;text-transform:uppercase }
 body.dark .login-hero__logo span { color:var(--purple-200) }
-.login-hero h1 { font-family:var(--font-display);font-size:2.2rem;font-weight:800;color:var(--purple-900);line-height:1.2;letter-spacing:-0.03em;margin-bottom:20px;max-width:480px }
+.login-hero h1 { font-family:var(--font-display);font-size:2.8rem;font-weight:800;color:var(--purple-900);line-height:1.12;letter-spacing:-0.03em;margin-bottom:24px;max-width:520px }
 body.dark .login-hero h1 { color:var(--dk-text) }
-.login-hero p { font-size:0.95rem;color:var(--gray-600);line-height:1.7;max-width:400px }
+.login-hero p { font-size:0.9rem;color:var(--gray-500);line-height:1.7;max-width:420px }
 body.dark .login-hero p { color:var(--dk-muted) }
-.login-hero__stats { display:flex;gap:40px;margin-top:48px }
+.login-hero__stats { display:flex;gap:40px;margin-top:56px }
 .login-hero__stat-val { font-family:var(--font-display);font-size:1.6rem;font-weight:800;color:var(--purple-900) }
 body.dark .login-hero__stat-val { color:var(--purple-400) }
 .login-hero__stat-lbl { font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--gray-500);margin-top:2px }
 body.dark .login-hero__stat-lbl { color:var(--dk-muted) }
-.login-form-side { width:520px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:48px 56px;overflow-y:auto;background:var(--white) }
+.login-form-side { width:480px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:48px 56px;overflow-y:auto;background:var(--white);box-shadow:-4px 0 30px rgba(0,0,0,0.04) }
 body.dark .login-form-side { background:var(--dk-surface) }
-.login-tabs { display:flex;background:var(--gray-100);border-radius:50px;padding:4px;margin-bottom:32px }
+.login-tabs { display:flex;background:var(--gray-100);border-radius:50px;padding:3px;margin-bottom:28px;max-width:280px }
 body.dark .login-tabs { background:var(--dk-border) }
-.login-tab { flex:1;padding:10px;border-radius:50px;font-size:0.85rem;font-weight:600;text-align:center;cursor:pointer;border:none;background:none;font-family:var(--font-body);color:var(--gray-500);transition:all var(--transition) }
+.login-tab { flex:1;padding:9px;border-radius:50px;font-size:0.82rem;font-weight:600;text-align:center;cursor:pointer;border:none;background:none;font-family:var(--font-body);color:var(--gray-500);transition:all var(--transition) }
 .login-tab.active { background:var(--purple-900);color:white;box-shadow:0 2px 8px rgba(75,28,113,0.2) }
 body.dark .login-tab.active { background:var(--purple-600) }
 .login-box__title { font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--gray-900);margin-bottom:6px }
@@ -800,8 +800,9 @@ body.dark .login-box__title { color:var(--dk-text) }
 .login-box__logo-text span { color:var(--purple-600);font-weight:400 }
 body.dark .login-box__logo-text { color:var(--dk-text) }
 .login-form-side .form-group { text-align:left;margin-bottom:18px }
-.login-form-side .form-input { width:100% }
-.login-box__btn { width:100%;padding:14px;border-radius:50px;background:var(--purple-900);color:white;font-size:0.92rem;font-weight:600;border:none;cursor:pointer;font-family:var(--font-body);transition:all var(--transition) }
+.login-form-side .form-input { width:100%;background:#fdfaf5;border-color:#e8e0d4 }
+.login-form-side .form-input:focus { background:var(--white);border-color:var(--purple-400) }
+.login-box__btn { width:100%;padding:15px;border-radius:12px;background:var(--purple-900);color:white;font-size:0.92rem;font-weight:600;border:none;cursor:pointer;font-family:var(--font-body);transition:all var(--transition) }
 .login-box__btn:hover { background:var(--purple-600);transform:translateY(-1px);box-shadow:0 4px 16px rgba(75,28,113,0.25) }
 .login-box__btn:disabled { opacity:0.6;cursor:not-allowed;transform:none }
 .login-box__forgot { display:block;margin-top:14px;font-size:0.78rem;color:var(--purple-600);text-decoration:none;text-align:center }
@@ -816,7 +817,7 @@ body.dark .login-box__success { background:rgba(34,197,94,0.1);border-color:rgba
 .login-box__success.show { display:block }
 .login-box__loading { display:none;text-align:center;margin-top:12px;font-size:0.82rem;color:var(--gray-400) }
 .login-box__loading.show { display:block }
-.login-box__google { width:100%;padding:12px;border-radius:50px;background:var(--white);border:1px solid var(--gray-200);color:var(--gray-700);font-size:0.88rem;font-weight:500;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:10px;transition:all var(--transition) }
+.login-box__google { width:100%;padding:13px;border-radius:12px;background:var(--white);border:1px solid var(--gray-200);color:var(--gray-700);font-size:0.88rem;font-weight:500;cursor:pointer;font-family:var(--font-body);display:flex;align-items:center;justify-content:center;gap:10px;transition:all var(--transition) }
 .login-box__google:hover { border-color:var(--gray-400);background:var(--gray-50);box-shadow:0 2px 8px rgba(0,0,0,0.06) }
 body.dark .login-box__google { background:var(--dk-card);border-color:var(--dk-border);color:var(--dk-text) }
 body.dark .login-box__google:hover { border-color:var(--dk-muted) }
