@@ -1125,7 +1125,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
         <div class="form-group"><label class="form-label">Ciudad</label><input class="form-input" type="text" placeholder="Tu ciudad, MX"></div>
       </div>
       <div class="form-group"><label class="form-label">Biografía</label><textarea class="form-input form-textarea" placeholder="Cuéntanos un poco sobre ti..."></textarea></div>
-      <button class="btn-save">Guardar cambios</button>
+      <button class="btn-save" onclick="saveProfile()">Guardar cambios</button>
     </div>
   </div>
 
@@ -1827,6 +1827,83 @@ document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventList
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
 (function(){const t=new Date;t.setDate(t.getDate()+2);t.setHours(19,0,0,0);setInterval(()=>{let d=Math.max(0,t-new Date);const dy=Math.floor(d/864e5);d-=dy*864e5;const h=Math.floor(d/36e5);d-=h*36e5;const m=Math.floor(d/6e4);d-=m*6e4;const s=Math.floor(d/1e3);document.getElementById('cd-days').textContent=String(dy).padStart(2,'0');document.getElementById('cd-hrs').textContent=String(h).padStart(2,'0');document.getElementById('cd-min').textContent=String(m).padStart(2,'0');document.getElementById('cd-sec').textContent=String(s).padStart(2,'0')},1000)})();
 (function(){const h=new Date().getHours();const g=h>=19?'Buenas noches':h>=12?'Buenas tardes':'Buenos días';document.getElementById('greetingTitle').textContent=g+', Doctor.'})();
+
+// ============ FIRESTORE: LOAD DATA IN CLUB ============
+function saveProfile(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  var inputs=document.querySelectorAll('[data-page="perfil"] .form-input');
+  var data={nombre:inputs[0]?inputs[0].value:'',correo:inputs[1]?inputs[1].value:'',telefono:inputs[2]?inputs[2].value:'',especialidad:inputs[3]?inputs[3].value:'',ciudad:inputs[4]?inputs[4].value:''};
+  db.collection('miembros').doc(user.uid).set(data,{merge:true}).then(function(){
+    alert('Perfil actualizado');
+    if(data.nombre){user.updateProfile({displayName:data.nombre});var n=document.querySelector('.sidebar__user-info h4');if(n)n.textContent=data.nombre}
+  }).catch(function(e){alert('Error: '+e.message)});
+}
+function loadProfile(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  db.collection('miembros').doc(user.uid).get().then(function(doc){
+    if(!doc.exists)return;var d=doc.data();
+    var inputs=document.querySelectorAll('[data-page="perfil"] .form-input');
+    if(inputs[0])inputs[0].value=d.nombre||'';if(inputs[1])inputs[1].value=d.correo||user.email||'';
+    if(inputs[2])inputs[2].value=d.telefono||'';if(inputs[3])inputs[3].value=d.especialidad||'';if(inputs[4])inputs[4].value=d.ciudad||'';
+  });
+}
+
+function loadClubCursos(){
+  db.collection('cursos').where('estado','==','Publicado').orderBy('creado','desc').get().then(function(s){
+    if(s.empty)return;
+    var cont=document.querySelector('[data-page="biblioteca"] .lib-grid');
+    var scroll=document.querySelector('.courses-h-scroll');
+    if(cont){cont.innerHTML='';s.forEach(function(d){var c=d.data();cont.innerHTML+='<div class="lib-card"><div class="lib-card__img"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+c.nombre+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'})}
+    if(scroll){scroll.innerHTML='';s.forEach(function(d){var c=d.data();scroll.innerHTML+='<div class="course-h-card"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg></div><span class="course-h-card__badge">'+c.categoria+'</span><h3 class="course-h-card__title">'+c.nombre+'</h3><p class="course-h-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="course-h-card__progress"><div class="course-h-card__bar-track"><div class="course-h-card__bar" style="width:0%"></div></div><div class="course-h-card__bar-info"><span>0%</span><span>Nuevo</span></div></div></div>'})}
+  }).catch(function(){});
+}
+function loadClubWebinars(){
+  db.collection('webinars').orderBy('creado','desc').get().then(function(s){
+    if(s.empty)return;
+    var cont=document.querySelector('[data-page="webinar"] .webinar-list');if(!cont)return;
+    cont.innerHTML='';
+    s.forEach(function(d){var c=d.data();
+      var estado=c.grabacion?'Grabado':c.estado;
+      var btnText=c.grabacion?'Ver grabación':estado==='Próximo'?'Reservar':'Unirme';
+      var link=c.grabacion||c.link||'#';
+      cont.innerHTML+='<div class="webinar-item"><div class="webinar-item__date"><span class="webinar-item__date-day">'+(c.fecha?c.fecha.split('-')[2]:'—')+'</span><span class="webinar-item__date-month">'+(c.fecha?['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][parseInt(c.fecha.split('-')[1])-1]:'')+'</span></div><div class="webinar-item__info"><h3 class="webinar-item__title">'+c.titulo+'</h3><p class="webinar-item__meta">'+c.ponente+' · '+c.hora+' · '+(c.duracion||'60')+' min</p></div><div class="webinar-item__actions"><a href="'+link+'" target="_blank" class="btn-sm btn-sm--primary">'+btnText+'</a></div></div>'});
+  }).catch(function(){});
+}
+function loadClubPdfs(){
+  db.collection('pdfs').where('estado','==','Publicado').orderBy('creado','desc').get().then(function(s){
+    if(s.empty)return;
+    var cont=document.querySelector('[data-page="pdf"] .pdf-grid');if(!cont)return;
+    cont.innerHTML='';
+    s.forEach(function(d){var c=d.data();
+      cont.innerHTML+='<div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
+  }).catch(function(){});
+}
+function loadClubNoticias(){
+  db.collection('noticias').where('estado','==','Publicada').orderBy('creado','desc').get().then(function(s){
+    if(s.empty)return;
+    var carousel=document.getElementById('newsCarousel');
+    var full=document.querySelector('[data-page="noticias"] .news-full-list');
+    if(carousel){carousel.innerHTML='';s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+c.fuente+'</span><h4 class="news-carousel__title">'+c.titulo+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'})}
+    if(full){full.innerHTML='';s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+c.fuente+'</span><h3 class="news-full-item__title">'+c.titulo+'</h3><p class="news-full-item__excerpt">'+c.contenido.substring(0,120)+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'})}
+  }).catch(function(){});
+}
+function loadClubNotificaciones(){
+  db.collection('notificaciones').orderBy('creado','desc').limit(20).get().then(function(s){
+    var cont=document.querySelector('[data-page="notificaciones"] .notif-list');
+    var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
+    if(s.empty){if(empty)empty.style.display='';return;}
+    if(empty)empty.style.display='none';
+    if(!cont){cont=document.createElement('div');cont.className='notif-list';var parent=document.querySelector('[data-page="notificaciones"]');if(empty)parent.insertBefore(cont,empty);else parent.appendChild(cont)}
+    cont.innerHTML='';
+    s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
+      cont.innerHTML+='<div class="s-card" style="padding:18px 22px;margin-bottom:10px"><div style="display:flex;align-items:flex-start;gap:12px"><span style="font-size:1.3rem">'+c.emoji+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+c.titulo+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+c.mensaje+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>'});
+  }).catch(function(){});
+}
+
+// Load club data when user is authenticated
+var clubDataLoaded=false;
+var origAuthCallback=firebase.auth().onAuthStateChanged;
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones()},500)}});
 </script>
 </body>
 </html>
