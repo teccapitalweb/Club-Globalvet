@@ -782,19 +782,20 @@ body.dark .login-hero{background:#0f0a18}
 .login-hero__stats{display:flex;gap:44px;position:absolute;bottom:52px;left:72px;z-index:1}
 .login-hero__stat-val{font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:white}
 .login-hero__stat-lbl{font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.4);margin-top:2px}
-.login-form-side{width:50%;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:40px 52px;overflow-y:auto;background:#fff}
+.login-form-side{width:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 52px;overflow-y:auto;background:#fff}
+.login-form-inner{width:100%;max-width:380px}
 body.dark .login-form-side{background:var(--dk-surface)}
-.login-tabs{display:inline-flex;border:1.5px solid var(--gray-200);border-radius:50px;padding:3px;margin-bottom:24px}
+.login-tabs{display:inline-flex;border:1.5px solid var(--gray-200);border-radius:50px;padding:3px;margin-bottom:28px}
 body.dark .login-tabs{border-color:var(--dk-border)}
 .login-tab{padding:7px 20px;border-radius:50px;font-size:0.78rem;font-weight:600;cursor:pointer;border:none;background:none;font-family:var(--font-body);color:var(--gray-400);transition:all var(--transition)}
 .login-tab.active{background:var(--purple-900);color:white}
 body.dark .login-tab.active{background:var(--purple-600)}
-.login-box__title{font-family:var(--font-display);font-size:1.4rem;font-weight:700;color:var(--gray-900);margin-bottom:4px}
+.login-box__title{font-family:var(--font-display);font-size:1.8rem;font-weight:700;color:var(--gray-900);margin-bottom:6px}
 body.dark .login-box__title{color:var(--dk-text)}
-.login-box__desc{font-size:0.82rem;color:var(--gray-400);margin-bottom:22px}
-.login-form-side .form-group{text-align:left;margin-bottom:14px}
-.login-form-side .form-label{font-size:0.64rem;color:var(--gray-500)}
-.login-form-side .form-input{width:100%;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;padding:12px 16px;font-size:0.88rem}
+.login-box__desc{font-size:0.84rem;color:var(--gray-400);margin-bottom:28px}
+.login-form-side .form-group{text-align:left;margin-bottom:18px}
+.login-form-side .form-label{font-size:0.64rem;color:var(--gray-500);margin-bottom:6px}
+.login-form-side .form-input{width:100%;background:var(--gray-50);border:1.5px solid var(--gray-200);border-radius:10px;padding:14px 18px;font-size:0.88rem}
 .login-form-side .form-input:focus{background:#fff;border-color:var(--purple-400);box-shadow:0 0 0 3px rgba(127,76,165,0.08)}
 body.dark .login-form-side .form-input{background:var(--dk-bg);border-color:var(--dk-border)}
 .login-box__btn{width:100%;padding:14px;border-radius:10px;background:var(--purple-900);color:white;font-size:0.88rem;font-weight:600;border:none;cursor:pointer;font-family:var(--font-body);transition:all var(--transition)}
@@ -819,8 +820,8 @@ body.dark .login-box__success{background:rgba(34,197,94,0.1);border-color:rgba(3
 .login-terms.show{display:flex}
 .login-terms input{margin-top:2px;accent-color:var(--purple-600);flex-shrink:0}
 .login-terms a{color:var(--purple-600);font-weight:600;text-decoration:none}
-.login-or{display:flex;align-items:center;gap:14px;margin:14px 0}
-.login-or span{font-size:0.7rem;color:var(--gray-300);white-space:nowrap}
+.login-or{display:flex;align-items:center;gap:14px;margin:18px 0}
+.login-or span{font-size:0.72rem;color:var(--gray-300);white-space:nowrap}
 .login-or::before,.login-or::after{content:'';flex:1;height:1px;background:var(--gray-200)}
 body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-border)}
 @media(max-width:900px){.login-hero{display:none}.login-form-side{width:100%;max-width:420px;margin:0 auto;padding:40px 28px}}
@@ -887,6 +888,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     </div>
   </div>
   <div class="login-form-side">
+    <div class="login-form-inner">
     <div class="login-tabs">
       <button class="login-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</button>
       <button class="login-tab" id="tabRegister" onclick="switchTab('register')">Registrarme</button>
@@ -917,6 +919,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     <button class="login-box__google" onclick="loginGoogle()"><svg viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar con Google</button>
     <a href="#" class="login-box__forgot" id="loginForgot" onclick="event.preventDefault();resetPassword()">¿Olvidaste tu contraseña?</a>
     <div class="login-box__register" id="loginToggle">¿Aún no tienes cuenta? <a href="#" onclick="event.preventDefault();switchTab('register')">Crea tu cuenta</a></div>
+    </div>
   </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
