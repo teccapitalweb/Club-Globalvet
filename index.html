@@ -1859,16 +1859,16 @@ function loadProfile(){
 }
 
 function loadClubCursos(){
-  db.collection('cursos').where('estado','==','Publicado').orderBy('creado','desc').get().then(function(s){
+  db.collection('cursos').get().then(function(s){
     if(s.empty)return;
     var cont=document.querySelector('[data-page="biblioteca"] .lib-grid');
     var scroll=document.querySelector('.courses-h-scroll');
-    if(cont){cont.innerHTML='';s.forEach(function(d){var c=d.data();cont.innerHTML+='<div class="lib-card"><div class="lib-card__img"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+c.nombre+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'})}
-    if(scroll){scroll.innerHTML='';s.forEach(function(d){var c=d.data();scroll.innerHTML+='<div class="course-h-card"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg></div><span class="course-h-card__badge">'+c.categoria+'</span><h3 class="course-h-card__title">'+c.nombre+'</h3><p class="course-h-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="course-h-card__progress"><div class="course-h-card__bar-track"><div class="course-h-card__bar" style="width:0%"></div></div><div class="course-h-card__bar-info"><span>0%</span><span>Nuevo</span></div></div></div>'})}
-  }).catch(function(){});
+    if(cont){cont.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;cont.innerHTML+='<div class="lib-card"><div class="lib-card__img"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+c.nombre+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'})}
+    if(scroll){scroll.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;scroll.innerHTML+='<div class="course-h-card"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg></div><span class="course-h-card__badge">'+c.categoria+'</span><h3 class="course-h-card__title">'+c.nombre+'</h3><p class="course-h-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="course-h-card__progress"><div class="course-h-card__bar-track"><div class="course-h-card__bar" style="width:0%"></div></div><div class="course-h-card__bar-info"><span>0%</span><span>Nuevo</span></div></div></div>'})}
+  }).catch(function(e){console.log('Error cursos:',e)});
 }
 function loadClubWebinars(){
-  db.collection('webinars').orderBy('creado','desc').get().then(function(s){
+  db.collection('webinars').get().then(function(s){
     if(s.empty)return;
     var cont=document.querySelector('[data-page="webinar"] .webinar-list');if(!cont)return;
     cont.innerHTML='';
@@ -1880,25 +1880,25 @@ function loadClubWebinars(){
   }).catch(function(){});
 }
 function loadClubPdfs(){
-  db.collection('pdfs').where('estado','==','Publicado').orderBy('creado','desc').get().then(function(s){
+  db.collection('pdfs').get().then(function(s){
     if(s.empty)return;
     var cont=document.querySelector('[data-page="pdf"] .pdf-grid');if(!cont)return;
     cont.innerHTML='';
-    s.forEach(function(d){var c=d.data();
+    s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;
       cont.innerHTML+='<div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
-  }).catch(function(){});
+  }).catch(function(e){console.log('Error pdfs:',e)});
 }
 function loadClubNoticias(){
-  db.collection('noticias').where('estado','==','Publicada').orderBy('creado','desc').get().then(function(s){
+  db.collection('noticias').get().then(function(s){
     if(s.empty)return;
     var carousel=document.getElementById('newsCarousel');
     var full=document.querySelector('[data-page="noticias"] .news-full-list');
-    if(carousel){carousel.innerHTML='';s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+c.fuente+'</span><h4 class="news-carousel__title">'+c.titulo+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'})}
-    if(full){full.innerHTML='';s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+c.fuente+'</span><h3 class="news-full-item__title">'+c.titulo+'</h3><p class="news-full-item__excerpt">'+c.contenido.substring(0,120)+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'})}
-  }).catch(function(){});
+    if(carousel){carousel.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+c.fuente+'</span><h4 class="news-carousel__title">'+c.titulo+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'})}
+    if(full){full.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+c.fuente+'</span><h3 class="news-full-item__title">'+c.titulo+'</h3><p class="news-full-item__excerpt">'+c.contenido.substring(0,120)+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'})}
+  }).catch(function(e){console.log('Error noticias:',e)});
 }
 function loadClubNotificaciones(){
-  db.collection('notificaciones').orderBy('creado','desc').limit(20).get().then(function(s){
+  db.collection('notificaciones').get().then(function(s){
     var cont=document.querySelector('[data-page="notificaciones"] .notif-list');
     var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
     if(s.empty){if(empty)empty.style.display='';return;}
