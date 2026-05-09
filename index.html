@@ -412,6 +412,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .clase-card:hover{background:var(--purple-50)}
 .clase-card__status{width:40px;height:40px;border-radius:50%;border:2px solid var(--gray-200);display:grid;place-items:center;flex-shrink:0;color:var(--gray-300)}
 .clase-card__status.done{background:var(--purple-600);border-color:var(--purple-600);color:white}
+.clase-card__status.locked{border-color:var(--gray-200);color:var(--gray-300);background:var(--gray-50)}
 .clase-card__info{flex:1}
 .clase-card__info h4{font-size:0.9rem;font-weight:600;color:var(--gray-800);margin-bottom:2px}
 .clase-card__info h4 span{font-size:0.75rem;font-weight:500;color:var(--gray-400);margin-left:8px}
@@ -1298,8 +1299,16 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
   <!-- VIDEO MODAL -->
   <div class="video-modal" id="videoModal" onclick="if(event.target===this)closeVideo()">
-    <button class="video-modal__close" onclick="closeVideo()">✕</button>
-    <iframe id="videoFrame" allow="autoplay" allowfullscreen></iframe>
+    <div style="width:100%;max-width:920px;position:relative">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h3 style="color:white;font-family:var(--font-display);font-size:1rem;font-weight:600" id="videoTitle">Clase</h3>
+        <div style="display:flex;gap:10px;align-items:center">
+          <button id="videoCompleteBtn" onclick="completarClase()" style="padding:8px 20px;border-radius:50px;background:#22c55e;color:white;border:none;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all 0.2s">Completar clase</button>
+          <button class="video-modal__close" onclick="closeVideo()">✕</button>
+        </div>
+      </div>
+      <iframe id="videoFrame" allow="autoplay" allowfullscreen style="width:100%;aspect-ratio:16/9;border:none;border-radius:var(--radius)"></iframe>
+    </div>
   </div>
 
   <!-- ==================== FICHA PACIENTE ==================== -->
@@ -2014,15 +2023,43 @@ function toggleTemario(){
     if(!frame.src||frame.src==='about:blank')frame.src=frame.dataset.url||'';
   }else{wrap.style.display='none';txt.textContent='Ver temario';}
 }
+var currentCursoId=null,currentClaseIdx=null,currentCursoClases=[];
+function completarClase(){
+  var user=firebase.auth().currentUser;if(!user||currentCursoId===null||currentClaseIdx===null)return;
+  var ref=db.collection('progreso').doc(user.uid+'_'+currentCursoId);
+  ref.get().then(function(doc){
+    var data=doc.exists?doc.data():{completadas:[]};
+    if(data.completadas.indexOf(currentClaseIdx)===-1)data.completadas.push(currentClaseIdx);
+    data.completadas.sort(function(a,b){return a-b});
+    return ref.set(data);
+  }).then(function(){
+    closeVideo();
+    openCurso(currentCursoId);
+  });
+}
+function openVideo(url,title,idx){
+  if(!url){alert('No hay video disponible para esta clase');return;}
+  document.getElementById('videoFrame').src=url;
+  document.getElementById('videoTitle').textContent=title||'Clase';
+  document.getElementById('videoModal').classList.add('show');
+  currentClaseIdx=idx;
+  var btn=document.getElementById('videoCompleteBtn');
+  btn.style.display='';
+}
+function closeVideo(){document.getElementById('videoModal').classList.remove('show');document.getElementById('videoFrame').src=''}
+
 function openCurso(id){
+  currentCursoId=id;
   db.collection('cursos').doc(id).get().then(function(doc){
     if(!doc.exists)return;var c=doc.data();
+    currentCursoClases=c.clases||[];
     document.getElementById('cursoCat').textContent=c.categoria||'';
     document.getElementById('cursoNombre').textContent=c.nombre||'';
     document.getElementById('cursoDesc').textContent=c.descripcion||'';
     document.getElementById('cursoInstructor').textContent=c.instructor||'';
-    document.getElementById('cursoClasesCount').textContent=c.clases?c.clases.length:'0';
-    document.getElementById('cursoClasesLabel').textContent=(c.clases?c.clases.length:0)+' clases';
+    var total=c.clases?c.clases.length:0;
+    document.getElementById('cursoClasesCount').textContent=total;
+    document.getElementById('cursoClasesLabel').textContent=total+' clases';
     document.getElementById('cursoNivel').textContent=c.nivel||'';
     var imgEl=document.getElementById('cursoImg');
     var imgUrl=driveImg(c.imagen);
@@ -2033,17 +2070,33 @@ function openCurso(id){
     temWrap.style.display='none';
     document.getElementById('temarioBtnText').textContent='Ver temario';
     if(c.temario){var temUrl=driveEmbed(c.temario);temFrame.dataset.url=temUrl;temFrame.src='';temBtn.style.display=''}else{temBtn.style.display='none'}
-    document.getElementById('cursoProgressBar').style.width='0%';
-    document.getElementById('cursoProgressPct').textContent='0%';
-    var list=document.getElementById('cursoClasesList');list.innerHTML='';
-    if(c.clases)c.clases.forEach(function(cl,i){
-      list.innerHTML+='<div class="clase-card" onclick="openVideo(\''+driveEmbed(cl.video)+'\')"><div class="clase-card__status"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/></svg></div><div class="clase-card__info"><h4>Clase '+(i+1)+' <span>'+cl.nombre+'</span></h4><p><svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> '+(cl.duracion||'—')+'</p></div><div class="clase-card__play"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polygon points="5,3 19,12 5,21"/></svg></div></div>'
+
+    // Load progress
+    var user=firebase.auth().currentUser;
+    var progRef=user?db.collection('progreso').doc(user.uid+'_'+id):null;
+    var progPromise=progRef?progRef.get():Promise.resolve(null);
+    progPromise.then(function(progDoc){
+      var completadas=progDoc&&progDoc.exists?progDoc.data().completadas:[];
+      var pct=total>0?Math.round(completadas.length/total*100):0;
+      document.getElementById('cursoProgressBar').style.width=pct+'%';
+      document.getElementById('cursoProgressPct').textContent=pct+'%';
+
+      var list=document.getElementById('cursoClasesList');list.innerHTML='';
+      if(c.clases)c.clases.forEach(function(cl,i){
+        var done=completadas.indexOf(i)!==-1;
+        var locked=i>0&&completadas.indexOf(i-1)===-1;
+        var statusIcon=done?'<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:white;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><path d="M20 6L9 17l-5-5"/></svg>':locked?'<svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>':'<svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/></svg>';
+        var statusClass=done?'done':locked?'locked':'';
+        var statusText=done?'Completada':locked?'Bloqueada':'Disponible';
+        var statusColor=done?'color:#22c55e':locked?'color:var(--gray-300)':'color:var(--gray-400)';
+        var clickAttr=locked?'onclick="alert(\'Completa la clase anterior para desbloquear esta.\')"':'onclick="openVideo(\''+driveEmbed(cl.video)+'\',\'Clase '+(i+1)+' — '+cl.nombre+'\','+i+')"';
+        var opacity=locked?'opacity:0.5':'';
+        list.innerHTML+='<div class="clase-card" '+clickAttr+' style="'+opacity+'"><div class="clase-card__status '+statusClass+'">'+statusIcon+'</div><div class="clase-card__info"><h4>Clase '+(i+1)+' <span style="'+statusColor+'">'+statusText+'</span></h4><p><svg viewBox="0 0 24 24" style="width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> '+(cl.duracion||'—')+'</p></div>'+(locked?'':'<div class="clase-card__play"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><polygon points="5,3 19,12 5,21"/></svg></div>')+'</div>';
+      });
+      nav('curso-detalle');
     });
-    nav('curso-detalle');
   });
 }
-function openVideo(url){if(!url){alert('No hay video disponible para esta clase');return;}document.getElementById('videoFrame').src=url;document.getElementById('videoModal').classList.add('show')}
-function closeVideo(){document.getElementById('videoModal').classList.remove('show');document.getElementById('videoFrame').src=''}
 var origAuthCallback=firebase.auth().onAuthStateChanged;
 firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones()},500)}});
 </script>
