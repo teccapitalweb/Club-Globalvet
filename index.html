@@ -396,7 +396,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .curso-header__meta span{display:flex;align-items:center;gap:6px}
 .curso-header__meta strong{color:var(--gray-800)}
 .curso-header__btns{display:flex;gap:10px;flex-wrap:wrap}
-.curso-header__btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:0.82rem;font-weight:600;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-700);cursor:pointer;font-family:var(--font-body);transition:all var(--transition)}
+.curso-header__btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:0.82rem;font-weight:600;border:1.5px solid var(--gray-200);background:var(--white);color:var(--gray-700);cursor:pointer;font-family:var(--font-body);transition:all var(--transition);text-decoration:none}
 .curso-header__btn:hover{border-color:var(--purple-200);color:var(--purple-600)}
 .curso-progress{background:var(--purple-900);border-radius:var(--radius-sm);padding:18px 28px;margin-bottom:28px;display:flex;align-items:center;gap:20px;color:white}
 .curso-progress__label{font-size:0.82rem;font-weight:500;white-space:nowrap}
@@ -1279,10 +1279,13 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
           <span><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> <strong id="cursoInstructor"></strong></span>
         </div>
         <div class="curso-header__btns">
-          <a class="curso-header__btn" id="cursoTemarioBtn" href="#" target="_blank"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> Ver temario</a>
+          <button class="curso-header__btn" id="cursoTemarioBtn" onclick="toggleTemario()"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> <span id="temarioBtnText">Ver temario</span></button>
           <div class="curso-header__btn" style="cursor:default"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> <span id="cursoClasesCount">0</span> clases</div>
         </div>
       </div>
+    </div>
+    <div id="cursoTemarioWrap" style="display:none;margin-bottom:24px;overflow:hidden;border-radius:var(--radius);border:1px solid var(--gray-200)">
+      <iframe id="cursoTemarioFrame" style="width:100%;height:600px;border:none"></iframe>
     </div>
     <div class="curso-progress">
       <span class="curso-progress__label">Tu progreso</span>
@@ -2002,6 +2005,15 @@ function loadClubNotificaciones(){
 var clubDataLoaded=false;
 function driveImg(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w600':''}
 function driveEmbed(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/file/d/'+m[1]+'/preview':''}
+function toggleTemario(){
+  var wrap=document.getElementById('cursoTemarioWrap');
+  var frame=document.getElementById('cursoTemarioFrame');
+  var txt=document.getElementById('temarioBtnText');
+  if(wrap.style.display==='none'){
+    wrap.style.display='block';txt.textContent='Ocultar temario';
+    if(!frame.src||frame.src==='about:blank')frame.src=frame.dataset.url||'';
+  }else{wrap.style.display='none';txt.textContent='Ver temario';}
+}
 function openCurso(id){
   db.collection('cursos').doc(id).get().then(function(doc){
     if(!doc.exists)return;var c=doc.data();
@@ -2016,7 +2028,11 @@ function openCurso(id){
     var imgUrl=driveImg(c.imagen);
     imgEl.style.backgroundImage=imgUrl?'url('+imgUrl+')':'linear-gradient(145deg,#4b1c71,#3a1560)';
     var temBtn=document.getElementById('cursoTemarioBtn');
-    if(c.temario){temBtn.href=c.temario;temBtn.style.display=''}else{temBtn.style.display='none'}
+    var temWrap=document.getElementById('cursoTemarioWrap');
+    var temFrame=document.getElementById('cursoTemarioFrame');
+    temWrap.style.display='none';
+    document.getElementById('temarioBtnText').textContent='Ver temario';
+    if(c.temario){var temUrl=driveEmbed(c.temario);temFrame.dataset.url=temUrl;temFrame.src='';temBtn.style.display=''}else{temBtn.style.display='none'}
     document.getElementById('cursoProgressBar').style.width='0%';
     document.getElementById('cursoProgressPct').textContent='0%';
     var list=document.getElementById('cursoClasesList');list.innerHTML='';
