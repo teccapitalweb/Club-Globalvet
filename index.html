@@ -1987,7 +1987,8 @@ function loadClubPdfs(){
     var cont=document.querySelector('[data-page="pdf"] .pdf-grid');if(!cont)return;
     cont.innerHTML='';
     s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;
-      cont.innerHTML+='<div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
+      var img=driveImg(c.imagen);
+      cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
 function loadClubNoticias(){
