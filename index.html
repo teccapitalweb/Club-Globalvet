@@ -1286,7 +1286,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
       </div>
     </div>
     <div id="cursoTemarioWrap" style="display:none;margin-bottom:24px;overflow:hidden;border-radius:14px;border:1px solid var(--gray-200);background:var(--gray-50)">
-      <iframe id="cursoTemarioFrame" style="width:100%;height:600px;border:none;display:block"></iframe>
+      <img id="cursoTemarioImg" src="" alt="Temario" style="width:100%;display:block;border-radius:14px">
     </div>
     <div class="curso-progress">
       <span class="curso-progress__label">Tu progreso</span>
@@ -2015,16 +2015,15 @@ function loadClubNotificaciones(){
 // Load club data when user is authenticated
 var clubDataLoaded=false;
 function driveImg(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w600':''}
+function driveLargeImg(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w1200':url}
 function driveEmbed(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/file/d/'+m[1]+'/preview':''}
-function drivePreview(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(m)return'https://drive.google.com/file/d/'+m[1]+'/preview';if(url.indexOf('drive.google.com')>-1)return url.replace('/view','/preview');return url}
 function toggleTemario(){
   var wrap=document.getElementById('cursoTemarioWrap');
-  var frame=document.getElementById('cursoTemarioFrame');
+  var img=document.getElementById('cursoTemarioImg');
   var txt=document.getElementById('temarioBtnText');
   if(wrap.style.display==='none'){
     wrap.style.display='block';txt.textContent='Ocultar temario';
-    var url=frame.dataset.url||'';
-    if(url&&(!frame.src||frame.src===window.location.href||frame.src==='about:blank'))frame.src=url;
+    if(!img.src||img.src===window.location.href)img.src=img.dataset.url||'';
   }else{wrap.style.display='none';txt.textContent='Ver temario';}
 }
 var currentCursoId=null,currentClaseIdx=null,currentCursoClases=[];
@@ -2070,10 +2069,10 @@ function openCurso(id){
     imgEl.style.backgroundImage=imgUrl?'url('+imgUrl+')':'linear-gradient(145deg,#4b1c71,#3a1560)';
     var temBtn=document.getElementById('cursoTemarioBtn');
     var temWrap=document.getElementById('cursoTemarioWrap');
-    var temFrame=document.getElementById('cursoTemarioFrame');
+    var temImg=document.getElementById('cursoTemarioImg');
     temWrap.style.display='none';
     document.getElementById('temarioBtnText').textContent='Ver temario';
-    if(c.temario){var temUrl=drivePreview(c.temario);temFrame.dataset.url=temUrl;temFrame.src='';temBtn.style.display=''}else{temBtn.style.display='none'}
+    if(c.temario){var temUrl=driveLargeImg(c.temario);temImg.dataset.url=temUrl;temImg.src='';temBtn.style.display=''}else{temBtn.style.display='none'}
 
     // Load progress
     var user=firebase.auth().currentUser;
