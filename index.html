@@ -1792,6 +1792,8 @@ firebase.initializeApp({
   appId:"1:146292961707:web:714454893bfcf3c1b8e2ee"
 });
 var db=firebase.firestore();
+// Persistencia LOCAL: la sesion del Club sobrevive recargas y se mantiene hasta logout explicito
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e){console.warn('Persistencia:',e);});
 </script>
 <script>
 function descargarFicha(e){
