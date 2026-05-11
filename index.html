@@ -937,6 +937,11 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 </style>
 </head>
 <body class="not-logged">
+<div id="authSplash" style="position:fixed;inset:0;z-index:99999;background:#fdfcf7;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity 0.3s ease">
+  <div style="width:60px;height:60px;border:4px solid #ebe0f7;border-top-color:#4b1c71;border-radius:50%;animation:authspin 0.8s linear infinite"></div>
+  <div style="font-family:system-ui,sans-serif;font-size:14px;color:#7a4ca5;font-weight:500">Verificando sesión...</div>
+  <style>@keyframes authspin{to{transform:rotate(360deg)}}</style>
+</div>
 
 <!-- LOGOUT MODAL -->
 <div class="logout-modal" id="logoutModal">
@@ -952,7 +957,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 </div>
 
 <!-- LOGIN SCREEN -->
-<div class="login-screen show" id="loginScreen">
+<div class="login-screen" id="loginScreen">
   <div class="login-hero">
     <div class="login-hero__logo">
       <img src="data:image/png;base64,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" alt="GV">
@@ -1943,7 +1948,17 @@ function loginGoogle(){
 }
 // Firebase Auth state listener
 var _firstAuthLoad=true;
+// Splash inicial: ocultar contenido mientras Firebase decide
+var _authResolved=false;
+setTimeout(function(){
+  // Si en 3 segundos Firebase no ha respondido, asumimos no logueado
+  if(!_authResolved){document.getElementById('loginScreen').classList.add('show');document.body.classList.add('not-logged');}
+},3000);
 firebase.auth().onAuthStateChanged(function(user){
+  _authResolved=true;
+  // Ocultar splash siempre que Firebase responda
+  var splash=document.getElementById('authSplash');
+  if(splash){splash.style.opacity='0';setTimeout(function(){splash.style.display='none';},300);}
   if(user){
     document.getElementById('loginScreen').classList.remove('show');
     document.body.classList.remove('not-logged');
