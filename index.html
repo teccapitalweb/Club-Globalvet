@@ -937,11 +937,6 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 </style>
 </head>
 <body class="not-logged">
-<div id="authSplash" style="position:fixed;inset:0;z-index:99999;background:#fdfcf7;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity 0.3s ease">
-  <div style="width:60px;height:60px;border:4px solid #ebe0f7;border-top-color:#4b1c71;border-radius:50%;animation:authspin 0.8s linear infinite"></div>
-  <div style="font-family:system-ui,sans-serif;font-size:14px;color:#7a4ca5;font-weight:500">Verificando sesión...</div>
-  <style>@keyframes authspin{to{transform:rotate(360deg)}}</style>
-</div>
 
 <!-- LOGOUT MODAL -->
 <div class="logout-modal" id="logoutModal">
@@ -957,7 +952,7 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 </div>
 
 <!-- LOGIN SCREEN -->
-<div class="login-screen" id="loginScreen">
+<div class="login-screen show" id="loginScreen">
   <div class="login-hero">
     <div class="login-hero__logo">
       <img src="data:image/png;base64,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" alt="GV">
@@ -1107,7 +1102,11 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
   <div class="page-content" data-page="webinar">
     <div class="page-header"><h1 class="page-header__title">Webinars en vivo</h1><p class="page-header__desc">Sesiones en vivo con especialistas + biblioteca de grabaciones.</p></div>
     <div class="webinar-list" id="webinarsList">
-      <div style="text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.95rem">Cargando webinars...</div>
+      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">22</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Abordaje del Dolor Crónico en Caninos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Ramírez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
+      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">30</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Odontología Veterinaria Práctica</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 18:00 hrs · 75 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. Morales</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
+      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">5</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Nutrición en Pacientes Geriátricos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 90 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Mendoza</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
+      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">12</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Imagenología Avanzada: Ecografía Abdominal</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 20:00 hrs · 120 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. López</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--done">Reservado</button></div></div>
+      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">20</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Urgencias en Felinos: Protocolos de Triage</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Sánchez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
     </div>
   </div>
 
@@ -1797,8 +1796,6 @@ firebase.initializeApp({
   appId:"1:146292961707:web:714454893bfcf3c1b8e2ee"
 });
 var db=firebase.firestore();
-// Persistencia LOCAL: la sesion del Club sobrevive recargas y se mantiene hasta logout explicito
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(function(e){console.warn('Persistencia:',e);});
 </script>
 <script>
 function descargarFicha(e){
@@ -1947,18 +1944,7 @@ function loginGoogle(){
   });
 }
 // Firebase Auth state listener
-var _firstAuthLoad=true;
-// Splash inicial: ocultar contenido mientras Firebase decide
-var _authResolved=false;
-setTimeout(function(){
-  // Si en 3 segundos Firebase no ha respondido, asumimos no logueado
-  if(!_authResolved){document.getElementById('loginScreen').classList.add('show');document.body.classList.add('not-logged');}
-},3000);
 firebase.auth().onAuthStateChanged(function(user){
-  _authResolved=true;
-  // Ocultar splash siempre que Firebase responda
-  var splash=document.getElementById('authSplash');
-  if(splash){splash.style.opacity='0';setTimeout(function(){splash.style.display='none';},300);}
   if(user){
     document.getElementById('loginScreen').classList.remove('show');
     document.body.classList.remove('not-logged');
@@ -1968,22 +1954,8 @@ firebase.auth().onAuthStateChanged(function(user){
     if(emailEl)emailEl.textContent=user.email||'';
     var avatarEl=document.querySelector('.sidebar__avatar-text');
     if(avatarEl&&user.displayName)avatarEl.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
-    // SOLO navegar a inicio en el primer login, no en cada refresh de token
-    if(_firstAuthLoad){_firstAuthLoad=false;nav('inicio');}
-    // Cargar datos del club solo una vez
-    if(!clubDataLoaded){
-      clubDataLoaded=true;
-      setTimeout(function(){
-        if(typeof loadProfile==='function')loadProfile();
-        if(typeof loadClubCursos==='function')loadClubCursos();
-        if(typeof loadClubWebinars==='function')loadClubWebinars();
-        if(typeof loadClubPdfs==='function')loadClubPdfs();
-        if(typeof loadClubNoticias==='function')loadClubNoticias();
-        if(typeof loadClubNotificaciones==='function')loadClubNotificaciones();
-      },500);
-    }
+    nav('inicio');
   }else{
-    _firstAuthLoad=true;
     document.getElementById('loginScreen').classList.add('show');
     document.body.classList.add('not-logged');
   }
@@ -2041,10 +2013,10 @@ function loadClubCursos(){
   }).catch(function(e){console.log('Error cursos:',e)});
 }
 function loadClubWebinars(){
-  db.collection('webinars').orderBy('fecha','asc').get().then(function(s){
+  db.collection('webinars').get().then(function(s){
     var cont=document.getElementById('webinarsList');if(!cont)return;
     if(s.empty){
-      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas. Pronto podrás unirte a webinars de la comunidad.</p></div>';
+      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
       return;
     }
     cont.innerHTML='';
@@ -2052,26 +2024,20 @@ function loadClubWebinars(){
     var meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     var hayProximos=false;
     s.forEach(function(d){var c=d.data();
-      // Si es grabado, va a la biblioteca (lo saltamos en la lista de "en vivo")
       if(c.estado==='Grabado'||c.grabacion){return;}
       hayProximos=true;
-      // Parsear fecha (formato YYYY-MM-DD)
       var fechaWebinar=c.fecha?new Date(c.fecha+'T00:00:00'):null;
       var dia=fechaWebinar?fechaWebinar.getDate():'—';
       var mes=fechaWebinar?meses[fechaWebinar.getMonth()].toUpperCase():'';
-      // Determinar botones según fecha y estado
       var btnsHtml='';
       var hoyTs=hoy.getTime();
       var webinarTs=fechaWebinar?fechaWebinar.getTime():0;
       var esHoy=webinarTs===hoyTs;
       var yaPaso=webinarTs<hoyTs;
-      // Verificar si tiene reserva del usuario actual
       var user=firebase.auth().currentUser;
       var reservaKey=user?'webinar_reserva_'+user.uid+'_'+d.id:null;
       var yaReservado=reservaKey&&localStorage.getItem(reservaKey)==='1';
-      // Boton Ver CV si tiene cv
       if(c.cv){btnsHtml+='<a href="'+c.cv+'" target="_blank" class="btn-sm">Ver CV</a>';}
-      // Boton principal
       if(yaPaso){
         btnsHtml+='<span class="btn-sm" style="opacity:0.5;cursor:not-allowed">Finalizado</span>';
       }else if(esHoy&&c.link){
@@ -2082,37 +2048,21 @@ function loadClubWebinars(){
         btnsHtml+='<button class="btn-sm" onclick="reservarWebinar(\''+d.id+'\',this)">Reservar</button>';
       }
       var duracion=c.duracion?(typeof c.duracion==='string'&&c.duracion.indexOf('min')>-1?c.duracion:c.duracion+' min'):'60 min';
-      cont.innerHTML+='<div class="webinar-item">'+
-        '<div class="webinar-item__date"><span class="webinar-item__date-day">'+dia+'</span><span class="webinar-item__date-month">'+mes+'</span></div>'+
-        '<div class="webinar-item__info"><h3 class="webinar-item__title">'+(c.titulo||'Webinar')+'</h3><p class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> '+(c.hora||'19:00')+' hrs · '+duracion+' &nbsp; <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> '+(c.ponente||'Especialista')+'</p></div>'+
-        '<div class="webinar-item__actions">'+btnsHtml+'</div>'+
-      '</div>';
+      cont.innerHTML+='<div class="webinar-item"><div class="webinar-item__date"><span class="webinar-item__date-day">'+dia+'</span><span class="webinar-item__date-month">'+mes+'</span></div><div class="webinar-item__info"><h3 class="webinar-item__title">'+(c.titulo||'Webinar')+'</h3><p class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> '+(c.hora||'19:00')+' hrs · '+duracion+' &nbsp; <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> '+(c.ponente||'Especialista')+'</p></div><div class="webinar-item__actions">'+btnsHtml+'</div></div>';
     });
     if(!hayProximos){
-      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas. Pronto podrás unirte a webinars de la comunidad.</p></div>';
+      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
     }
-  }).catch(function(e){
-    console.error('Error cargando webinars:',e);
-    var cont=document.getElementById('webinarsList');
-    if(cont)cont.innerHTML='<div style="text-align:center;padding:40px 20px;color:#d63838;font-size:0.9rem">Error al cargar los webinars. Recarga la página.</div>';
-  });
+  }).catch(function(e){console.error('Error webinars:',e);});
 }
-// Reservar webinar (guarda en localStorage)
 function reservarWebinar(webinarId,btn){
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión para reservar');return;}
   localStorage.setItem('webinar_reserva_'+user.uid+'_'+webinarId,'1');
-  // Tambien guardar en Firestore para que el admin sepa
   db.collection('reservas_webinars').doc(user.uid+'_'+webinarId).set({
-    uid:user.uid,
-    webinarId:webinarId,
-    nombre:user.displayName||user.email,
-    email:user.email,
-    fecha:new Date().toISOString()
+    uid:user.uid,webinarId:webinarId,nombre:user.displayName||user.email,email:user.email,fecha:new Date().toISOString()
   }).catch(function(){});
-  if(btn){
-    btn.outerHTML='<span class="btn-sm" style="background:var(--purple-50);color:var(--purple-600);border:1px solid var(--purple-200)">Reservado</span>';
-  }
+  if(btn){btn.outerHTML='<span class="btn-sm" style="background:var(--purple-50);color:var(--purple-600);border:1px solid var(--purple-200)">Reservado</span>';}
 }
 function loadClubPdfs(){
   db.collection('pdfs').get().then(function(s){
@@ -2420,8 +2370,8 @@ function openCurso(id){
     });
   });
 }
-// auth callback consolidado
-// Callback de carga de datos consolidado en el listener principal
+var origAuthCallback=firebase.auth().onAuthStateChanged;
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones()},500)}});
 </script>
 </body>
 </html>
