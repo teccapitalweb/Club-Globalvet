@@ -1942,6 +1942,7 @@ function loginGoogle(){
   });
 }
 // Firebase Auth state listener
+var _firstAuthLoad=true;
 firebase.auth().onAuthStateChanged(function(user){
   if(user){
     document.getElementById('loginScreen').classList.remove('show');
@@ -1952,8 +1953,22 @@ firebase.auth().onAuthStateChanged(function(user){
     if(emailEl)emailEl.textContent=user.email||'';
     var avatarEl=document.querySelector('.sidebar__avatar-text');
     if(avatarEl&&user.displayName)avatarEl.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
-    nav('inicio');
+    // SOLO navegar a inicio en el primer login, no en cada refresh de token
+    if(_firstAuthLoad){_firstAuthLoad=false;nav('inicio');}
+    // Cargar datos del club solo una vez
+    if(!clubDataLoaded){
+      clubDataLoaded=true;
+      setTimeout(function(){
+        if(typeof loadProfile==='function')loadProfile();
+        if(typeof loadClubCursos==='function')loadClubCursos();
+        if(typeof loadClubWebinars==='function')loadClubWebinars();
+        if(typeof loadClubPdfs==='function')loadClubPdfs();
+        if(typeof loadClubNoticias==='function')loadClubNoticias();
+        if(typeof loadClubNotificaciones==='function')loadClubNotificaciones();
+      },500);
+    }
   }else{
+    _firstAuthLoad=true;
     document.getElementById('loginScreen').classList.add('show');
     document.body.classList.add('not-logged');
   }
@@ -2390,8 +2405,8 @@ function openCurso(id){
     });
   });
 }
-var origAuthCallback=firebase.auth().onAuthStateChanged;
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones()},500)}});
+// auth callback consolidado
+// Callback de carga de datos consolidado en el listener principal
 </script>
 </body>
 </html>
