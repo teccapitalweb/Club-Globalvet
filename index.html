@@ -2134,37 +2134,34 @@ function generarCertificado(){
     document.head.appendChild(s);
   }
   if(!loaded.qr){
-    // Lista de CDNs alternativos para qrcode.js
-    var qrCDNs=[
-      "https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js",
-      "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js",
-      "https://cdn.skypack.dev/qrcode@1.5.3"
-    ];
-    var qrIdx=0;
-    function tryNextQRCDN(){
-      if(qrIdx>=qrCDNs.length){
-        console.error("[CERT] Todos los CDNs de QR fallaron");
-        quitarLoading();
-        alert("No se pudo cargar el generador de QR desde ningun CDN. Intenta en unos momentos o desde otra red.");
-        return;
+    // Estrategia: usar la API publica de qrserver.com como fuente de QR (no requiere JS externo)
+    // Esto evita el problema de CDNs bloqueados o ESM/UMD
+    console.log("[CERT] Usando API publica de QR (no requiere CDN)");
+    window.QRCode={
+      toDataURL:function(text,opts,cb){
+        // Construir URL del servicio publico de QR
+        var size=(opts&&opts.width)||300;
+        var apiUrl="https://api.qrserver.com/v1/create-qr-code/?size="+size+"x"+size+"&margin=10&data="+encodeURIComponent(text);
+        // Descargar imagen y convertir a base64 para usar en jsPDF
+        var xhr=new XMLHttpRequest();
+        xhr.open("GET",apiUrl,true);
+        xhr.responseType="blob";
+        xhr.onload=function(){
+          if(xhr.status===200){
+            var reader=new FileReader();
+            reader.onloadend=function(){cb(null,reader.result);};
+            reader.onerror=function(){cb(new Error("Error leyendo QR"),null);};
+            reader.readAsDataURL(xhr.response);
+          }else{
+            cb(new Error("HTTP "+xhr.status),null);
+          }
+        };
+        xhr.onerror=function(){cb(new Error("Error de red al generar QR"),null);};
+        xhr.send();
       }
-      var s2=document.createElement("script");
-      s2.src=qrCDNs[qrIdx];
-      console.log("[CERT] Intentando cargar QR desde:",qrCDNs[qrIdx]);
-      s2.onload=function(){
-        console.log("[CERT] qrcode.js cargado desde CDN #"+(qrIdx+1));
-        loaded.qr=true;
-        tryGo();
-      };
-      s2.onerror=function(){
-        console.warn("[CERT] Fallo CDN #"+(qrIdx+1)+", intentando siguiente...");
-        qrIdx++;
-        tryNextQRCDN();
-      };
-      document.head.appendChild(s2);
-    }
-    tryNextQRCDN();
+    };
+    loaded.qr=true;
+    console.log("[CERT] QR API lista");
   }
   tryGo();
   // Timeout de seguridad
