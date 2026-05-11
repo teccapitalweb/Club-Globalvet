@@ -1058,23 +1058,16 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
     <div class="home-layout"><div class="main-col">
       <div class="greeting"><div class="greeting__text"><h1 id="greetingTitle">Buenas tardes, Doctor.</h1><p>Tienes acceso completo al catálogo. Retoma donde te quedaste.</p></div><div class="greeting__streak"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg><span class="greeting__streak-days">5</span> días de racha</div></div>
       <div class="feature-row">
-        <div class="webinar-card"><div class="webinar-card__tag">Próximo Webinar</div><div class="webinar-card__title">Abordaje del Dolor Crónico en Caninos</div><div class="webinar-card__timer"><div class="cd-block"><div class="cd-val" id="cd-days">00</div><div class="cd-lbl">Días</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-hrs">03</div><div class="cd-lbl">Hrs</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-min">24</div><div class="cd-lbl">Min</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-sec">00</div><div class="cd-lbl">Seg</div></div></div><div class="webinar-card__date"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Jueves 22 Mayo · 19:00 CST</div></div>
-        <div class="resume-card"><div class="resume-card__label">Retomar curso</div><div class="resume-card__course"><div class="resume-card__progress-ring"><svg width="52" height="52" viewBox="0 0 52 52"><circle class="ring-bg" cx="26" cy="26" r="22"/><circle class="ring-fill" cx="26" cy="26" r="22" stroke-dasharray="138.23" stroke-dashoffset="52.53"/></svg><div class="resume-card__progress-pct">62%</div></div><div class="resume-card__info"><h3>Cirugía de Tejidos Blandos</h3><span>Módulo 5 de 8 · Dr. Ramírez</span></div></div><button class="resume-card__btn"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Continuar</button></div>
+        <div class="webinar-card" id="featuredWebinarCard"><div class="webinar-card__tag">Próximo Webinar</div><div class="webinar-card__title" id="featuredWebinarTitle">Cargando...</div><div class="webinar-card__timer"><div class="cd-block"><div class="cd-val" id="cd-days">00</div><div class="cd-lbl">Días</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-hrs">00</div><div class="cd-lbl">Hrs</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-min">00</div><div class="cd-lbl">Min</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-sec">00</div><div class="cd-lbl">Seg</div></div></div><div class="webinar-card__date" id="featuredWebinarDate"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> &mdash;</div></div>
+        <div class="resume-card" id="resumeCard" style="display:none"><div class="resume-card__label">Retomar curso</div><div class="resume-card__course"><div class="resume-card__progress-ring"><svg width="52" height="52" viewBox="0 0 52 52"><circle class="ring-bg" cx="26" cy="26" r="22"/><circle class="ring-fill" cx="26" cy="26" r="22" id="resumeRingFill" stroke-dasharray="138.23" stroke-dashoffset="138.23"/></svg><div class="resume-card__progress-pct" id="resumePct">0%</div></div><div class="resume-card__info"><h3 id="resumeCourseName">&mdash;</h3><span id="resumeCourseMeta">&mdash;</span></div></div><button class="resume-card__btn" id="resumeContinueBtn"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Continuar</button></div>
       </div>
-      <div class="stats-strip"><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div><div><div class="stats-strip__val">2</div><div class="stats-strip__lbl">En progreso</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="stats-strip__val">5</div><div class="stats-strip__lbl">Completados</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><div class="stats-strip__val">18 h</div><div class="stats-strip__lbl">Aprendizaje</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="stats-strip__val">96%</div><div class="stats-strip__lbl">Promedio</div></div></div></div>
+      <div class="stats-strip"><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div><div><div class="stats-strip__val" id="statEnProgreso">0</div><div class="stats-strip__lbl">En progreso</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="stats-strip__val" id="statCompletados">0</div><div class="stats-strip__lbl">Completados</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div><div><div class="stats-strip__val" id="statHoras">0 h</div><div class="stats-strip__lbl">Aprendizaje</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="stats-strip__val" id="statCertificados">0</div><div class="stats-strip__lbl">Certificados</div></div></div></div>
       <div class="section-header" style="margin-bottom:18px"><h2 class="section-header__title">Continuar aprendiendo</h2><a href="#" class="section-header__link" onclick="nav('biblioteca')">Ver todos →</a></div>
-      <div class="courses-h-scroll" style="margin-bottom:28px">
-        <div class="course-h-card"><div class="course-h-card__top"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342"/></svg></div><span class="course-h-card__badge">Cirugía</span></div><div class="course-h-card__title">Cirugía de Tejidos Blandos</div><div class="course-h-card__meta">Dr. Ramírez · 24 hrs</div><div class="course-h-card__bar"><div class="course-h-card__bar-track"><div class="course-h-card__bar-fill" style="width:62%"></div></div><div class="course-h-card__bar-row"><span class="course-h-card__bar-pct">62%</span><span class="course-h-card__bar-mod">Mód. 5/8</span></div></div></div>
-        <div class="course-h-card"><div class="course-h-card__top"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6"/></svg></div><span class="course-h-card__badge">Diagnóstico</span></div><div class="course-h-card__title">Imagenología Veterinaria</div><div class="course-h-card__meta">Dra. López · 30 hrs</div><div class="course-h-card__bar"><div class="course-h-card__bar-track"><div class="course-h-card__bar-fill" style="width:30%"></div></div><div class="course-h-card__bar-row"><span class="course-h-card__bar-pct">30%</span><span class="course-h-card__bar-mod">Mód. 3/10</span></div></div></div>
-        <div class="course-h-card"><div class="course-h-card__top"><div class="course-h-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714a2.25 2.25 0 00.659 1.591L19 14.5"/></svg></div><span class="course-h-card__badge">Nutrición</span></div><div class="course-h-card__title">Nutrición Clínica Avanzada</div><div class="course-h-card__meta">Dr. Mendoza · 18 hrs</div><div class="course-h-card__bar"><div class="course-h-card__bar-track"><div class="course-h-card__bar-fill" style="width:100%"></div></div><div class="course-h-card__bar-row"><span class="course-h-card__bar-pct">100%</span><span class="course-h-card__bar-mod">Completo</span></div></div></div>
+      <div class="courses-h-scroll" id="coursesHScroll" style="margin-bottom:28px">
+        <div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando cursos...</div>
       </div>
       <div class="section-header"><h2 class="section-header__title">Noticias recientes</h2><a href="#" class="section-header__link" onclick="nav('noticias')">Ver todas →</a></div>
-      <div class="news-carousel-wrap"><div class="news-carousel__arrows"><button class="news-carousel__arrow-btn" onclick="scrollC(-1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg></button><button class="news-carousel__arrow-btn" onclick="scrollC(1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="news-carousel" id="newsCarousel">
-        <div class="news-carousel__card"><img class="news-carousel__img" src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?w=400&h=200&fit=crop" alt=""><div class="news-carousel__body"><div class="news-carousel__source">WSAVA</div><div class="news-carousel__title">Nuevas guías para vacunación en pequeñas especies 2026</div><div class="news-carousel__date">Hace 2 días</div></div></div>
-        <div class="news-carousel__card"><img class="news-carousel__img" src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=400&h=200&fit=crop" alt=""><div class="news-carousel__body"><div class="news-carousel__source">Investigación</div><div class="news-carousel__title">Terapia regenerativa para displasia de cadera</div><div class="news-carousel__date">Hace 5 días</div></div></div>
-        <div class="news-carousel__card"><img class="news-carousel__img" src="https://images.unsplash.com/photo-1612531386530-97d5e5e5b8eb?w=400&h=200&fit=crop" alt=""><div class="news-carousel__body"><div class="news-carousel__source">SENASICA</div><div class="news-carousel__title">Cannabis medicinal veterinario en México</div><div class="news-carousel__date">Hace 1 semana</div></div></div>
-        <div class="news-carousel__card"><img class="news-carousel__img" src="https://images.unsplash.com/photo-1583337130417-13104dec14a7?w=400&h=200&fit=crop" alt=""><div class="news-carousel__body"><div class="news-carousel__source">Congreso</div><div class="news-carousel__title">NAVC 2026: Ponencias más destacadas</div><div class="news-carousel__date">Hace 2 semanas</div></div></div>
-      </div></div>
+      <div class="news-carousel-wrap"><div class="news-carousel__arrows"><button class="news-carousel__arrow-btn" onclick="scrollC(-1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg></button><button class="news-carousel__arrow-btn" onclick="scrollC(1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="news-carousel" id="newsCarousel"><div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando noticias...</div></div></div>
     </div>
     <div class="right-col">
       <div class="side-card" onclick="nav('descuento')"><div class="side-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div><div class="side-card__content"><div class="side-card__title">Descuento 20%</div><div class="side-card__desc">Aplica tu cupón exclusivo de miembro.</div></div><span class="side-card__arrow">›</span></div>
@@ -1088,13 +1081,8 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
   <div class="page-content" data-page="biblioteca">
     <div class="page-header"><h1 class="page-header__title">Biblioteca de cursos</h1><p class="page-header__desc">Todo nuestro catálogo de cursos grabados, disponibles 24/7.</p></div>
     <div class="filter-tabs"><button class="filter-tab active">Todos</button><button class="filter-tab">Cirugía</button><button class="filter-tab">Diagnóstico</button><button class="filter-tab">Nutrición</button><button class="filter-tab">Dermatología</button><button class="filter-tab">Urgencias</button></div>
-    <div class="lib-grid">
-      <div class="lib-card"><div class="lib-card__img"><span class="lib-card__badge">Básico</span></div><div class="lib-card__body"><div class="lib-card__title">Cirugía de Tejidos Blandos</div><div class="lib-card__meta"><span>Dr. Ramírez</span> · <span>24 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:62%"></div></div></div></div></div>
-      <div class="lib-card"><div class="lib-card__img" style="background:linear-gradient(145deg,#ede9fe,var(--purple-50))"><span class="lib-card__badge">Intermedio</span></div><div class="lib-card__body"><div class="lib-card__title">Imagenología Veterinaria</div><div class="lib-card__meta"><span>Dra. López</span> · <span>30 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:30%"></div></div></div></div></div>
-      <div class="lib-card"><div class="lib-card__img" style="background:linear-gradient(145deg,var(--purple-100),#f5eafc)"><span class="lib-card__badge">Avanzado</span></div><div class="lib-card__body"><div class="lib-card__title">Nutrición Clínica Avanzada</div><div class="lib-card__meta"><span>Dr. Mendoza</span> · <span>18 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:100%"></div></div></div></div></div>
-      <div class="lib-card"><div class="lib-card__img" style="background:linear-gradient(145deg,#faf5ff,#e8d5f5)"><span class="lib-card__badge">Básico</span></div><div class="lib-card__body"><div class="lib-card__title">Dermatología en Caninos</div><div class="lib-card__meta"><span>Dra. Herrera</span> · <span>20 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:0%"></div></div></div></div></div>
-      <div class="lib-card"><div class="lib-card__img" style="background:linear-gradient(145deg,#f0e6fa,var(--purple-50))"><span class="lib-card__badge">Intermedio</span></div><div class="lib-card__body"><div class="lib-card__title">Urgencias Felinas</div><div class="lib-card__meta"><span>Dr. Sánchez</span> · <span>16 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:0%"></div></div></div></div></div>
-      <div class="lib-card"><div class="lib-card__img" style="background:linear-gradient(145deg,var(--purple-50),#fce4ff)"><span class="lib-card__badge">Avanzado</span></div><div class="lib-card__body"><div class="lib-card__title">Odontología Veterinaria</div><div class="lib-card__meta"><span>Dra. Morales</span> · <span>22 hrs</span></div><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:0%"></div></div></div></div></div>
+    <div class="lib-grid" id="libGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando catálogo...</div>
     </div>
   </div>
 
@@ -1102,24 +1090,15 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
   <div class="page-content" data-page="webinar">
     <div class="page-header"><h1 class="page-header__title">Webinars en vivo</h1><p class="page-header__desc">Sesiones en vivo con especialistas + biblioteca de grabaciones.</p></div>
     <div class="webinar-list" id="webinarsList">
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">22</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Abordaje del Dolor Crónico en Caninos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Ramírez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">30</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Odontología Veterinaria Práctica</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 18:00 hrs · 75 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. Morales</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">5</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Nutrición en Pacientes Geriátricos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 90 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Mendoza</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">12</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Imagenología Avanzada: Ecografía Abdominal</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 20:00 hrs · 120 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. López</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--done">Reservado</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">20</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Urgencias en Felinos: Protocolos de Triage</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Sánchez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
+      <div style="text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando webinars...</div>
     </div>
   </div>
 
   <!-- ==================== MATERIAL PDF ==================== -->
   <div class="page-content" data-page="pdf">
     <div class="page-header"><h1 class="page-header__title">Material PDF</h1><p class="page-header__desc">Guías, protocolos y documentos descargables.</p></div>
-    <div class="pdf-grid">
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Guía · Protocolos de analgesia multimodal</div><div class="pdf-card__meta">32 pág. · 4.8 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Manual · Interpretación radiográfica</div><div class="pdf-card__meta">18 pág. · 2.7 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Fichas técnicas · Fármacos 2026</div><div class="pdf-card__meta">45 pág. · 6.8 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Tabla · Dosificación por peso</div><div class="pdf-card__meta">8 pág. · 1.2 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Protocolo · Esterilización quirúrgica</div><div class="pdf-card__meta">14 pág. · 3.1 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
-      <div class="pdf-card"><div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div><div class="pdf-card__info"><div class="pdf-card__title">Guía · Nutrición para pacientes renales</div><div class="pdf-card__meta">22 pág. · 4.2 MB</div></div><button class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></button></div>
+    <div class="pdf-grid" id="pdfGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando material...</div>
     </div>
   </div>
 
@@ -1970,7 +1949,21 @@ function showVac(type,btn){['canino','felino','bovino','equino','porcino','ovica
 function showScore(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('score-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();nav(l.dataset.page)}));
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
-(function(){const t=new Date;t.setDate(t.getDate()+2);t.setHours(19,0,0,0);setInterval(()=>{let d=Math.max(0,t-new Date);const dy=Math.floor(d/864e5);d-=dy*864e5;const h=Math.floor(d/36e5);d-=h*36e5;const m=Math.floor(d/6e4);d-=m*6e4;const s=Math.floor(d/1e3);document.getElementById('cd-days').textContent=String(dy).padStart(2,'0');document.getElementById('cd-hrs').textContent=String(h).padStart(2,'0');document.getElementById('cd-min').textContent=String(m).padStart(2,'0');document.getElementById('cd-sec').textContent=String(s).padStart(2,'0')},1000)})();
+// Countdown dinamico - se setea al cargar el webinar destacado
+var _featuredWebinarDate=null;
+setInterval(function(){
+  if(!_featuredWebinarDate)return;
+  var d=Math.max(0,_featuredWebinarDate.getTime()-new Date().getTime());
+  var dy=Math.floor(d/864e5);d-=dy*864e5;
+  var h=Math.floor(d/36e5);d-=h*36e5;
+  var m=Math.floor(d/6e4);d-=m*6e4;
+  var s=Math.floor(d/1e3);
+  var el;
+  if(el=document.getElementById('cd-days'))el.textContent=String(dy).padStart(2,'0');
+  if(el=document.getElementById('cd-hrs'))el.textContent=String(h).padStart(2,'0');
+  if(el=document.getElementById('cd-min'))el.textContent=String(m).padStart(2,'0');
+  if(el=document.getElementById('cd-sec'))el.textContent=String(s).padStart(2,'0');
+},1000);
 (function(){const h=new Date().getHours();const g=h>=19?'Buenas noches':h>=12?'Buenas tardes':'Buenos días';document.getElementById('greetingTitle').textContent=g+', Doctor.'})();
 
 // ============ FIRESTORE: LOAD DATA IN CLUB ============
@@ -2005,10 +1998,16 @@ function loadProfile(){
 
 function loadClubCursos(){
   db.collection('cursos').get().then(function(s){
-    if(s.empty)return;
-    var cont=document.querySelector('[data-page="biblioteca"] .lib-grid');
+    var cont=document.getElementById('libGrid')||document.querySelector('[data-page="biblioteca"] .lib-grid');
     var scroll=document.querySelector('.courses-h-scroll');
-    if(cont){cont.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;var img=driveImg(c.imagen);cont.innerHTML+='<div class="lib-card" onclick="openCurso(\''+d.id+'\')" style="cursor:pointer"><div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'})}
+    if(cont){
+      cont.innerHTML='';
+      var n=0;
+      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;n++;var img=driveImg(c.imagen);cont.innerHTML+='<div class="lib-card" onclick="openCurso(\''+d.id+'\')" style="cursor:pointer"><div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'});
+      if(n===0){
+        cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.</p></div>';
+      }
+    }
     if(scroll){scroll.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;var img=driveImg(c.imagen);scroll.innerHTML+='<div class="course-h-card" onclick="openCurso(\''+d.id+'\')" style="cursor:pointer"><div class="course-h-card__img" style="'+(img?'background-image:url('+img+')':'')+'"><div class="course-h-card__badge-overlay">'+c.nivel+'</div></div><div class="course-h-card__body"><h3 class="course-h-card__title">'+c.nombre+'</h3><div class="course-h-card__meta-bottom"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg> '+c.categoria+'</div><div class="course-h-card__progress-bar"><div class="course-h-card__progress-fill" style="width:0%"></div></div></div></div>'})}
   }).catch(function(e){console.log('Error cursos:',e)});
 }
@@ -2064,14 +2063,140 @@ function reservarWebinar(webinarId,btn){
   }).catch(function(){});
   if(btn){btn.outerHTML='<span class="btn-sm" style="background:var(--purple-50);color:var(--purple-600);border:1px solid var(--purple-200)">Reservado</span>';}
 }
+
+// === DASHBOARD INICIO ===
+function loadFeaturedWebinar(){
+  // Tomar el proximo webinar no grabado, ordenado por fecha asc
+  db.collection('webinars').get().then(function(s){
+    var hoy=new Date();hoy.setHours(0,0,0,0);
+    var proximos=[];
+    s.forEach(function(d){var c=d.data();
+      if(c.grabacion||c.estado==='Grabado')return;
+      if(!c.fecha)return;
+      var fw=new Date(c.fecha+'T'+(c.hora||'19:00')+':00');
+      if(fw.getTime()>=hoy.getTime())proximos.push({data:c,fecha:fw});
+    });
+    proximos.sort(function(a,b){return a.fecha.getTime()-b.fecha.getTime();});
+    var card=document.getElementById('featuredWebinarCard');
+    var title=document.getElementById('featuredWebinarTitle');
+    var dateEl=document.getElementById('featuredWebinarDate');
+    if(proximos.length===0){
+      if(title)title.textContent='Próximamente';
+      if(dateEl)dateEl.innerHTML='<svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Sin webinars programados';
+      _featuredWebinarDate=null;
+      // Apagar countdown
+      ['cd-days','cd-hrs','cd-min','cd-sec'].forEach(function(id){var e=document.getElementById(id);if(e)e.textContent='00';});
+      return;
+    }
+    var w=proximos[0];
+    var c=w.data;
+    var dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    var meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    var diaSem=dias[w.fecha.getDay()];
+    var dia=w.fecha.getDate();
+    var mes=meses[w.fecha.getMonth()];
+    var hora=c.hora||'19:00';
+    if(title)title.textContent=c.titulo||'Webinar';
+    if(dateEl)dateEl.innerHTML='<svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> '+diaSem+' '+dia+' '+mes+' · '+hora+' hrs';
+    _featuredWebinarDate=w.fecha;
+  }).catch(function(e){console.warn('Error webinar destacado:',e);});
+}
+
+function loadResumeCard(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  var card=document.getElementById('resumeCard');
+  // Buscar el ultimo progreso del usuario (mas reciente)
+  db.collection('progreso').get().then(function(s){
+    var docs=[];
+    s.forEach(function(d){
+      // Solo los del usuario
+      if(d.id.indexOf(user.uid+'_')!==0)return;
+      var data=d.data();data._id=d.id;data._cursoId=d.id.substring(user.uid.length+1);
+      docs.push(data);
+    });
+    if(docs.length===0){if(card)card.style.display='none';return;}
+    // Ordenar por fecha de modificacion descendente
+    docs.sort(function(a,b){var fa=a.actualizado||a.creado||'';var fb=b.actualizado||b.creado||'';return fb.localeCompare(fa);});
+    // El curso que mas recientemente se ha trabajado
+    var ultimo=null;
+    for(var i=0;i<docs.length;i++){
+      var p=docs[i];
+      if(p.completadas&&p.completadas.length>0&&(!p.total||p.completadas.length<p.total)){ultimo=p;break;}
+      if(!ultimo)ultimo=p;
+    }
+    if(!ultimo){if(card)card.style.display='none';return;}
+    // Obtener info del curso
+    db.collection('cursos').doc(ultimo._cursoId).get().then(function(doc){
+      if(!doc.exists){if(card)card.style.display='none';return;}
+      var curso=doc.data();
+      var totalClases=(curso.clases&&curso.clases.length)||0;
+      var completadas=(ultimo.completadas&&ultimo.completadas.length)||0;
+      var pct=totalClases>0?Math.round(100*completadas/totalClases):0;
+      // Si esta 100% completo no mostrar como "retomar"
+      if(pct>=100){if(card)card.style.display='none';return;}
+      if(card)card.style.display='';
+      var nameEl=document.getElementById('resumeCourseName');
+      var metaEl=document.getElementById('resumeCourseMeta');
+      var pctEl=document.getElementById('resumePct');
+      var ringEl=document.getElementById('resumeRingFill');
+      var btn=document.getElementById('resumeContinueBtn');
+      if(nameEl)nameEl.textContent=curso.nombre||'Curso';
+      if(metaEl)metaEl.textContent='Módulo '+(completadas+1)+' de '+totalClases+(curso.instructor?' · '+curso.instructor:'');
+      if(pctEl)pctEl.textContent=pct+'%';
+      if(ringEl){
+        var perim=138.23;
+        ringEl.setAttribute('stroke-dashoffset',(perim*(1-pct/100)).toFixed(2));
+      }
+      if(btn)btn.onclick=function(){openCurso(ultimo._cursoId);};
+    }).catch(function(){if(card)card.style.display='none';});
+  }).catch(function(){if(card)card.style.display='none';});
+}
+
+function loadInicioStats(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  // En progreso, completados, horas
+  db.collection('progreso').get().then(function(s){
+    var enProgreso=0,completados=0,horas=0;
+    var cursoPromises=[];
+    s.forEach(function(d){
+      if(d.id.indexOf(user.uid+'_')!==0)return;
+      var p=d.data();
+      var cursoId=d.id.substring(user.uid.length+1);
+      cursoPromises.push(db.collection('cursos').doc(cursoId).get().then(function(doc){
+        if(!doc.exists)return;
+        var c=doc.data();
+        var total=(c.clases&&c.clases.length)||0;
+        var done=(p.completadas&&p.completadas.length)||0;
+        if(total>0&&done>=total){completados++;horas+=parseInt(c.duracion)||0;}
+        else if(done>0)enProgreso++;
+      }).catch(function(){}));
+    });
+    Promise.all(cursoPromises).then(function(){
+      var el;
+      if(el=document.getElementById('statEnProgreso'))el.textContent=enProgreso;
+      if(el=document.getElementById('statCompletados'))el.textContent=completados;
+      if(el=document.getElementById('statHoras'))el.textContent=horas+' h';
+    });
+  }).catch(function(){});
+  // Certificados emitidos
+  db.collection('certificados').where('uid','==',user.uid).get().then(function(s){
+    var el=document.getElementById('statCertificados');
+    if(el)el.textContent=s.size;
+  }).catch(function(){});
+}
+
 function loadClubPdfs(){
   db.collection('pdfs').get().then(function(s){
-    if(s.empty)return;
-    var cont=document.querySelector('[data-page="pdf"] .pdf-grid');if(!cont)return;
+    var cont=document.getElementById('pdfGrid');if(!cont)return;
     cont.innerHTML='';
+    var n=0;
     s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;
+      n++;
       var img=driveImg(c.imagen);
       cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
+    if(n===0){
+      cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando material descargable para ti. Pronto encontrarás guías, protocolos y documentos aquí.</p></div>';
+    }
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
 function loadClubNoticias(){
@@ -2371,7 +2496,7 @@ function openCurso(id){
   });
 }
 var origAuthCallback=firebase.auth().onAuthStateChanged;
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones()},500)}});
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();},500)}});
 </script>
 </body>
 </html>
