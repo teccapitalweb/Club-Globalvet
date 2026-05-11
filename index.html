@@ -2203,53 +2203,53 @@ function crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl){
     doc.setDrawColor(201,160,74);doc.setLineWidth(0.5);doc.rect(6,6,W-12,H-12,"S");
     doc.setLineWidth(0.15);doc.rect(8.6,8.6,W-17.2,H-17.2,"S");
     // === LOGO (centrado arriba) ===
-    var logoW=95,logoH=31;var logoX=(W-logoW)/2;
-    doc.addImage(CERT_LOGO_B64,"PNG",logoX,22,logoW,logoH);
+    var logoW=80,logoH=26;var logoX=(W-logoW)/2;
+    doc.addImage(CERT_LOGO_B64,"PNG",logoX,18,logoW,logoH);
     // === QR (arriba derecha) ===
-    var qrSize=28;var qrX=W-qrSize-19;var qrY=22;
+    var qrSize=24;var qrX=W-qrSize-22;var qrY=20;
     doc.setFillColor(255,255,255);doc.rect(qrX-1.3,qrY-1.3,qrSize+2.6,qrSize+2.6,"F");
     doc.setDrawColor(201,160,74);doc.setLineWidth(0.25);doc.rect(qrX-1.3,qrY-1.3,qrSize+2.6,qrSize+2.6,"S");
     doc.addImage(qrDataUrl,"PNG",qrX,qrY,qrSize,qrSize);
-    // === TITULO CERTIFICADO === (MUCHO mas grande para llenar el espacio)
-    doc.setFont("helvetica","bold");doc.setFontSize(48);doc.setTextColor(201,160,74);
-    doc.text("CERTIFICADO",W/2,82,{align:"center",charSpace:6});
-    doc.setFont("helvetica","normal");doc.setFontSize(13);doc.setTextColor(10,10,10);
-    doc.text("DE FINALIZACION",W/2,96,{align:"center",charSpace:7});
-    // === SUBTITULO ===
-    doc.setFontSize(11);doc.setTextColor(90,90,90);
-    doc.text("EL PRESENTE CERTIFICADO SE OTORGA A",W/2,114,{align:"center",charSpace:4});
-    // === NOMBRE === (muy grande, protagonista)
-    doc.setFont("helvetica","bold");doc.setFontSize(40);doc.setTextColor(10,10,10);
-    doc.text(nombre,W/2,135,{align:"center"});
+    // === TITULO CERTIFICADO === bajado y bien dimensionado
+    doc.setFont("helvetica","bold");doc.setFontSize(40);doc.setTextColor(201,160,74);
+    doc.text("CERTIFICADO",W/2,68,{align:"center",charSpace:5});
+    doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(10,10,10);
+    doc.text("DE FINALIZACION",W/2,80,{align:"center",charSpace:6});
+    // === SUBTITULO === sin charSpace excesivo para no salirse
+    doc.setFontSize(10);doc.setTextColor(90,90,90);
+    doc.text("EL PRESENTE CERTIFICADO SE OTORGA A",W/2,96,{align:"center",charSpace:2.5});
+    // === NOMBRE === protagonista
+    doc.setFont("helvetica","bold");doc.setFontSize(34);doc.setTextColor(10,10,10);
+    doc.text(nombre,W/2,116,{align:"center"});
     // === LINEA DECORATIVA CON DIAMANTE ===
     doc.setDrawColor(201,160,74);doc.setLineWidth(0.4);
-    doc.line(70,141,146,141);doc.line(151,141,227,141);
-    doc.setFillColor(201,160,74);doc.triangle(148.5,139,150.5,141,148.5,143,"F");doc.triangle(148.5,139,146.5,141,148.5,143,"F");
+    doc.line(80,122,146,122);doc.line(151,122,217,122);
+    doc.setFillColor(201,160,74);doc.triangle(148.5,120,150.5,122,148.5,124,"F");doc.triangle(148.5,120,146.5,122,148.5,124,"F");
     // === CURSO ===
-    doc.setFont("helvetica","normal");doc.setFontSize(13);doc.setTextColor(90,90,90);
-    doc.text("Por haber completado satisfactoriamente el curso",W/2,153,{align:"center"});
-    doc.setFont("helvetica","bold");doc.setFontSize(18);doc.setTextColor(10,10,10);
-    doc.text(curso,W/2,165,{align:"center"});
-    // === FIRMAS === (tambien mas grandes)
-    // Firma 1 - Eduardo (izquierda)
-    var f1X=30,f1Y=175,f1W=70,f1H=20;
+    doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(90,90,90);
+    doc.text("Por haber completado satisfactoriamente el curso",W/2,134,{align:"center"});
+    doc.setFont("helvetica","bold");doc.setFontSize(15);doc.setTextColor(10,10,10);
+    doc.text(curso,W/2,145,{align:"center"});
+    // === FIRMAS === dentro del marco
+    // Firma 1 - Eduardo (izquierda) - centrada en x=75 (mitad del lado izquierdo)
+    var f1X=40,f1Y=162,f1W=60,f1H=18;
     try{doc.addImage(CERT_FIRMA_EDUARDO_B64,"PNG",f1X+10,f1Y,f1W,f1H);}catch(e){}
-    doc.setDrawColor(201,160,74);doc.setLineWidth(0.5);doc.line(f1X,f1Y+22,f1X+90,f1Y+22);
-    doc.setFont("helvetica","bold");doc.setFontSize(13);doc.setTextColor(10,10,10);
-    doc.text("Lic. Eduardo Cabrera Hernandez",f1X+45,f1Y+28,{align:"center"});
-    doc.setFont("helvetica","normal");doc.setFontSize(8.5);doc.setTextColor(120,120,120);
-    doc.text("DIRECTOR ACADEMICO",f1X+45,f1Y+33.5,{align:"center",charSpace:2});
-    // Firma 2 - IPCI (derecha)
-    var f2X=177,f2Y=173,f2W=70,f2H=24;
+    doc.setDrawColor(201,160,74);doc.setLineWidth(0.5);doc.line(f1X,f1Y+20,f1X+80,f1Y+20);
+    doc.setFont("helvetica","bold");doc.setFontSize(11);doc.setTextColor(10,10,10);
+    doc.text("Lic. Eduardo Cabrera Hernandez",f1X+40,f1Y+25,{align:"center"});
+    doc.setFont("helvetica","normal");doc.setFontSize(7.5);doc.setTextColor(120,120,120);
+    doc.text("DIRECTOR ACADEMICO",f1X+40,f1Y+30,{align:"center",charSpace:1.8});
+    // Firma 2 - IPCI (derecha) - centrada en x=222
+    var f2X=177,f2Y=160,f2W=60,f2H=22;
     try{doc.addImage(CERT_FIRMA_IPCI_B64,"PNG",f2X+10,f2Y,f2W,f2H);}catch(e){}
-    doc.setDrawColor(201,160,74);doc.setLineWidth(0.5);doc.line(f2X,f2Y+24,f2X+90,f2Y+24);
-    doc.setFont("helvetica","bold");doc.setFontSize(14);doc.setTextColor(10,10,10);
-    doc.text("IPCI Latinoamericano",f2X+45,f2Y+30,{align:"center"});
-    doc.setFont("helvetica","normal");doc.setFontSize(8);doc.setTextColor(120,120,120);
-    doc.text("COORDINACION DE CERTIFICACION",f2X+45,f2Y+35.5,{align:"center",charSpace:1.5});
-    // === FOLIO + FECHA (abajo izquierda) ===
-    doc.setFont("helvetica","normal");doc.setFontSize(7.5);doc.setTextColor(156,138,120);
-    doc.text("FOLIO No. "+folio+"   .   EMITIDO "+fechaTxt,15,205,{charSpace:1});
+    doc.setDrawColor(201,160,74);doc.setLineWidth(0.5);doc.line(f2X,f2Y+22,f2X+80,f2Y+22);
+    doc.setFont("helvetica","bold");doc.setFontSize(12);doc.setTextColor(10,10,10);
+    doc.text("IPCI Latinoamericano",f2X+40,f2Y+27,{align:"center"});
+    doc.setFont("helvetica","normal");doc.setFontSize(7);doc.setTextColor(120,120,120);
+    doc.text("COORDINACION DE CERTIFICACION",f2X+40,f2Y+32,{align:"center",charSpace:1.3});
+    // === FOLIO + FECHA (abajo izquierda, dentro del marco) ===
+    doc.setFont("helvetica","normal");doc.setFontSize(7);doc.setTextColor(156,138,120);
+    doc.text("FOLIO No. "+folio+"   \u00B7   EMITIDO "+fechaTxt,15,200,{charSpace:0.8});
     // === DESCARGAR ===
     var fileName="Certificado_"+curso.replace(/[^a-zA-Z0-9]/g,"_")+"_"+folio+".pdf";
     console.log("[CERT] Guardando PDF:",fileName);
