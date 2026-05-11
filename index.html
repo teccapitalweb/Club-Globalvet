@@ -2134,18 +2134,44 @@ function generarCertificado(){
     document.head.appendChild(s);
   }
   if(!loaded.qr){
-    var s2=document.createElement("script");
-    s2.src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";
-    s2.onload=function(){console.log("[CERT] qrcode.js cargado");loaded.qr=true;tryGo();};
-    s2.onerror=function(){console.error("[CERT] Fallo carga qrcode");quitarLoading();alert("No se pudo cargar el generador de QR. Verifica tu conexion a internet.");};
-    document.head.appendChild(s2);
+    // Lista de CDNs alternativos para qrcode.js
+    var qrCDNs=[
+      "https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js",
+      "https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js",
+      "https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js",
+      "https://cdn.skypack.dev/qrcode@1.5.3"
+    ];
+    var qrIdx=0;
+    function tryNextQRCDN(){
+      if(qrIdx>=qrCDNs.length){
+        console.error("[CERT] Todos los CDNs de QR fallaron");
+        quitarLoading();
+        alert("No se pudo cargar el generador de QR desde ningun CDN. Intenta en unos momentos o desde otra red.");
+        return;
+      }
+      var s2=document.createElement("script");
+      s2.src=qrCDNs[qrIdx];
+      console.log("[CERT] Intentando cargar QR desde:",qrCDNs[qrIdx]);
+      s2.onload=function(){
+        console.log("[CERT] qrcode.js cargado desde CDN #"+(qrIdx+1));
+        loaded.qr=true;
+        tryGo();
+      };
+      s2.onerror=function(){
+        console.warn("[CERT] Fallo CDN #"+(qrIdx+1)+", intentando siguiente...");
+        qrIdx++;
+        tryNextQRCDN();
+      };
+      document.head.appendChild(s2);
+    }
+    tryNextQRCDN();
   }
   tryGo();
   // Timeout de seguridad
   setTimeout(function(){
     var l=document.getElementById("certLoading");
     if(l){l.remove();alert("La generacion del certificado esta tardando. Verifica la consola del navegador (F12) para mas detalles.");}
-  },15000);
+  },30000);
 }
 
 // Assets en base64 inline
