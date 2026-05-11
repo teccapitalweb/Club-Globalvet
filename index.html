@@ -1101,12 +1101,8 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
   <!-- ==================== WEBINAR ==================== -->
   <div class="page-content" data-page="webinar">
     <div class="page-header"><h1 class="page-header__title">Webinars en vivo</h1><p class="page-header__desc">Sesiones en vivo con especialistas + biblioteca de grabaciones.</p></div>
-    <div class="webinar-list">
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">22</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Abordaje del Dolor Crónico en Caninos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Ramírez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">30</div><div class="webinar-item__date-month">May</div></div><div class="webinar-item__info"><div class="webinar-item__title">Odontología Veterinaria Práctica</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 18:00 hrs · 75 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. Morales</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">5</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Nutrición en Pacientes Geriátricos</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 90 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Mendoza</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--primary">Unirme</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">12</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Imagenología Avanzada: Ecografía Abdominal</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 20:00 hrs · 120 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dra. López</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Ver CV</button><button class="btn-sm btn-sm--done">Reservado</button></div></div>
-      <div class="webinar-item"><div class="webinar-item__date"><div class="webinar-item__date-day">20</div><div class="webinar-item__date-month">Jun</div></div><div class="webinar-item__info"><div class="webinar-item__title">Urgencias en Felinos: Protocolos de Triage</div><div class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg> 19:00 hrs · 60 min <svg class="icon" viewBox="0 0 24 24" style="margin-left:4px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> Dr. Sánchez</div></div><div class="webinar-item__actions"><button class="btn-sm btn-sm--ghost">Reservar</button></div></div>
+    <div class="webinar-list" id="webinarsList">
+      <div style="text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.95rem">Cargando webinars...</div>
     </div>
   </div>
 
@@ -2013,16 +2009,78 @@ function loadClubCursos(){
   }).catch(function(e){console.log('Error cursos:',e)});
 }
 function loadClubWebinars(){
-  db.collection('webinars').get().then(function(s){
-    if(s.empty)return;
-    var cont=document.querySelector('[data-page="webinar"] .webinar-list');if(!cont)return;
+  db.collection('webinars').orderBy('fecha','asc').get().then(function(s){
+    var cont=document.getElementById('webinarsList');if(!cont)return;
+    if(s.empty){
+      cont.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9c9c9c;font-size:0.95rem"><div style="font-size:2.5rem;margin-bottom:12px">📺</div><h3 style="font-size:1.05rem;color:#4a4a4a;margin-bottom:6px;font-weight:600">Próximamente más webinars</h3><p style="font-size:0.85rem">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
+      return;
+    }
     cont.innerHTML='';
+    var hoy=new Date();hoy.setHours(0,0,0,0);
+    var meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var hayProximos=false;
     s.forEach(function(d){var c=d.data();
-      var estado=c.grabacion?'Grabado':c.estado;
-      var btnText=c.grabacion?'Ver grabación':estado==='Próximo'?'Reservar':'Unirme';
-      var link=c.grabacion||c.link||'#';
-      cont.innerHTML+='<div class="webinar-item"><div class="webinar-item__date"><span class="webinar-item__date-day">'+(c.fecha?c.fecha.split('-')[2]:'—')+'</span><span class="webinar-item__date-month">'+(c.fecha?['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][parseInt(c.fecha.split('-')[1])-1]:'')+'</span></div><div class="webinar-item__info"><h3 class="webinar-item__title">'+c.titulo+'</h3><p class="webinar-item__meta">'+c.ponente+' · '+c.hora+' · '+(c.duracion||'60')+' min</p></div><div class="webinar-item__actions"><a href="'+link+'" target="_blank" class="btn-sm btn-sm--primary">'+btnText+'</a></div></div>'});
+      // Si es grabado, va a la biblioteca (lo saltamos en la lista de "en vivo")
+      if(c.estado==='Grabado'||c.grabacion){return;}
+      hayProximos=true;
+      // Parsear fecha (formato YYYY-MM-DD)
+      var fechaWebinar=c.fecha?new Date(c.fecha+'T00:00:00'):null;
+      var dia=fechaWebinar?fechaWebinar.getDate():'—';
+      var mes=fechaWebinar?meses[fechaWebinar.getMonth()].toUpperCase():'';
+      // Determinar botones según fecha y estado
+      var btnsHtml='';
+      var hoyTs=hoy.getTime();
+      var webinarTs=fechaWebinar?fechaWebinar.getTime():0;
+      var esHoy=webinarTs===hoyTs;
+      var yaPaso=webinarTs<hoyTs;
+      // Verificar si tiene reserva del usuario actual
+      var user=firebase.auth().currentUser;
+      var reservaKey=user?'webinar_reserva_'+user.uid+'_'+d.id:null;
+      var yaReservado=reservaKey&&localStorage.getItem(reservaKey)==='1';
+      // Boton Ver CV si tiene cv
+      if(c.cv){btnsHtml+='<a href="'+c.cv+'" target="_blank" class="btn-sm">Ver CV</a>';}
+      // Boton principal
+      if(yaPaso){
+        btnsHtml+='<span class="btn-sm" style="opacity:0.5;cursor:not-allowed">Finalizado</span>';
+      }else if(esHoy&&c.link){
+        btnsHtml+='<a href="'+c.link+'" target="_blank" class="btn-sm btn-sm--primary">Unirme</a>';
+      }else if(yaReservado){
+        btnsHtml+='<span class="btn-sm" style="background:var(--purple-50);color:var(--purple-600);border:1px solid var(--purple-200)">Reservado</span>';
+      }else{
+        btnsHtml+='<button class="btn-sm" onclick="reservarWebinar(\''+d.id+'\',this)">Reservar</button>';
+      }
+      var duracion=c.duracion?(typeof c.duracion==='string'&&c.duracion.indexOf('min')>-1?c.duracion:c.duracion+' min'):'60 min';
+      cont.innerHTML+='<div class="webinar-item">'+
+        '<div class="webinar-item__date"><span class="webinar-item__date-day">'+dia+'</span><span class="webinar-item__date-month">'+mes+'</span></div>'+
+        '<div class="webinar-item__info"><h3 class="webinar-item__title">'+(c.titulo||'Webinar')+'</h3><p class="webinar-item__meta"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> '+(c.hora||'19:00')+' hrs · '+duracion+' &nbsp; <svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> '+(c.ponente||'Especialista')+'</p></div>'+
+        '<div class="webinar-item__actions">'+btnsHtml+'</div>'+
+      '</div>';
+    });
+    if(!hayProximos){
+      cont.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9c9c9c;font-size:0.95rem"><div style="font-size:2.5rem;margin-bottom:12px">📺</div><h3 style="font-size:1.05rem;color:#4a4a4a;margin-bottom:6px;font-weight:600">Próximamente más webinars</h3><p style="font-size:0.85rem">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
+    }
+  }).catch(function(e){
+    console.error('Error cargando webinars:',e);
+    var cont=document.getElementById('webinarsList');
+    if(cont)cont.innerHTML='<div style="text-align:center;padding:40px 20px;color:#d63838;font-size:0.9rem">Error al cargar los webinars. Recarga la página.</div>';
+  });
+}
+// Reservar webinar (guarda en localStorage)
+function reservarWebinar(webinarId,btn){
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión para reservar');return;}
+  localStorage.setItem('webinar_reserva_'+user.uid+'_'+webinarId,'1');
+  // Tambien guardar en Firestore para que el admin sepa
+  db.collection('reservas_webinars').doc(user.uid+'_'+webinarId).set({
+    uid:user.uid,
+    webinarId:webinarId,
+    nombre:user.displayName||user.email,
+    email:user.email,
+    fecha:new Date().toISOString()
   }).catch(function(){});
+  if(btn){
+    btn.outerHTML='<span class="btn-sm" style="background:var(--purple-50);color:var(--purple-600);border:1px solid var(--purple-200)">Reservado</span>';
+  }
 }
 function loadClubPdfs(){
   db.collection('pdfs').get().then(function(s){
