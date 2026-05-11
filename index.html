@@ -2012,7 +2012,7 @@ function loadClubWebinars(){
   db.collection('webinars').orderBy('fecha','asc').get().then(function(s){
     var cont=document.getElementById('webinarsList');if(!cont)return;
     if(s.empty){
-      cont.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9c9c9c;font-size:0.95rem"><div style="font-size:2.5rem;margin-bottom:12px">📺</div><h3 style="font-size:1.05rem;color:#4a4a4a;margin-bottom:6px;font-weight:600">Próximamente más webinars</h3><p style="font-size:0.85rem">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
+      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas. Pronto podrás unirte a webinars de la comunidad.</p></div>';
       return;
     }
     cont.innerHTML='';
@@ -2057,7 +2057,7 @@ function loadClubWebinars(){
       '</div>';
     });
     if(!hayProximos){
-      cont.innerHTML='<div style="text-align:center;padding:60px 20px;color:#9c9c9c;font-size:0.95rem"><div style="font-size:2.5rem;margin-bottom:12px">📺</div><h3 style="font-size:1.05rem;color:#4a4a4a;margin-bottom:6px;font-weight:600">Próximamente más webinars</h3><p style="font-size:0.85rem">Estamos preparando nuevas sesiones en vivo con especialistas.</p></div>';
+      cont.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><rect x="2" y="6" width="20" height="12" rx="2"/><polygon points="10 10 16 12 10 14 10 10"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando nuevas sesiones en vivo con especialistas. Pronto podrás unirte a webinars de la comunidad.</p></div>';
     }
   }).catch(function(e){
     console.error('Error cargando webinars:',e);
