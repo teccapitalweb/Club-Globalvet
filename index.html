@@ -2090,9 +2090,11 @@ function completarClase(){
 }
 function closeCongrats(){document.getElementById('congratsModal').classList.remove('show')}
 function generarCertificado(){
-  var user=firebase.auth().currentUser;if(!user)return;
+  console.log("[CERT] Iniciando generacion de certificado...");
+  var user=firebase.auth().currentUser;
+  if(!user){alert("Debes iniciar sesion para generar el certificado");return;}
   var nombre=user.displayName||(user.email?user.email.split("@")[0]:"Doctor");
-  var curso=document.getElementById("cursoNombre").textContent;
+  var curso=document.getElementById("cursoNombre").textContent||"Curso";
   var fecha=new Date();
   var fechaTxt=fecha.toLocaleDateString("es-MX",{day:"2-digit",month:"long",year:"numeric"}).toUpperCase();
   var ano=fecha.getFullYear();
@@ -2100,18 +2102,50 @@ function generarCertificado(){
   var uidPart=user.uid.slice(-2).toUpperCase();
   var folio="IPCI-LAT-"+ano+"-"+ts+uidPart;
   var verifyUrl="https://teccapitalweb.github.io/Club-Globalvet/verificar.html?folio="+folio;
-  // Guardar folio en Firestore para verificación posterior
+  console.log("[CERT] Folio:",folio,"Usuario:",nombre,"Curso:",curso);
+  // Mostrar indicador de carga
+  var loading=document.createElement("div");
+  loading.id="certLoading";
+  loading.style.cssText="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;color:white;font-size:18px;font-family:sans-serif;flex-direction:column;gap:20px;";
+  loading.innerHTML="<div style=\"border:4px solid rgba(255,255,255,0.3);border-top-color:#c9a04a;border-radius:50%;width:60px;height:60px;animation:certspin 1s linear infinite\"></div><div>Generando tu certificado...</div><style>@keyframes certspin{to{transform:rotate(360deg)}}</style>";
+  document.body.appendChild(loading);
+  function quitarLoading(){var l=document.getElementById("certLoading");if(l)l.remove();}
+  // Guardar folio en Firestore para verificacion posterior
   db.collection("certificados").doc(folio).set({
     folio:folio,uid:user.uid,nombre:nombre,curso:curso,cursoId:currentCursoId,
     fechaEmision:firebase.firestore.FieldValue.serverTimestamp(),
     fechaTxt:fechaTxt,emisor:"IPCI Latinoamericano",vigente:true
-  });
+  }).then(function(){console.log("[CERT] Folio guardado en Firestore");}).catch(function(e){console.error("[CERT] Error Firestore:",e);});
   // Cargar jsPDF y qrcode.js
-  var loaded={pdf:!!window.jspdf,qr:!!window.QRCode};
-  function tryGo(){if(loaded.pdf&&loaded.qr)crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl);}
-  if(!loaded.pdf){var s=document.createElement("script");s.src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js";s.onload=function(){loaded.pdf=true;tryGo();};document.head.appendChild(s);}
-  if(!loaded.qr){var s2=document.createElement("script");s2.src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";s2.onload=function(){loaded.qr=true;tryGo();};document.head.appendChild(s2);}
+  var loaded={pdf:!!(window.jspdf&&window.jspdf.jsPDF),qr:!!window.QRCode};
+  console.log("[CERT] Librerias ya cargadas?",loaded);
+  function tryGo(){
+    if(loaded.pdf&&loaded.qr){
+      console.log("[CERT] Ambas librerias listas, generando PDF...");
+      try{crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl);}
+      catch(e){console.error("[CERT] Error en crearCertPDF:",e);quitarLoading();alert("Error al generar PDF: "+e.message);}
+    }
+  }
+  if(!loaded.pdf){
+    var s=document.createElement("script");
+    s.src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js";
+    s.onload=function(){console.log("[CERT] jsPDF cargado");loaded.pdf=true;tryGo();};
+    s.onerror=function(){console.error("[CERT] Fallo carga jsPDF");quitarLoading();alert("No se pudo cargar el generador de PDF. Verifica tu conexion a internet.");};
+    document.head.appendChild(s);
+  }
+  if(!loaded.qr){
+    var s2=document.createElement("script");
+    s2.src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js";
+    s2.onload=function(){console.log("[CERT] qrcode.js cargado");loaded.qr=true;tryGo();};
+    s2.onerror=function(){console.error("[CERT] Fallo carga qrcode");quitarLoading();alert("No se pudo cargar el generador de QR. Verifica tu conexion a internet.");};
+    document.head.appendChild(s2);
+  }
   tryGo();
+  // Timeout de seguridad
+  setTimeout(function(){
+    var l=document.getElementById("certLoading");
+    if(l){l.remove();alert("La generacion del certificado esta tardando. Verifica la consola del navegador (F12) para mas detalles.");}
+  },15000);
 }
 
 // Assets en base64 inline
@@ -2122,7 +2156,8 @@ var CERT_FIRMA_IPCI_B64="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAABaC
 function crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl){
   // QR como dataURL
   QRCode.toDataURL(verifyUrl,{errorCorrectionLevel:"M",margin:1,width:300,color:{dark:"#000000",light:"#ffffff"}},function(err,qrDataUrl){
-    if(err){alert("No se pudo generar el QR");return;}
+    if(err){console.error("[CERT] Error QR:",err);var l=document.getElementById("certLoading");if(l)l.remove();alert("No se pudo generar el QR: "+err.message);return;}
+    console.log("[CERT] QR generado, construyendo PDF...");
     // jsPDF horizontal A4: 297x210mm. Uso escala 1mm = ~2.286px del SVG original (680x480)
     var doc=new jspdf.jsPDF("l","mm","a4");
     var W=297,H=210;
@@ -2194,7 +2229,10 @@ function crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl){
     doc.text("FOLIO No. "+folio+"   .   EMITIDO "+fechaTxt,15,200,{charSpace:0.8});
     // === DESCARGAR ===
     var fileName="Certificado_"+curso.replace(/[^a-zA-Z0-9]/g,"_")+"_"+folio+".pdf";
+    console.log("[CERT] Guardando PDF:",fileName);
     doc.save(fileName);
+    console.log("[CERT] PDF guardado correctamente");
+    var l=document.getElementById("certLoading");if(l)l.remove();
   });
 }
 function openVideo(url,title,idx){
