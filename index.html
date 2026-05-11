@@ -2150,7 +2150,7 @@ function loadResumeCard(){
           var perim=138.23;
           ringEl.setAttribute('stroke-dashoffset',(perim*(1-pct/100)).toFixed(2));
         }
-        if(btn)btn.onclick=function(){nav('curso');openCurso(p._cursoId);};
+        if(btn)btn.onclick=function(){openCurso(p._cursoId);};
       }).catch(function(){tryNext(idx+1);});
     }
     tryNext(0);
