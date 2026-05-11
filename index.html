@@ -2210,26 +2210,34 @@ function crearCertPDF(nombre,curso,fechaTxt,folio,verifyUrl){
     doc.setFillColor(255,255,255);doc.rect(qrX-1.3,qrY-1.3,qrSize+2.6,qrSize+2.6,"F");
     doc.setDrawColor(201,160,74);doc.setLineWidth(0.25);doc.rect(qrX-1.3,qrY-1.3,qrSize+2.6,qrSize+2.6,"S");
     doc.addImage(qrDataUrl,"PNG",qrX,qrY,qrSize,qrSize);
-    // === TITULO CERTIFICADO === bajado y bien dimensionado
+    // Helper: centra texto compensando charSpace correctamente
+    function centerText(text,y,charSpace){
+      charSpace=charSpace||0;
+      var w=doc.getStringUnitWidth(text)*doc.internal.getFontSize()/doc.internal.scaleFactor;
+      var totalWidth=w+charSpace*(text.length-1);
+      var x=(W-totalWidth)/2;
+      doc.text(text,x,y,{charSpace:charSpace});
+    }
+    // === TITULO CERTIFICADO === centrado REAL
     doc.setFont("helvetica","bold");doc.setFontSize(44);doc.setTextColor(201,160,74);
-    doc.text("CERTIFICADO",W/2,70,{align:"center",charSpace:5});
+    centerText("CERTIFICADO",70,5);
     doc.setFont("helvetica","normal");doc.setFontSize(12);doc.setTextColor(10,10,10);
-    doc.text("DE FINALIZACION",W/2,82,{align:"center",charSpace:6});
-    // === SUBTITULO === sin charSpace excesivo para no salirse
+    centerText("DE FINALIZACION",82,6);
+    // === SUBTITULO ===
     doc.setFontSize(10);doc.setTextColor(90,90,90);
-    doc.text("EL PRESENTE CERTIFICADO SE OTORGA A",W/2,99,{align:"center",charSpace:2.8});
-    // === NOMBRE === protagonista
+    centerText("EL PRESENTE CERTIFICADO SE OTORGA A",99,2.8);
+    // === NOMBRE === protagonista (sin charSpace, align:center funciona bien)
     doc.setFont("helvetica","bold");doc.setFontSize(34);doc.setTextColor(10,10,10);
-    doc.text(nombre,W/2,116,{align:"center"});
+    centerText(nombre,116,0);
     // === LINEA DECORATIVA CON DIAMANTE ===
     doc.setDrawColor(201,160,74);doc.setLineWidth(0.35);
     doc.line(85,123,146.5,123);doc.line(150.5,123,212,123);
     doc.setFillColor(201,160,74);doc.triangle(148.5,121.5,150,123,148.5,124.5,"F");doc.triangle(148.5,121.5,147,123,148.5,124.5,"F");
     // === CURSO ===
     doc.setFont("helvetica","normal");doc.setFontSize(11);doc.setTextColor(90,90,90);
-    doc.text("Por haber completado satisfactoriamente el curso",W/2,135,{align:"center"});
+    centerText("Por haber completado satisfactoriamente el curso",135,0);
     doc.setFont("helvetica","bold");doc.setFontSize(18);doc.setTextColor(10,10,10);
-    doc.text(curso,W/2,146,{align:"center"});
+    centerText(curso,146,0);
     // === FIRMAS === dentro del marco
     // Firma 1 - Eduardo (izquierda) - centrada en x=75 (mitad del lado izquierdo)
     var f1X=40,f1Y=162,f1W=60,f1H=18;
