@@ -2105,51 +2105,56 @@ function loadFeaturedWebinar(){
 function loadResumeCard(){
   var user=firebase.auth().currentUser;if(!user)return;
   var card=document.getElementById('resumeCard');
-  // Buscar el ultimo progreso del usuario (mas reciente)
+  if(!card)return;
+  // Buscar progreso del usuario (filtrado por prefijo de doc id)
   db.collection('progreso').get().then(function(s){
     var docs=[];
     s.forEach(function(d){
-      // Solo los del usuario
       if(d.id.indexOf(user.uid+'_')!==0)return;
-      var data=d.data();data._id=d.id;data._cursoId=d.id.substring(user.uid.length+1);
+      var data=d.data();
+      data._cursoId=d.id.substring(user.uid.length+1);
       docs.push(data);
     });
-    if(docs.length===0){if(card)card.style.display='none';return;}
-    // Ordenar por fecha de modificacion descendente
-    docs.sort(function(a,b){var fa=a.actualizado||a.creado||'';var fb=b.actualizado||b.creado||'';return fb.localeCompare(fa);});
-    // El curso que mas recientemente se ha trabajado
-    var ultimo=null;
-    for(var i=0;i<docs.length;i++){
-      var p=docs[i];
-      if(p.completadas&&p.completadas.length>0&&(!p.total||p.completadas.length<p.total)){ultimo=p;break;}
-      if(!ultimo)ultimo=p;
+    if(docs.length===0){card.style.display='none';return;}
+    // Ordenar por actualizado descendente (o creado si no hay actualizado)
+    docs.sort(function(a,b){
+      var fa=a.actualizado||a.creado||'';
+      var fb=b.actualizado||b.creado||'';
+      return fb.localeCompare(fa);
+    });
+    // Buscar el primer curso que NO esté 100% completo
+    function tryNext(idx){
+      if(idx>=docs.length){card.style.display='none';return;}
+      var p=docs[idx];
+      db.collection('cursos').doc(p._cursoId).get().then(function(doc){
+        if(!doc.exists){tryNext(idx+1);return;}
+        var curso=doc.data();
+        if(curso.estado&&curso.estado!=='Publicado'){tryNext(idx+1);return;}
+        var totalClases=(curso.clases&&curso.clases.length)||0;
+        var completadas=(p.completadas&&p.completadas.length)||0;
+        var pct=totalClases>0?Math.round(100*completadas/totalClases):0;
+        // Si está 100%, ir al siguiente
+        if(pct>=100){tryNext(idx+1);return;}
+        // Mostrar este
+        card.style.display='';
+        var nameEl=document.getElementById('resumeCourseName');
+        var metaEl=document.getElementById('resumeCourseMeta');
+        var pctEl=document.getElementById('resumePct');
+        var ringEl=document.getElementById('resumeRingFill');
+        var btn=document.getElementById('resumeContinueBtn');
+        if(nameEl)nameEl.textContent=curso.nombre||'Curso';
+        var siguienteMod=Math.min(completadas+1,totalClases);
+        if(metaEl)metaEl.textContent='Clase '+siguienteMod+' de '+totalClases+(curso.instructor?' · '+curso.instructor:'');
+        if(pctEl)pctEl.textContent=pct+'%';
+        if(ringEl){
+          var perim=138.23;
+          ringEl.setAttribute('stroke-dashoffset',(perim*(1-pct/100)).toFixed(2));
+        }
+        if(btn)btn.onclick=function(){nav('curso');openCurso(p._cursoId);};
+      }).catch(function(){tryNext(idx+1);});
     }
-    if(!ultimo){if(card)card.style.display='none';return;}
-    // Obtener info del curso
-    db.collection('cursos').doc(ultimo._cursoId).get().then(function(doc){
-      if(!doc.exists){if(card)card.style.display='none';return;}
-      var curso=doc.data();
-      var totalClases=(curso.clases&&curso.clases.length)||0;
-      var completadas=(ultimo.completadas&&ultimo.completadas.length)||0;
-      var pct=totalClases>0?Math.round(100*completadas/totalClases):0;
-      // Si esta 100% completo no mostrar como "retomar"
-      if(pct>=100){if(card)card.style.display='none';return;}
-      if(card)card.style.display='';
-      var nameEl=document.getElementById('resumeCourseName');
-      var metaEl=document.getElementById('resumeCourseMeta');
-      var pctEl=document.getElementById('resumePct');
-      var ringEl=document.getElementById('resumeRingFill');
-      var btn=document.getElementById('resumeContinueBtn');
-      if(nameEl)nameEl.textContent=curso.nombre||'Curso';
-      if(metaEl)metaEl.textContent='Módulo '+(completadas+1)+' de '+totalClases+(curso.instructor?' · '+curso.instructor:'');
-      if(pctEl)pctEl.textContent=pct+'%';
-      if(ringEl){
-        var perim=138.23;
-        ringEl.setAttribute('stroke-dashoffset',(perim*(1-pct/100)).toFixed(2));
-      }
-      if(btn)btn.onclick=function(){openCurso(ultimo._cursoId);};
-    }).catch(function(){if(card)card.style.display='none';});
-  }).catch(function(){if(card)card.style.display='none';});
+    tryNext(0);
+  }).catch(function(e){console.warn('Error resume card:',e);card.style.display='none';});
 }
 
 function loadInicioStats(){
@@ -2183,6 +2188,44 @@ function loadInicioStats(){
     var el=document.getElementById('statCertificados');
     if(el)el.textContent=s.size;
   }).catch(function(){});
+}
+
+// === RACHA DE DIAS ===
+function updateRacha(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  var hoy=new Date();
+  var hoyStr=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0');
+  var ref=db.collection('miembros').doc(user.uid);
+  ref.get().then(function(doc){
+    var data=doc.exists?doc.data():{};
+    var racha=data.racha||{dias:0,ultimaFecha:''};
+    var dias=racha.dias||0;
+    var ultima=racha.ultimaFecha||'';
+    if(ultima===hoyStr){
+      // Ya entró hoy, no cambia nada
+    }else if(ultima===''){
+      // Primera vez que entra
+      dias=1;
+      ultima=hoyStr;
+    }else{
+      // Calcular si ayer (suma) o hace mas (reset)
+      var ayer=new Date(hoy);ayer.setDate(ayer.getDate()-1);
+      var ayerStr=ayer.getFullYear()+'-'+String(ayer.getMonth()+1).padStart(2,'0')+'-'+String(ayer.getDate()).padStart(2,'0');
+      if(ultima===ayerStr){
+        dias=dias+1;
+      }else{
+        dias=1;
+      }
+      ultima=hoyStr;
+    }
+    // Actualizar visual
+    var el=document.querySelector('.greeting__streak-days');
+    if(el)el.textContent=dias;
+    // Persistir si cambió
+    if(racha.dias!==dias||racha.ultimaFecha!==ultima){
+      ref.set({racha:{dias:dias,ultimaFecha:ultima}},{merge:true}).catch(function(e){console.warn('Error guardando racha:',e);});
+    }
+  }).catch(function(e){console.warn('Error leyendo racha:',e);});
 }
 
 function loadClubPdfs(){
@@ -2240,9 +2283,12 @@ function completarClase(){
   var user=firebase.auth().currentUser;if(!user||currentCursoId===null||currentClaseIdx===null)return;
   var ref=db.collection('progreso').doc(user.uid+'_'+currentCursoId);
   ref.get().then(function(doc){
-    var data=doc.exists?doc.data():{completadas:[]};
+    var data=doc.exists?doc.data():{completadas:[],uid:user.uid,cursoId:currentCursoId,creado:new Date().toISOString()};
+    if(!data.completadas)data.completadas=[];
     if(data.completadas.indexOf(currentClaseIdx)===-1)data.completadas.push(currentClaseIdx);
     data.completadas.sort(function(a,b){return a-b});
+    data.actualizado=new Date().toISOString();
+    data.uid=user.uid;data.cursoId=currentCursoId;
     return ref.set(data).then(function(){return data});
   }).then(function(data){
     closeVideo();
@@ -2251,6 +2297,9 @@ function completarClase(){
       document.getElementById('congratsModal').classList.add('show');
     }
     openCurso(currentCursoId);
+    // Actualizar dashboard al volver al inicio
+    if(typeof loadResumeCard==='function')loadResumeCard();
+    if(typeof loadInicioStats==='function')loadInicioStats();
   });
 }
 function closeCongrats(){document.getElementById('congratsModal').classList.remove('show')}
@@ -2496,7 +2545,7 @@ function openCurso(id){
   });
 }
 var origAuthCallback=firebase.auth().onAuthStateChanged;
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();},500)}});
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();},500)}});
 </script>
 </body>
 </html>
