@@ -1964,7 +1964,25 @@ setInterval(function(){
   if(el=document.getElementById('cd-min'))el.textContent=String(m).padStart(2,'0');
   if(el=document.getElementById('cd-sec'))el.textContent=String(s).padStart(2,'0');
 },1000);
-(function(){const h=new Date().getHours();const g=h>=19?'Buenas noches':h>=12?'Buenas tardes':'Buenos días';document.getElementById('greetingTitle').textContent=g+', Doctor.'})();
+function updateGreeting(){
+  var h=new Date().getHours();
+  var g=h>=19?'Buenas noches':h>=12?'Buenas tardes':'Buenos días';
+  var user=firebase.auth().currentUser;
+  var nombre='Doctor';
+  if(user){
+    if(user.displayName){
+      // Tomar solo el primer nombre (antes del primer espacio)
+      nombre=user.displayName.split(' ')[0];
+    }else if(user.email){
+      nombre=user.email.split('@')[0];
+      // Capitalizar primera letra
+      nombre=nombre.charAt(0).toUpperCase()+nombre.slice(1);
+    }
+  }
+  var el=document.getElementById('greetingTitle');
+  if(el)el.textContent=g+', '+nombre+'.';
+}
+updateGreeting();
 
 // ============ FIRESTORE: LOAD DATA IN CLUB ============
 function saveProfile(){
@@ -2607,7 +2625,7 @@ function openCurso(id){
   });
 }
 var origAuthCallback=firebase.auth().onAuthStateChanged;
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();},500)}});
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();},500)}});
 </script>
 </body>
 </html>
