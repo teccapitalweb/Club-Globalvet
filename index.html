@@ -1997,18 +1997,67 @@ function loadProfile(){
 }
 
 function loadClubCursos(){
-  db.collection('cursos').get().then(function(s){
+  var user=firebase.auth().currentUser;
+  Promise.all([
+    db.collection('cursos').get(),
+    // Solo cargar progreso si hay usuario logueado
+    user?db.collection('progreso').get():Promise.resolve(null)
+  ]).then(function(results){
+    var s=results[0];
+    var progSnap=results[1];
+    // Construir mapa de progreso del usuario actual {cursoId: {completadas:[], total:N}}
+    var progMap={};
+    if(progSnap&&user){
+      progSnap.forEach(function(d){
+        if(d.id.indexOf(user.uid+'_')!==0)return;
+        var cursoId=d.id.substring(user.uid.length+1);
+        progMap[cursoId]=d.data();
+      });
+    }
     var cont=document.getElementById('libGrid')||document.querySelector('[data-page="biblioteca"] .lib-grid');
-    var scroll=document.querySelector('.courses-h-scroll');
+    var scroll=document.getElementById('coursesHScroll')||document.querySelector('.courses-h-scroll');
+    // Filtrar cursos publicados
+    var cursos=[];
+    s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;c._id=d.id;cursos.push(c);});
+    // Calcular pct para cada curso
+    function getPct(curso){
+      var total=(curso.clases&&curso.clases.length)||0;
+      var prog=progMap[curso._id];
+      var done=(prog&&prog.completadas&&prog.completadas.length)||0;
+      return total>0?Math.round(100*done/total):0;
+    }
+    // === BIBLIOTECA ===
     if(cont){
       cont.innerHTML='';
-      var n=0;
-      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;n++;var img=driveImg(c.imagen);cont.innerHTML+='<div class="lib-card" onclick="openCurso(\''+d.id+'\')" style="cursor:pointer"><div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+c.categoria+'</span><h3 class="lib-card__title">'+c.nombre+'</h3><p class="lib-card__meta">'+c.instructor+' · '+(c.clases?c.clases.length:0)+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div style="width:0%"></div></div><span>0%</span></div></div></div>'});
-      if(n===0){
+      cursos.forEach(function(c){
+        var img=driveImg(c.imagen);
+        var pct=getPct(c);
+        var totalClases=(c.clases&&c.clases.length)||0;
+        cont.innerHTML+='<div class="lib-card" onclick="openCurso(\''+c._id+'\')" style="cursor:pointer"><div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+(c.categoria||'')+'</span><h3 class="lib-card__title">'+(c.nombre||'')+'</h3><p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div></div></div>';
+      });
+      if(cursos.length===0){
         cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.</p></div>';
       }
     }
-    if(scroll){scroll.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;var img=driveImg(c.imagen);scroll.innerHTML+='<div class="course-h-card" onclick="openCurso(\''+d.id+'\')" style="cursor:pointer"><div class="course-h-card__img" style="'+(img?'background-image:url('+img+')':'')+'"><div class="course-h-card__badge-overlay">'+c.nivel+'</div></div><div class="course-h-card__body"><h3 class="course-h-card__title">'+c.nombre+'</h3><div class="course-h-card__meta-bottom"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg> '+c.categoria+'</div><div class="course-h-card__progress-bar"><div class="course-h-card__progress-fill" style="width:0%"></div></div></div></div>'})}
+    // === CONTINUAR APRENDIENDO (solo cursos en progreso, no 0% ni 100%) ===
+    if(scroll){
+      scroll.innerHTML='';
+      // Filtrar: cursos en progreso (>0% y <100%) o todos si no hay ninguno en progreso
+      var enProgreso=cursos.filter(function(c){var p=getPct(c);return p>0&&p<100;});
+      var paraMostrar=enProgreso.length>0?enProgreso:cursos.slice(0,5);
+      paraMostrar.forEach(function(c){
+        var img=driveImg(c.imagen);
+        var pct=getPct(c);
+        var totalClases=(c.clases&&c.clases.length)||0;
+        var prog=progMap[c._id];
+        var done=(prog&&prog.completadas&&prog.completadas.length)||0;
+        var modText=totalClases>0?'Mód. '+Math.min(done+1,totalClases)+'/'+totalClases:'';
+        scroll.innerHTML+='<div class="course-h-card" onclick="openCurso(\''+c._id+'\')" style="cursor:pointer"><div class="course-h-card__img" style="'+(img?'background-image:url('+img+')':'')+'"><div class="course-h-card__badge-overlay">'+(c.nivel||'')+'</div></div><div class="course-h-card__body"><h3 class="course-h-card__title">'+(c.nombre||'')+'</h3><div class="course-h-card__meta-bottom"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg> '+(c.categoria||'')+'</div><div class="course-h-card__progress-bar"><div class="course-h-card__progress-fill" style="width:'+pct+'%"></div></div>'+(modText?'<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem"><span style="color:var(--purple-600);font-weight:600">'+pct+'%</span><span style="color:var(--gray-400)">'+modText+'</span></div>':'')+'</div></div>';
+      });
+      if(paraMostrar.length===0){
+        scroll.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">No hay cursos disponibles aún.</div>';
+      }
+    }
   }).catch(function(e){console.log('Error cursos:',e)});
 }
 function loadClubWebinars(){
@@ -2244,11 +2293,24 @@ function loadClubPdfs(){
 }
 function loadClubNoticias(){
   db.collection('noticias').get().then(function(s){
-    if(s.empty)return;
     var carousel=document.getElementById('newsCarousel');
     var full=document.querySelector('[data-page="noticias"] .news-full-list');
-    if(carousel){carousel.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+c.fuente+'</span><h4 class="news-carousel__title">'+c.titulo+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'})}
-    if(full){full.innerHTML='';s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'var(--gray-200)')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+c.fuente+'</span><h3 class="news-full-item__title">'+c.titulo+'</h3><p class="news-full-item__excerpt">'+c.contenido.substring(0,120)+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'})}
+    if(carousel){
+      carousel.innerHTML='';
+      var n=0;
+      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;n++;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'linear-gradient(135deg,var(--purple-50),var(--purple-100))')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+(c.fuente||'')+'</span><h4 class="news-carousel__title">'+(c.titulo||'')+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'});
+      if(n===0){
+        carousel.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">Aún no hay noticias publicadas.</div>';
+      }
+    }
+    if(full){
+      full.innerHTML='';
+      var n2=0;
+      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;n2++;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'linear-gradient(135deg,var(--purple-50),var(--purple-100))')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+(c.fuente||'')+'</span><h3 class="news-full-item__title">'+(c.titulo||'')+'</h3><p class="news-full-item__excerpt">'+((c.contenido||'').substring(0,120))+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'});
+      if(n2===0){
+        full.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Pronto encontrarás aquí las últimas noticias del sector veterinario.</p></div>';
+      }
+    }
   }).catch(function(e){console.log('Error noticias:',e)});
 }
 function loadClubNotificaciones(){
