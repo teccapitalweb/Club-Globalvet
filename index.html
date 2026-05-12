@@ -2657,12 +2657,19 @@ function loadNotifPrefs(){
 function toggleNotif(el,key){
   el.classList.toggle('on');
   var user=firebase.auth().currentUser;if(!user)return;
+  // Actualizar cache local inmediatamente
+  if(!_notifPrefsCache)_notifPrefsCache={cursos:true,webinars:true,pdfs:true,promos:true,general:true};
+  _notifPrefsCache[key]=el.classList.contains('on');
   var update={};
   update['notifPrefs.'+key]=el.classList.contains('on');
   db.collection('miembros').doc(user.uid).update(update).catch(function(){
     // Si update falla porque no existe el campo, hacer set merge
-    db.collection('miembros').doc(user.uid).set({notifPrefs:{[key]:el.classList.contains('on')}},{merge:true});
+    var prefs={};
+    prefs[key]=el.classList.contains('on');
+    db.collection('miembros').doc(user.uid).set({notifPrefs:prefs},{merge:true});
   });
+  // Refrescar notificaciones del Club con los nuevos filtros
+  if(typeof loadClubNotificaciones==='function')loadClubNotificaciones();
 }
 
 // Configuracion: cambiar contraseña
@@ -2859,6 +2866,7 @@ function renderNoticias(arr){
 function loadClubNotificaciones(){
   var user=firebase.auth().currentUser;
   db.collection('notificaciones').get().then(function(s){
+    console.log('[NOTIF] Total notificaciones en Firestore:',s.size);
     var cont=document.querySelector('[data-page="notificaciones"] .notif-list');
     var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
     var parent=document.querySelector('[data-page="notificaciones"]');
@@ -2870,7 +2878,8 @@ function loadClubNotificaciones(){
     // Filtrar
     var ahora=Date.now();
     var hace24h=ahora-24*60*60*1000;
-    var prefs=_notifPrefsCache||{cursos:true,webinars:true,pdfs:true,promos:true,general:true};
+    // Si las prefs no estan cargadas todavia, dejar TODAS pasar (no filtrar)
+    var prefs=_notifPrefsCache;
     // Mapear "tipo" -> key de prefs
     function tipoToPref(tipo){
       if(!tipo)return 'general';
@@ -2878,24 +2887,40 @@ function loadClubNotificaciones(){
       if(t.indexOf('curso')!==-1)return 'cursos';
       if(t.indexOf('webinar')!==-1)return 'webinars';
       if(t.indexOf('pdf')!==-1||t.indexOf('material')!==-1)return 'pdfs';
-      if(t.indexOf('promo')!==-1||t.indexOf('descuento')!==-1)return 'promos';
+      if(t.indexOf('promo')!==-1||t.indexOf('descuento')!==-1||t.indexOf('oferta')!==-1)return 'promos';
       return 'general';
     }
     var notifs=[];
+    var debug={total:0,filtradoPor24h:0,filtradoPorDismiss:0,filtradoPorPref:0,mostradas:0};
     s.forEach(function(d){
+      debug.total++;
       var c=d.data();c._id=d.id;
       // Filtro 24h
-      var fcreado=c.creado?new Date(c.creado).getTime():0;
-      if(fcreado<hace24h)return;
+      var fcreado=0;
+      if(c.creado){
+        if(typeof c.creado==='string'){fcreado=new Date(c.creado).getTime();}
+        else if(c.creado.toDate){fcreado=c.creado.toDate().getTime();}
+        else if(c.creado instanceof Date){fcreado=c.creado.getTime();}
+      }
+      if(fcreado===0||isNaN(fcreado)){
+        // Sin fecha, asumir reciente
+        fcreado=ahora;
+      }
+      if(fcreado<hace24h){debug.filtradoPor24h++;return;}
       // Filtro descartadas manualmente
-      if(dismissed.indexOf(d.id)!==-1)return;
-      // Filtro por preferencias del usuario
-      var prefKey=tipoToPref(c.tipo);
-      if(prefs[prefKey]===false)return;
+      if(dismissed.indexOf(d.id)!==-1){debug.filtradoPorDismiss++;return;}
+      // Filtro por preferencias del usuario (solo si las prefs ya estan cargadas)
+      if(prefs){
+        var prefKey=tipoToPref(c.tipo);
+        if(prefs[prefKey]===false){debug.filtradoPorPref++;return;}
+      }
+      c._fechaTs=fcreado;
       notifs.push(c);
+      debug.mostradas++;
     });
+    console.log('[NOTIF] Debug:',debug);
     // Ordenar por fecha descendente
-    notifs.sort(function(a,b){return (new Date(b.creado).getTime())-(new Date(a.creado).getTime());});
+    notifs.sort(function(a,b){return b._fechaTs-a._fechaTs;});
     // Render
     if(notifs.length===0){
       if(empty)empty.style.display='';
@@ -2905,10 +2930,10 @@ function loadClubNotificaciones(){
     if(empty)empty.style.display='none';
     cont.innerHTML='';
     notifs.forEach(function(c){
-      var f=c.creado?notifTimeAgo(c.creado):'';
+      var f=c._fechaTs?notifTimeAgo(new Date(c._fechaTs).toISOString()):'';
       cont.innerHTML+='<div class="s-card" data-notif-id="'+c._id+'" style="padding:18px 22px;margin-bottom:10px;position:relative"><button onclick="dismissNotif(\''+c._id+'\')" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--gray-300);cursor:pointer;padding:4px;border-radius:6px;transition:all 0.2s" onmouseover="this.style.color=\'var(--gray-500)\';this.style.background=\'var(--gray-100)\'" onmouseout="this.style.color=\'var(--gray-300)\';this.style.background=\'none\'"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div style="display:flex;align-items:flex-start;gap:12px;padding-right:24px"><span style="font-size:1.3rem">'+(c.emoji||'📢')+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+escapeHtml(c.titulo||'')+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+escapeHtml(c.mensaje||'')+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>';
     });
-  }).catch(function(){});
+  }).catch(function(e){console.error('[NOTIF] Error:',e);});
 }
 
 // Tiempo relativo corto para notificaciones
@@ -3757,7 +3782,10 @@ function showLogroToast(logro){
   },3000);
 }
 
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();loadNotifPrefsCache();},500)}});
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
+  // Cargar prefs ANTES de notificaciones para que el filtro funcione
+  loadNotifPrefsCache().then(function(){loadClubNotificaciones();});
+},500)}});
 </script>
 </body>
 </html>
