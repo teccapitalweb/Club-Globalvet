@@ -2151,7 +2151,8 @@ function iniciarSesion(){
     firebase.auth().createUserWithEmailAndPassword(email,pass).then(function(cred){
       return cred.user.updateProfile({displayName:name}).then(function(){
         return firebase.firestore().collection('miembros').doc(cred.user.uid).set({
-          nombre:name,correo:email,plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:''
+          nombre:name,correo:email,plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:'',
+          notifPrefs:{cursos:true,webinars:true,pdfs:true,promos:true,general:true}
         });
       });
     }).then(function(){
@@ -2194,7 +2195,8 @@ function loginGoogle(){
     var isNew=result.additionalUserInfo&&result.additionalUserInfo.isNewUser;
     if(isNew){
       return firebase.firestore().collection('miembros').doc(user.uid).set({
-        nombre:user.displayName||'',correo:user.email||'',plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:user.photoURL||''
+        nombre:user.displayName||'',correo:user.email||'',plan:'Mensual',estado:'activo',registro:new Date().toISOString(),foto:user.photoURL||'',
+        notifPrefs:{cursos:true,webinars:true,pdfs:true,promos:true,general:true}
       });
     }
   }).catch(function(err){
