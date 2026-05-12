@@ -360,6 +360,14 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .notif-empty__icon { width: 56px; height: 56px; margin: 0 auto 16px; background: var(--gray-100); border-radius: 50%; display: grid; place-items: center; color: var(--gray-400); }
 .notif-empty h3 { font-family: var(--font-display); font-size: 1.05rem; font-weight: 600; color: var(--gray-800); margin-bottom: 6px; }
 .notif-empty p { font-size: 0.82rem; color: var(--gray-400); }
+.notif-badge { position: absolute; min-width: 18px; height: 18px; padding: 0 5px; background: var(--purple-900); color: #fff; font-size: 0.62rem; font-weight: 700; border-radius: 9px; display: none; align-items: center; justify-content: center; line-height: 1; font-family: var(--font-body); letter-spacing: 0; }
+.notif-badge.show { display: inline-flex; }
+.sidebar__link .notif-badge { top: 50%; right: 10px; transform: translateY(-50%); }
+.topbar__btn { position: relative; }
+.topbar__btn .notif-badge { top: -3px; right: -3px; border: 2px solid var(--white); box-shadow: 0 2px 6px rgba(75,28,113,0.3); }
+body.dark .topbar__btn .notif-badge { border-color: var(--dk-bg, #1a1a2e); }
+.notif-card-nueva { border-left: 3px solid var(--purple-900) !important; background: linear-gradient(90deg, rgba(75,28,113,0.04) 0%, var(--white) 60%) !important; }
+body.dark .notif-card-nueva { background: linear-gradient(90deg, rgba(127,76,165,0.12) 0%, var(--dk-card) 60%) !important; }
 
 /* CONFIG TOGGLES */
 .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--gray-50); }
@@ -1207,7 +1215,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <ul class="sidebar__nav">
       <li><a class="sidebar__link" data-page="descuento"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg> Descuento 20%</a></li>
       <li><a class="sidebar__link" data-page="canal"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg> Canal</a></li>
-      <li><a class="sidebar__link" data-page="notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg> Notificaciones</a></li>
+      <li><a class="sidebar__link" data-page="notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg> Notificaciones <span class="notif-badge" id="sidebarNotifBadge">0</span></a></li>
     </ul>
   </div>
   <div class="sidebar__section"><div class="sidebar__section-title">Mi Cuenta</div>
@@ -1228,7 +1236,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="topbar__left"><button class="topbar__hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button></div>
     <div class="topbar__actions">
       <button class="topbar__btn" id="darkToggle" onclick="toggleDark()" title="Modo oscuro"><svg class="icon icon-moon" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg><svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
-      <button class="topbar__btn" onclick="nav('notificaciones')" title="Notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></button>
+      <button class="topbar__btn" onclick="nav('notificaciones')" title="Notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span class="notif-badge" id="topbarNotifBadge">0</span></button>
       <button class="topbar__btn" onclick="nav('configuracion')" title="Configuración"><svg class="icon" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
   </header>
@@ -2873,9 +2881,12 @@ function loadClubNotificaciones(){
     var cont=document.getElementById('notifList');
     var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
     if(!cont){console.warn('[NOTIF] No se encontro #notifList');return;}
-    // Leer las notificaciones que el usuario ya borro manualmente
+    // Leer las notificaciones que el usuario ya borro manualmente (boton X)
     var dismissed=[];
     try{dismissed=JSON.parse(localStorage.getItem('notif_dismissed_'+(user?user.uid:'anon'))||'[]');}catch(e){}
+    // Leer las notificaciones que el usuario marco como leidas (boton Marcar todas leidas)
+    var read=[];
+    try{read=JSON.parse(localStorage.getItem('notif_read_'+(user?user.uid:'anon'))||'[]');}catch(e){}
     // Filtrar
     var ahora=Date.now();
     var hace24h=ahora-24*60*60*1000;
@@ -2890,7 +2901,7 @@ function loadClubNotificaciones(){
       return 'general';
     }
     var notifs=[];
-    var debug={total:0,filtradoPor24h:0,filtradoPorDismiss:0,filtradoPorPref:0,mostradas:0};
+    var debug={total:0,filtradoPor24h:0,filtradoPorDismiss:0,filtradoPorPref:0,mostradas:0,sinLeer:0};
     s.forEach(function(d){
       debug.total++;
       var c=d.data();c._id=d.id;
@@ -2908,11 +2919,15 @@ function loadClubNotificaciones(){
         if(prefs[prefKey]===false){debug.filtradoPorPref++;return;}
       }
       c._fechaTs=fcreado;
+      c._nueva=read.indexOf(d.id)===-1;
+      if(c._nueva)debug.sinLeer++;
       notifs.push(c);
       debug.mostradas++;
     });
     console.log('[NOTIF] Debug:',debug);
     notifs.sort(function(a,b){return b._fechaTs-a._fechaTs;});
+    // Actualizar badge (cuenta de no leidas)
+    updateNotifBadge(debug.sinLeer);
     if(notifs.length===0){
       cont.innerHTML='';
       if(empty)empty.style.display='';
@@ -2922,9 +2937,25 @@ function loadClubNotificaciones(){
     cont.innerHTML='';
     notifs.forEach(function(c){
       var f=c._fechaTs?notifTimeAgo(new Date(c._fechaTs).toISOString()):'';
-      cont.innerHTML+='<div class="s-card" data-notif-id="'+c._id+'" style="padding:18px 22px;margin-bottom:10px;position:relative"><button onclick="dismissNotif(\''+c._id+'\')" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--gray-300);cursor:pointer;padding:4px;border-radius:6px;transition:all 0.2s" onmouseover="this.style.color=\'var(--gray-500)\';this.style.background=\'var(--gray-100)\'" onmouseout="this.style.color=\'var(--gray-300)\';this.style.background=\'none\'"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div style="display:flex;align-items:flex-start;gap:12px;padding-right:24px"><span style="font-size:1.3rem">'+(c.emoji||'📢')+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+escapeHtml(c.titulo||'')+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+escapeHtml(c.mensaje||'')+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>';
+      var nuevaClass=c._nueva?' notif-card-nueva':'';
+      cont.innerHTML+='<div class="s-card'+nuevaClass+'" data-notif-id="'+c._id+'" style="padding:18px 22px;margin-bottom:10px;position:relative"><button onclick="dismissNotif(\''+c._id+'\')" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--gray-300);cursor:pointer;padding:4px;border-radius:6px;transition:all 0.2s" onmouseover="this.style.color=\'var(--gray-500)\';this.style.background=\'var(--gray-100)\'" onmouseout="this.style.color=\'var(--gray-300)\';this.style.background=\'none\'"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div style="display:flex;align-items:flex-start;gap:12px;padding-right:24px"><span style="font-size:1.3rem">'+(c.emoji||'📢')+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+escapeHtml(c.titulo||'')+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+escapeHtml(c.mensaje||'')+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>';
     });
-  }).catch(function(e){console.error('[NOTIF] Error:',e);});
+  }).catch(function(e){console.error('[NOTIF] Error:',e);updateNotifBadge(0);});
+}
+
+// Actualiza el badge del sidebar y topbar con el conteo de no leidas
+function updateNotifBadge(count){
+  var ids=['sidebarNotifBadge','topbarNotifBadge'];
+  ids.forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el)return;
+    if(count>0){
+      el.textContent=count>9?'9+':String(count);
+      el.classList.add('show');
+    }else{
+      el.classList.remove('show');
+    }
+  });
 }
 
 // Tiempo relativo corto para notificaciones
@@ -2937,7 +2968,7 @@ function notifTimeAgo(iso){
   var h=Math.floor(m/60);return 'Hace '+h+' h';
 }
 
-// Descartar notificación manualmente (guardar en localStorage)
+// Descartar notificación manualmente (boton X de cada card, la oculta)
 function dismissNotif(id){
   var user=firebase.auth().currentUser;
   var key='notif_dismissed_'+(user?user.uid:'anon');
@@ -2948,13 +2979,14 @@ function dismissNotif(id){
   loadClubNotificaciones();
 }
 
-// Marcar todas como leidas (descartar todas las visibles)
+// Marcar todas como leidas (quita borde morado y baja contador, NO oculta las cards)
 function dismissAllNotifs(){
   var user=firebase.auth().currentUser;
   db.collection('notificaciones').get().then(function(s){
     var arr=[];
-    s.forEach(function(d){arr.push(d.id);});
-    var key='notif_dismissed_'+(user?user.uid:'anon');
+    try{arr=JSON.parse(localStorage.getItem('notif_read_'+(user?user.uid:'anon'))||'[]');}catch(e){}
+    s.forEach(function(d){if(arr.indexOf(d.id)===-1)arr.push(d.id);});
+    var key='notif_read_'+(user?user.uid:'anon');
     localStorage.setItem(key,JSON.stringify(arr));
     loadClubNotificaciones();
   });
