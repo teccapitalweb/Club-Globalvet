@@ -1009,6 +1009,35 @@ body.dark .foro-tema__title,body.dark .foro-detail__title{color:var(--dk-text)}
 body.dark .foro-tema__preview,body.dark .foro-detail__content,body.dark .foro-respuesta__text{color:var(--dk-muted)}
 @media(max-width:768px){.foro-bar{flex-direction:column;align-items:stretch}.foro-tema-item{flex-wrap:wrap}.foro-tema__count{order:99;margin-top:8px}}
 
+/* ============ DASHBOARD V2: Accesos rapidos horizontales + Noticias vertical ============ */
+.quick-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;margin-bottom:24px}
+.quick-card{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:all var(--transition)}
+.quick-card:hover{border-color:var(--purple-200);transform:translateY(-2px);box-shadow:0 8px 20px rgba(127,76,165,0.1)}
+.quick-card__icon{width:42px;height:42px;border-radius:12px;background:var(--purple-50);color:var(--purple-700);display:grid;place-items:center;flex-shrink:0}
+.quick-card__icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.quick-card__content{flex:1;min-width:0}
+.quick-card__title{font-family:var(--font-display);font-size:0.9rem;font-weight:700;color:var(--gray-900);margin-bottom:2px}
+.quick-card__desc{font-size:0.74rem;color:var(--gray-500);line-height:1.3}
+.quick-card__arrow{color:var(--gray-300);font-size:1.4rem;font-weight:600}
+body.dark .quick-card{background:var(--dk-card);border-color:var(--dk-border)}
+body.dark .quick-card__title{color:var(--dk-text)}
+body.dark .quick-card__desc{color:var(--dk-muted)}
+body.dark .quick-card__icon{background:rgba(127,76,165,0.15)}
+@media(max-width:768px){.quick-row{grid-template-columns:1fr}}
+
+/* Noticias verticales (sidebar derecho) */
+.news-vertical{display:flex;flex-direction:column;gap:14px}
+.news-vertical-item{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all var(--transition)}
+.news-vertical-item:hover{border-color:var(--purple-200);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
+.news-vertical-item__img{width:100%;height:120px;background-size:cover;background-position:center;background-color:var(--purple-50)}
+.news-vertical-item__body{padding:14px}
+.news-vertical-item__source{font-size:0.66rem;font-weight:700;color:var(--purple-700);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block}
+.news-vertical-item__title{font-family:var(--font-display);font-size:0.88rem;font-weight:700;color:var(--gray-900);line-height:1.35;margin-bottom:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.news-vertical-item__date{font-size:0.7rem;color:var(--gray-400)}
+body.dark .news-vertical-item{background:var(--dk-card);border-color:var(--dk-border)}
+body.dark .news-vertical-item__title{color:var(--dk-text)}
+body.dark .news-vertical-item__date{color:var(--dk-muted)}
+
 /* ============ LOGROS ============ */
 .logros-summary{display:flex;align-items:center;justify-content:space-between;gap:24px;background:linear-gradient(135deg,var(--purple-900),var(--purple-700));border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;color:white;flex-wrap:wrap}
 .logros-summary__main{flex:1;min-width:240px}
@@ -1184,14 +1213,18 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="courses-h-scroll" id="coursesHScroll" style="margin-bottom:28px">
         <div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando cursos...</div>
       </div>
-      <div class="section-header"><h2 class="section-header__title">Noticias recientes</h2><a href="#" class="section-header__link" onclick="nav('noticias')">Ver todas →</a></div>
-      <div class="news-carousel-wrap"><div class="news-carousel__arrows"><button class="news-carousel__arrow-btn" onclick="scrollC(-1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M15 19l-7-7 7-7"/></svg></button><button class="news-carousel__arrow-btn" onclick="scrollC(1)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M9 5l7 7-7 7"/></svg></button></div><div class="news-carousel" id="newsCarousel"><div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando noticias...</div></div></div>
+      <!-- Accesos rápidos horizontales: Descuento + Canal + Foro + Actividad reciente -->
+      <div class="quick-row">
+        <div class="quick-card" onclick="nav('descuento')"><div class="quick-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div><div class="quick-card__content"><div class="quick-card__title">Descuento 20%</div><div class="quick-card__desc">Aplica tu cupón exclusivo de miembro.</div></div><span class="quick-card__arrow">›</span></div>
+        <div class="quick-card" onclick="nav('canal')"><div class="quick-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></div><div class="quick-card__content"><div class="quick-card__title">Canal privado</div><div class="quick-card__desc">Únete al canal exclusivo en WhatsApp.</div></div><span class="quick-card__arrow">›</span></div>
+        <div class="quick-card" onclick="nav('foro')"><div class="quick-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><div class="quick-card__content"><div class="quick-card__title">Foro</div><div class="quick-card__desc">Comparte casos y aprende con otros.</div></div><span class="quick-card__arrow">›</span></div>
+      </div>
     </div>
     <div class="right-col">
-      <div class="side-card" onclick="nav('descuento')"><div class="side-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div><div class="side-card__content"><div class="side-card__title">Descuento 20%</div><div class="side-card__desc">Aplica tu cupón exclusivo de miembro.</div></div><span class="side-card__arrow">›</span></div>
-      <div class="side-card" onclick="nav('canal')"><div class="side-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></div><div class="side-card__content"><div class="side-card__title">Canal privado</div><div class="side-card__desc">Únete al canal exclusivo en WhatsApp.</div></div><span class="side-card__arrow">›</span></div>
-      <div class="side-card" onclick="nav('foro')"><div class="side-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><div class="side-card__content"><div class="side-card__title">Foro</div><div class="side-card__desc">Comparte casos y aprende con otros.</div></div><span class="side-card__arrow">›</span></div>
-      <div class="activity-card"><div class="activity-card__title">Actividad reciente</div><div class="activity-item"><div class="activity-item__dot activity-item__dot--course"></div><div class="activity-item__text">Completaste <strong>Módulo 4</strong> de Cirugía</div><div class="activity-item__time">2h</div></div><div class="activity-item"><div class="activity-item__dot activity-item__dot--cert"></div><div class="activity-item__text">Certificado: <strong>Nutrición Clínica</strong></div><div class="activity-item__time">Ayer</div></div><div class="activity-item"><div class="activity-item__dot activity-item__dot--webinar"></div><div class="activity-item__text">Webinar de <strong>Urgencias</strong></div><div class="activity-item__time">3 días</div></div></div>
+      <div class="section-header" style="margin-bottom:14px"><h2 class="section-header__title" style="font-size:1rem">Noticias</h2><a href="#" class="section-header__link" onclick="nav('noticias')">Ver todas →</a></div>
+      <div class="news-vertical" id="newsVertical">
+        <div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando noticias...</div>
+      </div>
     </div></div>
   </div>
 
@@ -2607,6 +2640,7 @@ function loadClubNoticias(){
 
 function renderNoticias(arr){
   var carousel=document.getElementById('newsCarousel');
+  var vertical=document.getElementById('newsVertical');
   var full=document.querySelector('[data-page="noticias"] .news-full-list');
   function noticiaCard(c,esCarousel){
     var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
@@ -2619,6 +2653,13 @@ function renderNoticias(arr){
       return '<div class="news-full-item" '+(clickAction?'onclick="'+clickAction+'" style="cursor:pointer"':'')+'><div class="news-full-item__img" style="'+imgStyle+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+escapeHtml(c.fuente||'')+'</span><h3 class="news-full-item__title">'+escapeHtml(c.titulo||'')+'</h3><p class="news-full-item__excerpt">'+escapeHtml(preview)+(preview.length>=150?'...':'')+'</p><p class="news-full-item__date">'+f+'</p></div></div>';
     }
   }
+  function noticiaVertical(c){
+    var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
+    var clickAction=c.link?'window.open(\''+c.link+'\',\'_blank\')':'';
+    var imgStyle=c.imagen?'background-image:url('+c.imagen+')':'';
+    return '<div class="news-vertical-item" '+(clickAction?'onclick="'+clickAction+'"':'')+'><div class="news-vertical-item__img" style="'+imgStyle+'"></div><div class="news-vertical-item__body"><span class="news-vertical-item__source">'+escapeHtml(c.fuente||'')+'</span><h4 class="news-vertical-item__title">'+escapeHtml(c.titulo||'')+'</h4><div class="news-vertical-item__date">'+f+'</div></div></div>';
+  }
+  // Carousel (si todavia existe en algun lado)
   if(carousel){
     carousel.innerHTML='';
     if(arr.length===0){
@@ -2627,6 +2668,16 @@ function renderNoticias(arr){
       arr.slice(0,6).forEach(function(c){carousel.innerHTML+=noticiaCard(c,true);});
     }
   }
+  // Vertical (dashboard nuevo)
+  if(vertical){
+    vertical.innerHTML='';
+    if(arr.length===0){
+      vertical.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius-sm);padding:30px 20px;text-align:center;color:#9c9c9c;font-size:0.85rem">Aún no hay noticias.</div>';
+    }else{
+      arr.slice(0,5).forEach(function(c){vertical.innerHTML+=noticiaVertical(c);});
+    }
+  }
+  // Pagina completa
   if(full){
     full.innerHTML='';
     if(arr.length===0){
