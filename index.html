@@ -2523,27 +2523,118 @@ function loadClubPdfs(){
     }
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
+// ============ NEWSDATA.IO API ============
+var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
+var NEWSDATA_CACHE_KEY='newsdata_cache_v2';
+var NEWSDATA_CACHE_HOURS=6;
+
+// Trae noticias automaticas con cache de 6h
+function fetchAutoNews(){
+  return new Promise(function(resolve){
+    // Verificar cache
+    try{
+      var cacheRaw=localStorage.getItem(NEWSDATA_CACHE_KEY);
+      if(cacheRaw){
+        var cache=JSON.parse(cacheRaw);
+        var ageHours=(Date.now()-cache.timestamp)/(1000*60*60);
+        if(ageHours<NEWSDATA_CACHE_HOURS&&cache.noticias&&cache.noticias.length>0){
+          console.log('[NEWS] Usando cache ('+ageHours.toFixed(1)+'h)');
+          resolve(cache.noticias);
+          return;
+        }
+      }
+    }catch(e){}
+    // Llamar API: noticias en español sobre veterinaria/mascotas/animales
+    var query=encodeURIComponent('veterinaria OR veterinario OR mascotas OR animales OR perros OR gatos');
+    var url='https://newsdata.io/api/1/news?apikey='+NEWSDATA_API_KEY+'&q='+query+'&language=es&category=health,science';
+    console.log('[NEWS] Fetching NewsData.io...');
+    fetch(url).then(function(r){return r.json();}).then(function(data){
+      if(!data.results||!Array.isArray(data.results)){
+        console.warn('[NEWS] Sin resultados:',data);
+        resolve([]);
+        return;
+      }
+      var noticias=data.results.filter(function(n){return n.image_url;}).slice(0,10).map(function(n){
+        return {
+          _id:'news_'+(n.article_id||Math.random().toString(36).slice(2)),
+          titulo:n.title||'',
+          contenido:n.description||n.content||'',
+          fuente:n.source_id||n.source_name||'NewsData',
+          imagen:n.image_url||'',
+          link:n.link||'',
+          creado:n.pubDate||new Date().toISOString(),
+          _auto:true
+        };
+      });
+      // Guardar en cache
+      try{localStorage.setItem(NEWSDATA_CACHE_KEY,JSON.stringify({timestamp:Date.now(),noticias:noticias}));}catch(e){}
+      console.log('[NEWS] '+noticias.length+' noticias obtenidas y cacheadas');
+      resolve(noticias);
+    }).catch(function(e){
+      console.warn('[NEWS] Error fetch:',e);
+      // Si falla, intentar usar cache aunque sea viejo
+      try{
+        var cacheRaw=localStorage.getItem(NEWSDATA_CACHE_KEY);
+        if(cacheRaw){var cache=JSON.parse(cacheRaw);if(cache.noticias)resolve(cache.noticias);else resolve([]);}
+        else resolve([]);
+      }catch(e2){resolve([]);}
+    });
+  });
+}
+
 function loadClubNoticias(){
-  db.collection('noticias').get().then(function(s){
-    var carousel=document.getElementById('newsCarousel');
-    var full=document.querySelector('[data-page="noticias"] .news-full-list');
-    if(carousel){
-      carousel.innerHTML='';
-      var n=0;
-      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;n++;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';carousel.innerHTML+='<div class="news-carousel__card"><div class="news-carousel__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'linear-gradient(135deg,var(--purple-50),var(--purple-100))')+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+(c.fuente||'')+'</span><h4 class="news-carousel__title">'+(c.titulo||'')+'</h4><p class="news-carousel__date">'+f+'</p></div></div>'});
-      if(n===0){
-        carousel.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">Aún no hay noticias publicadas.</div>';
-      }
+  // Cargar en paralelo: noticias manuales (Firestore) + automaticas (NewsData)
+  Promise.all([
+    db.collection('noticias').get().then(function(s){
+      var arr=[];
+      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;c._id=d.id;c._manual=true;arr.push(c);});
+      return arr;
+    }).catch(function(){return [];}),
+    fetchAutoNews()
+  ]).then(function(results){
+    var manuales=results[0]||[];
+    var autos=results[1]||[];
+    // Combinar: primero las manuales (prioridad), luego automaticas
+    var todas=manuales.concat(autos);
+    // Ordenar por fecha descendente
+    todas.sort(function(a,b){
+      var fa=a.creado||'';var fb=b.creado||'';return fb.localeCompare(fa);
+    });
+    // Renderizar
+    renderNoticias(todas);
+  }).catch(function(e){console.warn('Error loadClubNoticias:',e);renderNoticias([]);});
+}
+
+function renderNoticias(arr){
+  var carousel=document.getElementById('newsCarousel');
+  var full=document.querySelector('[data-page="noticias"] .news-full-list');
+  function noticiaCard(c,esCarousel){
+    var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
+    var clickAction=c.link?'window.open(\''+c.link+'\',\'_blank\')':'';
+    var imgStyle=c.imagen?'background:url('+c.imagen+') center/cover':'background:linear-gradient(135deg,var(--purple-50),var(--purple-100))';
+    if(esCarousel){
+      return '<div class="news-carousel__card" '+(clickAction?'onclick="'+clickAction+'" style="cursor:pointer"':'')+'><div class="news-carousel__img" style="'+imgStyle+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+escapeHtml(c.fuente||'')+'</span><h4 class="news-carousel__title">'+escapeHtml(c.titulo||'')+'</h4><p class="news-carousel__date">'+f+'</p></div></div>';
+    }else{
+      var preview=(c.contenido||'').substring(0,150);
+      return '<div class="news-full-item" '+(clickAction?'onclick="'+clickAction+'" style="cursor:pointer"':'')+'><div class="news-full-item__img" style="'+imgStyle+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+escapeHtml(c.fuente||'')+'</span><h3 class="news-full-item__title">'+escapeHtml(c.titulo||'')+'</h3><p class="news-full-item__excerpt">'+escapeHtml(preview)+(preview.length>=150?'...':'')+'</p><p class="news-full-item__date">'+f+'</p></div></div>';
     }
-    if(full){
-      full.innerHTML='';
-      var n2=0;
-      s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicada')return;n2++;var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';full.innerHTML+='<div class="news-full-item"><div class="news-full-item__img" style="background:'+(c.imagen?'url('+c.imagen+') center/cover':'linear-gradient(135deg,var(--purple-50),var(--purple-100))')+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+(c.fuente||'')+'</span><h3 class="news-full-item__title">'+(c.titulo||'')+'</h3><p class="news-full-item__excerpt">'+((c.contenido||'').substring(0,120))+'...</p><p class="news-full-item__date">'+f+'</p></div></div>'});
-      if(n2===0){
-        full.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Pronto encontrarás aquí las últimas noticias del sector veterinario.</p></div>';
-      }
+  }
+  if(carousel){
+    carousel.innerHTML='';
+    if(arr.length===0){
+      carousel.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">Aún no hay noticias publicadas.</div>';
+    }else{
+      arr.slice(0,6).forEach(function(c){carousel.innerHTML+=noticiaCard(c,true);});
     }
-  }).catch(function(e){console.log('Error noticias:',e)});
+  }
+  if(full){
+    full.innerHTML='';
+    if(arr.length===0){
+      full.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Pronto encontrarás aquí las últimas noticias del sector veterinario.</p></div>';
+    }else{
+      arr.forEach(function(c){full.innerHTML+=noticiaCard(c,false);});
+    }
+  }
 }
 function loadClubNotificaciones(){
   db.collection('notificaciones').get().then(function(s){
