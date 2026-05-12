@@ -3021,33 +3021,44 @@ function toggleForoLike(){
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión');return;}
   var temaId=_foroCurrentTema._id;
-  var likesArr=_foroCurrentTema.likesUsuarios||[];
-  var liked=likesArr.indexOf(user.uid)!==-1;
   var btn=document.getElementById('foroDetailLikeBtn');
   var countEl=document.getElementById('foroDetailLikes');
-  // Optimistic update
-  if(liked){
-    likesArr=likesArr.filter(function(u){return u!==user.uid;});
-    btn.classList.remove('liked');
-  }else{
-    likesArr.push(user.uid);
-    btn.classList.add('liked');
-  }
-  _foroCurrentTema.likesUsuarios=likesArr;
-  countEl.textContent=likesArr.length;
-  // Persistir
-  db.collection('foro_temas').doc(temaId).update({
-    likesUsuarios:liked?firebase.firestore.FieldValue.arrayRemove(user.uid):firebase.firestore.FieldValue.arrayUnion(user.uid)
-  }).then(function(){
-    // Actualizar tema en _foroTemas
-    var idx=_foroTemas.findIndex(function(t){return t._id===temaId;});
-    if(idx!==-1)_foroTemas[idx].likesUsuarios=likesArr;
+  if(btn.dataset.busy==='1')return;
+  btn.dataset.busy='1';
+  // Leer estado real desde Firestore primero (no confiar en cache local)
+  var ref=db.collection('foro_temas').doc(temaId);
+  ref.get().then(function(doc){
+    if(!doc.exists){btn.dataset.busy='0';return;}
+    var data=doc.data();
+    var likesArr=data.likesUsuarios||[];
+    var liked=likesArr.indexOf(user.uid)!==-1;
+    // Toggle
+    var newLikes;
+    if(liked){
+      newLikes=likesArr.filter(function(u){return u!==user.uid;});
+      btn.classList.remove('liked');
+    }else{
+      newLikes=likesArr.concat([user.uid]);
+      btn.classList.add('liked');
+    }
+    // Actualizar UI inmediatamente
+    countEl.textContent=newLikes.length;
+    _foroCurrentTema.likesUsuarios=newLikes;
+    // Persistir el array completo (mas confiable que arrayUnion/arrayRemove con reglas)
+    return ref.update({likesUsuarios:newLikes}).then(function(){
+      // Refrescar en lista global
+      var idx=_foroTemas.findIndex(function(t){return t._id===temaId;});
+      if(idx!==-1)_foroTemas[idx].likesUsuarios=newLikes;
+      btn.dataset.busy='0';
+      // Actualizar tambien la lista renderizada
+      renderForoTemas();
+    });
   }).catch(function(e){
     console.error('Error like:',e);
-    // Revertir
-    if(liked){likesArr.push(user.uid);btn.classList.add('liked');}else{likesArr=likesArr.filter(function(u){return u!==user.uid;});btn.classList.remove('liked');}
-    _foroCurrentTema.likesUsuarios=likesArr;
-    countEl.textContent=likesArr.length;
+    btn.dataset.busy='0';
+    alert('No se pudo registrar el like: '+(e.message||'Error de permisos'));
+    // Revertir clase
+    btn.classList.toggle('liked');
   });
 }
 
