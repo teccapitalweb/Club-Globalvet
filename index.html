@@ -1104,6 +1104,33 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   </div>
 </div>
 
+<!-- Modal: Cancelar suscripción -->
+<div class="logout-modal" id="cancelSubModal">
+  <div class="logout-modal__box">
+    <div class="logout-modal__icon" style="background:#fef2f2;color:#dc2626"><svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+    <div class="logout-modal__title">Cancelar suscripción</div>
+    <div class="logout-modal__desc">Si cancelas tu suscripción perderás acceso al catálogo de cursos, webinars y todos los beneficios del Club. ¿Estás seguro?</div>
+    <div class="logout-modal__actions">
+      <button class="logout-modal__cancel" onclick="document.getElementById('cancelSubModal').classList.remove('show')">Mantener mi plan</button>
+      <button class="logout-modal__confirm" onclick="confirmCancelSub()">Sí, cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Eliminar cuenta -->
+<div class="logout-modal" id="deleteAccountModal">
+  <div class="logout-modal__box">
+    <div class="logout-modal__icon" style="background:#fef2f2;color:#dc2626"><svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M9 7V4a2 2 0 012-2h2a2 2 0 012 2v3"/></svg></div>
+    <div class="logout-modal__title">Eliminar cuenta</div>
+    <div class="logout-modal__desc">Esta acción es <strong>permanente</strong>. Perderás todo tu progreso, certificados y acceso al Club. Para confirmar, escribe <strong>ELIMINAR</strong>:</div>
+    <input type="text" id="deleteConfirmInput" placeholder="ELIMINAR" style="width:100%;padding:10px 14px;border:1px solid var(--gray-200);border-radius:8px;margin-bottom:14px;font-size:0.9rem;text-align:center;font-family:var(--font-body)" oninput="document.getElementById('deleteConfirmBtn').disabled=this.value!=='ELIMINAR'">
+    <div class="logout-modal__actions">
+      <button class="logout-modal__cancel" onclick="document.getElementById('deleteAccountModal').classList.remove('show');document.getElementById('deleteConfirmInput').value='';document.getElementById('deleteConfirmBtn').disabled=true">Cancelar</button>
+      <button class="logout-modal__confirm" id="deleteConfirmBtn" onclick="confirmDeleteAccount()" disabled style="opacity:0.5">Eliminar permanentemente</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOGIN SCREEN -->
 <div class="login-screen show" id="loginScreen">
   <div class="login-hero">
@@ -1363,7 +1390,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="coupon-note">Válido en la página oficial y consultas presenciales.<br>Uso ilimitado durante tu suscripción activa.</div>
       <div class="coupon-divider"></div>
       <div class="coupon-help">¿Necesitas ayuda para aplicar tu descuento?</div>
-      <a href="https://wa.me/522361130601?text=Hola%2C%20quiero%20aplicar%20mi%20descuento%20de%20miembro%20CLUB20VET%20%C2%BFCu%C3%A1les%20son%20sus%20cursos%20disponibles%3F" target="_blank" class="coupon-wa-btn" style="text-decoration:none"><svg viewBox="0 0 448 512" style="width:18px;height:18px;fill:white"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> Aplicar descuento</a>
+      <a href="https://wa.me/522361130601?text=Soy%20socio%20del%20Club%20GlobalVet%2C%20me%20gustar%C3%ADa%20aplicar%20el%20cup%C3%B3n%20CLUB20VET.%20Quiero%20conocer%20todos%20sus%20cursos." target="_blank" class="coupon-wa-btn" style="text-decoration:none"><svg viewBox="0 0 448 512" style="width:18px;height:18px;fill:white"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> Aplicar descuento</a>
     </div></div>
   </div>
 
@@ -1375,7 +1402,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
         <div class="channel-icon"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:#25D366;stroke:none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg></div>
         <div class="channel-title">WhatsApp · Canal GlobalVet</div>
         <div class="channel-desc">Recibe actualizaciones, tips y promociones directamente en tu WhatsApp.</div>
-        <button class="channel-join-btn"><svg viewBox="0 0 448 512" style="width:18px;height:18px;fill:white"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> Unirme al canal</button>
+        <a href="https://whatsapp.com/channel/0029Vb7Yn55IN9isud6gei0m" target="_blank" class="channel-join-btn" style="text-decoration:none"><svg viewBox="0 0 448 512" style="width:18px;height:18px;fill:white"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> Unirme al canal</a>
       </div>
       <div class="channel-benefits">
         <div class="channel-benefits__title">¿Qué recibirás en el canal?</div>
@@ -1424,10 +1451,10 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="sub-plan">GlobalVet Mensual</div>
       <div class="sub-price">$200 MXN <span>/ mes</span></div>
       <div class="sub-meta">
-        <div class="sub-meta-item"><label>Estado</label><span class="status-active">Activa</span></div>
-        <div class="sub-meta-item"><label>Próximo cobro</label><span>4 de junio de 2026</span></div>
+        <div class="sub-meta-item"><label>Estado</label><span class="status-active" id="subStatus">Activa</span></div>
+        <div class="sub-meta-item"><label>Próximo cobro</label><span id="subProximoCobro">—</span></div>
       </div>
-      <div style="margin-top:20px;position:relative;z-index:1"><button class="btn-outline btn-outline--danger">Cancelar suscripción</button></div>
+      <div style="margin-top:20px;position:relative;z-index:1"><button class="btn-outline btn-outline--danger" id="subCancelBtn" onclick="openCancelSubModal()">Cancelar suscripción</button></div>
     </div>
     <div class="section-header" style="margin-bottom:16px"><h2 class="section-header__title">Lo que incluye tu plan</h2></div>
     <div class="sub-benefits">
@@ -1447,7 +1474,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <div class="page-content" data-page="notificaciones">
     <div class="notif-header">
       <div class="page-header" style="margin-bottom:0"><h1 class="page-header__title">Notificaciones</h1><p class="page-header__desc">Mantente al día con novedades y recordatorios.</p></div>
-      <button class="btn-outline">Marcar todas leídas</button>
+      <button class="btn-outline" onclick="dismissAllNotifs()">Marcar todas leídas</button>
     </div>
     <div class="notif-empty">
       <div class="notif-empty__icon"><svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
@@ -1484,10 +1511,11 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 
     <div class="s-card">
       <div class="s-card__title">Notificaciones</div>
-      <div class="toggle-row"><div class="toggle-row__text"><h4>Nuevos cursos</h4><p>Recibe aviso cuando se suba un nuevo curso</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="toggle-row"><div class="toggle-row__text"><h4>Clases en vivo</h4><p>Recordatorio 30 minutos antes de cada sesión</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="toggle-row"><div class="toggle-row__text"><h4>Nuevos PDFs</h4><p>Aviso cuando se publique nuevo material</p></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="toggle-row"><div class="toggle-row__text"><h4>Promociones</h4><p>Ofertas especiales y descuentos del Club</p></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+      <div class="toggle-row"><div class="toggle-row__text"><h4>Nuevos cursos</h4><p>Recibe aviso cuando se suba un nuevo curso</p></div><div class="toggle on" id="togCursos" onclick="toggleNotif(this,'cursos')"></div></div>
+      <div class="toggle-row"><div class="toggle-row__text"><h4>Webinars en vivo</h4><p>Recordatorio antes de cada sesión</p></div><div class="toggle on" id="togWebinars" onclick="toggleNotif(this,'webinars')"></div></div>
+      <div class="toggle-row"><div class="toggle-row__text"><h4>Nuevos PDFs</h4><p>Aviso cuando se publique nuevo material</p></div><div class="toggle on" id="togPdfs" onclick="toggleNotif(this,'pdfs')"></div></div>
+      <div class="toggle-row"><div class="toggle-row__text"><h4>Promociones</h4><p>Ofertas especiales y descuentos del Club</p></div><div class="toggle on" id="togPromos" onclick="toggleNotif(this,'promos')"></div></div>
+      <div class="toggle-row"><div class="toggle-row__text"><h4>Anuncios generales</h4><p>Avisos importantes del Club</p></div><div class="toggle on" id="togGeneral" onclick="toggleNotif(this,'general')"></div></div>
     </div>
 
     <div class="s-card">
@@ -1500,7 +1528,8 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 
     <div class="s-card">
       <div class="s-card__title">Seguridad</div>
-      <div class="config-row"><div class="config-row__text"><h4>Cambiar contraseña</h4><p>Actualiza tu contraseña periódicamente</p></div><button class="btn-outline">Cambiar</button></div>
+      <div class="config-row"><div class="config-row__text"><h4>Cambiar contraseña</h4><p>Te enviaremos un correo para restablecer tu contraseña</p></div><button class="btn-outline" onclick="cambiarContrasena()">Cambiar</button></div>
+      <div class="config-row" style="border-top:1px solid var(--gray-100);padding-top:18px;margin-top:18px"><div class="config-row__text"><h4 style="color:#dc2626">Eliminar mi cuenta</h4><p>Esta acción es permanente y no se puede deshacer</p></div><button class="btn-outline btn-outline--danger" onclick="openDeleteAccountModal()">Eliminar</button></div>
     </div>
 
     <div class="s-card">
@@ -2562,7 +2591,129 @@ function loadClubPdfs(){
     }
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
-// ============ NEWSDATA.IO API ============
+// ============ SUSCRIPCION / CONFIGURACION / DESCUENTO / CANAL ============
+
+// Carga datos de la suscripcion del usuario
+function loadSuscripcion(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  db.collection('miembros').doc(user.uid).get().then(function(doc){
+    var data=doc.exists?doc.data():{};
+    var statusEl=document.getElementById('subStatus');
+    var proxEl=document.getElementById('subProximoCobro');
+    var cancelBtn=document.getElementById('subCancelBtn');
+    var estado=data.suscripcion&&data.suscripcion.estado?data.suscripcion.estado:'activa';
+    if(estado==='cancelada'){
+      if(statusEl){statusEl.textContent='Cancelada';statusEl.classList.remove('status-active');statusEl.style.color='#dc2626';}
+      if(cancelBtn){cancelBtn.textContent='Suscripción cancelada';cancelBtn.disabled=true;cancelBtn.style.opacity='0.5';cancelBtn.style.cursor='not-allowed';}
+    }else{
+      if(statusEl){statusEl.textContent='Activa';statusEl.classList.add('status-active');statusEl.style.color='';}
+      if(cancelBtn){cancelBtn.textContent='Cancelar suscripción';cancelBtn.disabled=false;cancelBtn.style.opacity='';cancelBtn.style.cursor='';}
+    }
+    // Proximo cobro = registro + 1 mes (mientras no haya Stripe)
+    var registro=data.registro||user.metadata.creationTime||new Date().toISOString();
+    var fr=new Date(registro);
+    var hoy=new Date();
+    // Encontrar el proximo cobro: siguiente mes con el mismo dia del registro
+    var prox=new Date(fr);
+    while(prox.getTime()<hoy.getTime()){
+      prox.setMonth(prox.getMonth()+1);
+    }
+    var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    var proxStr=prox.getDate()+' de '+meses[prox.getMonth()]+' de '+prox.getFullYear();
+    if(proxEl)proxEl.textContent=proxStr;
+  }).catch(function(){});
+}
+
+function openCancelSubModal(){document.getElementById('cancelSubModal').classList.add('show');}
+
+function confirmCancelSub(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  db.collection('miembros').doc(user.uid).set({suscripcion:{estado:'cancelada',canceladoEn:new Date().toISOString()}},{merge:true}).then(function(){
+    document.getElementById('cancelSubModal').classList.remove('show');
+    loadSuscripcion();
+    alert('Tu suscripción ha sido cancelada. Mantendrás acceso hasta el próximo cobro.');
+  }).catch(function(e){alert('Error al cancelar: '+e.message);});
+}
+
+// Configuracion: toggles de notificaciones
+function loadNotifPrefs(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  db.collection('miembros').doc(user.uid).get().then(function(doc){
+    var data=doc.exists?doc.data():{};
+    var prefs=data.notifPrefs||{cursos:true,webinars:true,pdfs:true,promos:true,general:true};
+    var apply=function(id,key){
+      var el=document.getElementById(id);
+      if(!el)return;
+      if(prefs[key]===false)el.classList.remove('on');else el.classList.add('on');
+    };
+    apply('togCursos','cursos');
+    apply('togWebinars','webinars');
+    apply('togPdfs','pdfs');
+    apply('togPromos','promos');
+    apply('togGeneral','general');
+  }).catch(function(){});
+}
+
+function toggleNotif(el,key){
+  el.classList.toggle('on');
+  var user=firebase.auth().currentUser;if(!user)return;
+  var update={};
+  update['notifPrefs.'+key]=el.classList.contains('on');
+  db.collection('miembros').doc(user.uid).update(update).catch(function(){
+    // Si update falla porque no existe el campo, hacer set merge
+    db.collection('miembros').doc(user.uid).set({notifPrefs:{[key]:el.classList.contains('on')}},{merge:true});
+  });
+}
+
+// Configuracion: cambiar contraseña
+function cambiarContrasena(){
+  var user=firebase.auth().currentUser;
+  if(!user||!user.email){alert('No se pudo identificar tu correo. Vuelve a iniciar sesión.');return;}
+  if(!confirm('Te enviaremos un correo a '+user.email+' con instrucciones para cambiar tu contraseña. ¿Continuar?'))return;
+  firebase.auth().sendPasswordResetEmail(user.email).then(function(){
+    alert('Listo. Revisa tu correo '+user.email+' (también la carpeta de spam) para cambiar tu contraseña.');
+  }).catch(function(e){alert('Error: '+e.message);});
+}
+
+// Configuracion: eliminar cuenta
+function openDeleteAccountModal(){
+  document.getElementById('deleteAccountModal').classList.add('show');
+  document.getElementById('deleteConfirmInput').value='';
+  document.getElementById('deleteConfirmBtn').disabled=true;
+  document.getElementById('deleteConfirmBtn').style.opacity='0.5';
+}
+
+function confirmDeleteAccount(){
+  var user=firebase.auth().currentUser;if(!user)return;
+  // 1) Borrar documento de miembros
+  db.collection('miembros').doc(user.uid).delete().catch(function(){})
+  .then(function(){
+    // 2) Borrar la cuenta de Firebase Auth
+    return user.delete();
+  }).then(function(){
+    alert('Tu cuenta ha sido eliminada permanentemente.');
+    document.getElementById('deleteAccountModal').classList.remove('show');
+    // Recargar la pagina
+    setTimeout(function(){location.reload();},500);
+  }).catch(function(e){
+    if(e.code==='auth/requires-recent-login'){
+      alert('Por seguridad, debes volver a iniciar sesión antes de eliminar tu cuenta. Cierra sesión y entra de nuevo.');
+    }else{
+      alert('Error: '+e.message);
+    }
+  });
+}
+
+// Filtra notificaciones del Club segun las preferencias del usuario
+var _notifPrefsCache=null;
+function loadNotifPrefsCache(){
+  var user=firebase.auth().currentUser;if(!user){_notifPrefsCache=null;return Promise.resolve(null);}
+  return db.collection('miembros').doc(user.uid).get().then(function(doc){
+    var data=doc.exists?doc.data():{};
+    _notifPrefsCache=data.notifPrefs||{cursos:true,webinars:true,pdfs:true,promos:true,general:true};
+    return _notifPrefsCache;
+  }).catch(function(){return null;});
+}
 var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
 var NEWSDATA_CACHE_KEY='newsdata_cache_v2';
 var NEWSDATA_CACHE_HOURS=6;
@@ -2706,16 +2857,91 @@ function renderNoticias(arr){
   }
 }
 function loadClubNotificaciones(){
+  var user=firebase.auth().currentUser;
   db.collection('notificaciones').get().then(function(s){
     var cont=document.querySelector('[data-page="notificaciones"] .notif-list');
     var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
-    if(s.empty){if(empty)empty.style.display='';return;}
+    var parent=document.querySelector('[data-page="notificaciones"]');
+    // Crear contenedor si no existe
+    if(!cont){cont=document.createElement('div');cont.className='notif-list';if(empty)parent.insertBefore(cont,empty);else parent.appendChild(cont);}
+    // Leer las notificaciones que el usuario ya borro manualmente
+    var dismissed=[];
+    try{dismissed=JSON.parse(localStorage.getItem('notif_dismissed_'+(user?user.uid:'anon'))||'[]');}catch(e){}
+    // Filtrar
+    var ahora=Date.now();
+    var hace24h=ahora-24*60*60*1000;
+    var prefs=_notifPrefsCache||{cursos:true,webinars:true,pdfs:true,promos:true,general:true};
+    // Mapear "tipo" -> key de prefs
+    function tipoToPref(tipo){
+      if(!tipo)return 'general';
+      var t=tipo.toLowerCase();
+      if(t.indexOf('curso')!==-1)return 'cursos';
+      if(t.indexOf('webinar')!==-1)return 'webinars';
+      if(t.indexOf('pdf')!==-1||t.indexOf('material')!==-1)return 'pdfs';
+      if(t.indexOf('promo')!==-1||t.indexOf('descuento')!==-1)return 'promos';
+      return 'general';
+    }
+    var notifs=[];
+    s.forEach(function(d){
+      var c=d.data();c._id=d.id;
+      // Filtro 24h
+      var fcreado=c.creado?new Date(c.creado).getTime():0;
+      if(fcreado<hace24h)return;
+      // Filtro descartadas manualmente
+      if(dismissed.indexOf(d.id)!==-1)return;
+      // Filtro por preferencias del usuario
+      var prefKey=tipoToPref(c.tipo);
+      if(prefs[prefKey]===false)return;
+      notifs.push(c);
+    });
+    // Ordenar por fecha descendente
+    notifs.sort(function(a,b){return (new Date(b.creado).getTime())-(new Date(a.creado).getTime());});
+    // Render
+    if(notifs.length===0){
+      if(empty)empty.style.display='';
+      cont.innerHTML='';
+      return;
+    }
     if(empty)empty.style.display='none';
-    if(!cont){cont=document.createElement('div');cont.className='notif-list';var parent=document.querySelector('[data-page="notificaciones"]');if(empty)parent.insertBefore(cont,empty);else parent.appendChild(cont)}
     cont.innerHTML='';
-    s.forEach(function(d){var c=d.data();var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
-      cont.innerHTML+='<div class="s-card" style="padding:18px 22px;margin-bottom:10px"><div style="display:flex;align-items:flex-start;gap:12px"><span style="font-size:1.3rem">'+c.emoji+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+c.titulo+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+c.mensaje+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>'});
+    notifs.forEach(function(c){
+      var f=c.creado?notifTimeAgo(c.creado):'';
+      cont.innerHTML+='<div class="s-card" data-notif-id="'+c._id+'" style="padding:18px 22px;margin-bottom:10px;position:relative"><button onclick="dismissNotif(\''+c._id+'\')" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--gray-300);cursor:pointer;padding:4px;border-radius:6px;transition:all 0.2s" onmouseover="this.style.color=\'var(--gray-500)\';this.style.background=\'var(--gray-100)\'" onmouseout="this.style.color=\'var(--gray-300)\';this.style.background=\'none\'"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg></button><div style="display:flex;align-items:flex-start;gap:12px;padding-right:24px"><span style="font-size:1.3rem">'+(c.emoji||'📢')+'</span><div style="flex:1"><h4 style="font-size:0.88rem;font-weight:600;color:var(--gray-800)">'+escapeHtml(c.titulo||'')+'</h4><p style="font-size:0.8rem;color:var(--gray-500);margin-top:2px">'+escapeHtml(c.mensaje||'')+'</p><p style="font-size:0.68rem;color:var(--gray-400);margin-top:6px">'+f+'</p></div></div></div>';
+    });
   }).catch(function(){});
+}
+
+// Tiempo relativo corto para notificaciones
+function notifTimeAgo(iso){
+  if(!iso)return '';
+  var d=new Date(iso);
+  var s=Math.floor((Date.now()-d.getTime())/1000);
+  if(s<60)return 'Hace un momento';
+  var m=Math.floor(s/60);if(m<60)return 'Hace '+m+' min';
+  var h=Math.floor(m/60);return 'Hace '+h+' h';
+}
+
+// Descartar notificación manualmente (guardar en localStorage)
+function dismissNotif(id){
+  var user=firebase.auth().currentUser;
+  var key='notif_dismissed_'+(user?user.uid:'anon');
+  var arr=[];
+  try{arr=JSON.parse(localStorage.getItem(key)||'[]');}catch(e){}
+  if(arr.indexOf(id)===-1)arr.push(id);
+  localStorage.setItem(key,JSON.stringify(arr));
+  loadClubNotificaciones();
+}
+
+// Marcar todas como leidas (descartar todas las visibles)
+function dismissAllNotifs(){
+  var user=firebase.auth().currentUser;
+  db.collection('notificaciones').get().then(function(s){
+    var arr=[];
+    s.forEach(function(d){arr.push(d.id);});
+    var key='notif_dismissed_'+(user?user.uid:'anon');
+    localStorage.setItem(key,JSON.stringify(arr));
+    loadClubNotificaciones();
+  });
 }
 
 // Load club data when user is authenticated
@@ -3531,7 +3757,7 @@ function showLogroToast(logro){
   },3000);
 }
 
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();},500)}});
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();loadNotifPrefsCache();},500)}});
 </script>
 </body>
 </html>
