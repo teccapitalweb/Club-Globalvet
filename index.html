@@ -1476,6 +1476,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="page-header" style="margin-bottom:0"><h1 class="page-header__title">Notificaciones</h1><p class="page-header__desc">Mantente al día con novedades y recordatorios.</p></div>
       <button class="btn-outline" onclick="dismissAllNotifs()">Marcar todas leídas</button>
     </div>
+    <div class="notif-list" id="notifList"></div>
     <div class="notif-empty">
       <div class="notif-empty__icon"><svg class="icon" viewBox="0 0 24 24" style="width:24px;height:24px"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
       <h3>Todo al día</h3>
@@ -2867,20 +2868,16 @@ function loadClubNotificaciones(){
   var user=firebase.auth().currentUser;
   db.collection('notificaciones').get().then(function(s){
     console.log('[NOTIF] Total notificaciones en Firestore:',s.size);
-    var cont=document.querySelector('[data-page="notificaciones"] .notif-list');
+    var cont=document.getElementById('notifList');
     var empty=document.querySelector('[data-page="notificaciones"] .notif-empty');
-    var parent=document.querySelector('[data-page="notificaciones"]');
-    // Crear contenedor si no existe
-    if(!cont){cont=document.createElement('div');cont.className='notif-list';if(empty)parent.insertBefore(cont,empty);else parent.appendChild(cont);}
+    if(!cont){console.warn('[NOTIF] No se encontro #notifList');return;}
     // Leer las notificaciones que el usuario ya borro manualmente
     var dismissed=[];
     try{dismissed=JSON.parse(localStorage.getItem('notif_dismissed_'+(user?user.uid:'anon'))||'[]');}catch(e){}
     // Filtrar
     var ahora=Date.now();
     var hace24h=ahora-24*60*60*1000;
-    // Si las prefs no estan cargadas todavia, dejar TODAS pasar (no filtrar)
     var prefs=_notifPrefsCache;
-    // Mapear "tipo" -> key de prefs
     function tipoToPref(tipo){
       if(!tipo)return 'general';
       var t=tipo.toLowerCase();
@@ -2895,21 +2892,15 @@ function loadClubNotificaciones(){
     s.forEach(function(d){
       debug.total++;
       var c=d.data();c._id=d.id;
-      // Filtro 24h
       var fcreado=0;
       if(c.creado){
         if(typeof c.creado==='string'){fcreado=new Date(c.creado).getTime();}
         else if(c.creado.toDate){fcreado=c.creado.toDate().getTime();}
         else if(c.creado instanceof Date){fcreado=c.creado.getTime();}
       }
-      if(fcreado===0||isNaN(fcreado)){
-        // Sin fecha, asumir reciente
-        fcreado=ahora;
-      }
+      if(fcreado===0||isNaN(fcreado))fcreado=ahora;
       if(fcreado<hace24h){debug.filtradoPor24h++;return;}
-      // Filtro descartadas manualmente
       if(dismissed.indexOf(d.id)!==-1){debug.filtradoPorDismiss++;return;}
-      // Filtro por preferencias del usuario (solo si las prefs ya estan cargadas)
       if(prefs){
         var prefKey=tipoToPref(c.tipo);
         if(prefs[prefKey]===false){debug.filtradoPorPref++;return;}
@@ -2919,12 +2910,10 @@ function loadClubNotificaciones(){
       debug.mostradas++;
     });
     console.log('[NOTIF] Debug:',debug);
-    // Ordenar por fecha descendente
     notifs.sort(function(a,b){return b._fechaTs-a._fechaTs;});
-    // Render
     if(notifs.length===0){
-      if(empty)empty.style.display='';
       cont.innerHTML='';
+      if(empty)empty.style.display='';
       return;
     }
     if(empty)empty.style.display='none';
