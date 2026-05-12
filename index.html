@@ -934,6 +934,78 @@ body.dark .logout-modal__title { color: var(--dk-text); }
 body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: var(--dk-border); color: var(--dk-muted); }
 .logout-modal__confirm { background: #ef4444; border: none; color: white; }
 .logout-modal__confirm:hover { background: #dc2626; }
+
+/* ============ FORO ============ */
+.foro-bar{display:flex;gap:14px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.foro-search{flex:1;min-width:260px;position:relative}
+.foro-search input{width:100%;padding:12px 16px 12px 44px;border:1px solid var(--gray-200);border-radius:50px;background:var(--white);font-size:0.88rem;font-family:var(--font-body);color:var(--gray-800);outline:none;transition:all var(--transition)}
+.foro-search input:focus{border-color:var(--purple-400);box-shadow:0 0 0 3px rgba(127,76,165,0.1)}
+.foro-search svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:var(--gray-400);stroke-width:2;fill:none;stroke:currentColor}
+.foro-filters{display:flex;gap:6px;flex-wrap:wrap}
+.foro-filter-tab{padding:8px 16px;border:1px solid var(--gray-200);background:var(--white);border-radius:50px;font-size:0.78rem;font-weight:500;color:var(--gray-600);cursor:pointer;font-family:var(--font-body);transition:all var(--transition)}
+.foro-filter-tab:hover{border-color:var(--purple-200);color:var(--purple-700)}
+.foro-filter-tab.active{background:var(--purple-900);color:white;border-color:var(--purple-900)}
+.foro-tema-item{display:flex;gap:16px;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius-sm);padding:18px 22px;margin-bottom:12px;cursor:pointer;transition:all var(--transition)}
+.foro-tema-item:hover{border-color:var(--purple-200);box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.foro-avatar{width:42px;height:42px;border-radius:50%;background:var(--purple-700);color:white;display:grid;place-items:center;font-size:0.82rem;font-weight:700;flex-shrink:0;letter-spacing:0.5px}
+.foro-tema__body{flex:1;min-width:0}
+.foro-tema__header{display:flex;align-items:center;gap:10px;margin-bottom:4px;flex-wrap:wrap}
+.foro-tema__title{font-family:var(--font-display);font-size:0.98rem;font-weight:700;color:var(--gray-900);line-height:1.3;margin:0}
+.foro-new-badge{font-size:0.6rem;font-weight:700;color:#22c55e;background:#dcfce7;padding:2px 8px;border-radius:50px;letter-spacing:0.5px;text-transform:uppercase}
+.foro-tema__preview{font-size:0.83rem;color:var(--gray-500);line-height:1.4;margin:4px 0 8px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.foro-tema__meta{display:flex;align-items:center;gap:10px;font-size:0.72rem;color:var(--gray-400);flex-wrap:wrap}
+.foro-tema__author{color:var(--gray-600);font-weight:500}
+.foro-cat-badge{display:inline-block;font-size:0.68rem;font-weight:600;background:var(--purple-50);color:var(--purple-700);padding:3px 10px;border-radius:50px;letter-spacing:0.3px}
+.foro-tema__stat{display:flex;align-items:center;gap:4px;color:var(--gray-400)}
+.foro-tema__stat svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.8}
+.foro-tema__stat--heart svg{fill:#ef4444;stroke:#ef4444}
+.foro-tema__count{font-size:1.5rem;font-weight:700;color:var(--purple-900);text-align:center;line-height:1;flex-shrink:0;align-self:center;min-width:46px}
+.foro-tema__count-label{font-size:0.65rem;color:var(--gray-400);text-align:center;margin-top:2px;letter-spacing:0.2px}
+.foro-create-cta{width:100%;border:1.5px dashed var(--gray-200);background:var(--white);border-radius:var(--radius-sm);padding:24px;margin-top:14px;cursor:pointer;font-family:var(--font-body);transition:all var(--transition);text-align:center}
+.foro-create-cta:hover{border-color:var(--purple-400);background:var(--purple-50)}
+.foro-create-cta__title{font-size:0.95rem;font-weight:600;color:var(--purple-900);margin-bottom:4px}
+.foro-create-cta__desc{font-size:0.78rem;color:var(--gray-500)}
+.foro-create-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:14px}
+.foro-input{width:100%;padding:12px 16px;border:1px solid var(--gray-200);border-radius:var(--radius-xs);background:var(--white);font-size:0.88rem;font-family:var(--font-body);color:var(--gray-800);outline:none;transition:all var(--transition)}
+.foro-input:focus{border-color:var(--purple-400);box-shadow:0 0 0 3px rgba(127,76,165,0.1)}
+.foro-textarea{min-height:120px;resize:vertical;line-height:1.5}
+.foro-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:16px;padding-right:42px;appearance:none}
+.foro-form-actions{display:flex;justify-content:flex-end;gap:10px}
+.foro-btn{padding:10px 22px;border:none;border-radius:50px;font-size:0.85rem;font-weight:600;cursor:pointer;font-family:var(--font-body);transition:all var(--transition)}
+.foro-btn--primary{background:var(--purple-900);color:white}
+.foro-btn--primary:hover{background:var(--purple-700);transform:translateY(-1px)}
+.foro-btn--ghost{background:var(--white);color:var(--gray-700);border:1px solid var(--gray-200)}
+.foro-btn--ghost:hover{border-color:var(--purple-400);color:var(--purple-700)}
+.foro-back-link{display:inline-block;color:var(--purple-700);font-size:0.85rem;font-weight:500;text-decoration:none;margin-bottom:14px}
+.foro-back-link:hover{color:var(--purple-900)}
+.foro-detail-card{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:28px}
+.foro-detail__title{font-family:var(--font-display);font-size:1.35rem;font-weight:700;color:var(--gray-900);margin-bottom:8px;line-height:1.3}
+.foro-detail__meta{display:flex;align-items:center;gap:8px;font-size:0.78rem;color:var(--gray-400);margin-bottom:18px;flex-wrap:wrap}
+.foro-detail__author{color:var(--gray-700);font-weight:600}
+.foro-detail__content{font-size:0.92rem;color:var(--gray-700);line-height:1.65;padding-bottom:18px;border-bottom:1px solid var(--gray-100);white-space:pre-wrap}
+.foro-detail__actions{padding:14px 0;border-bottom:1px solid var(--gray-100);display:flex;gap:10px}
+.foro-like-btn{display:flex;align-items:center;gap:7px;background:none;border:1px solid var(--gray-200);padding:7px 14px;border-radius:50px;cursor:pointer;font-size:0.82rem;color:var(--gray-600);font-weight:500;font-family:var(--font-body);transition:all var(--transition)}
+.foro-like-btn:hover{border-color:#ef4444;color:#ef4444}
+.foro-like-btn.liked{background:#fef2f2;border-color:#ef4444;color:#ef4444}
+.foro-like-btn.liked svg{fill:#ef4444}
+.foro-respuestas{margin-top:18px}
+.foro-respuestas__title{font-size:0.83rem;color:var(--gray-500);font-weight:500;margin-bottom:14px}
+.foro-respuesta-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--gray-100)}
+.foro-respuesta-item:last-child{border-bottom:none}
+.foro-respuesta__avatar{width:34px;height:34px;border-radius:50%;background:var(--purple-700);color:white;display:grid;place-items:center;font-size:0.72rem;font-weight:700;flex-shrink:0}
+.foro-respuesta__body{flex:1;min-width:0}
+.foro-respuesta__head{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:0.78rem}
+.foro-respuesta__author{color:var(--gray-800);font-weight:600}
+.foro-respuesta__date{color:var(--gray-400)}
+.foro-respuesta__text{font-size:0.86rem;color:var(--gray-700);line-height:1.5;white-space:pre-wrap}
+.foro-respuesta-form{margin-top:20px;display:flex;gap:10px;align-items:flex-start}
+.foro-respuesta-form textarea{min-height:60px;flex:1}
+.foro-respuesta-form .foro-btn{flex-shrink:0;align-self:flex-start}
+body.dark .foro-tema-item,body.dark .foro-create-card,body.dark .foro-detail-card{background:var(--dk-card);border-color:var(--dk-border)}
+body.dark .foro-search input,body.dark .foro-filter-tab,body.dark .foro-input{background:var(--dk-card);border-color:var(--dk-border);color:var(--dk-text)}
+body.dark .foro-tema__title,body.dark .foro-detail__title{color:var(--dk-text)}
+body.dark .foro-tema__preview,body.dark .foro-detail__content,body.dark .foro-respuesta__text{color:var(--dk-muted)}
+@media(max-width:768px){.foro-bar{flex-direction:column;align-items:stretch}.foro-tema-item{flex-wrap:wrap}.foro-tema__count{order:99;margin-top:8px}}
 </style>
 </head>
 <body class="not-logged">
@@ -1115,11 +1187,83 @@ body.dark .logout-modal__cancel { background: var(--dk-surface); border-color: v
 
   <!-- ==================== FORO ==================== -->
   <div class="page-content" data-page="foro">
-    <div class="page-header"><h1 class="page-header__title">Foro de la comunidad</h1><p class="page-header__desc">Pregunta, comparte casos clínicos y aprende con otros profesionales.</p></div>
-    <div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center">
-      <svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-      <h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3>
-      <p style="font-size:0.85rem;color:var(--gray-400)">El foro de la comunidad está en desarrollo. Pronto podrás compartir casos y conectar con otros veterinarios.</p>
+    <div class="page-header"><h1 class="page-header__title">Foro</h1><p class="page-header__desc">Pregunta, comparte y aprende con la comunidad GlobalVet México.</p></div>
+
+    <!-- VISTA 1: LISTA DE TEMAS -->
+    <div id="foroListView">
+      <!-- Buscar + Filtros -->
+      <div class="foro-bar">
+        <div class="foro-search">
+          <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="foroSearchInput" placeholder="Buscar temas..." oninput="renderForoTemas()">
+        </div>
+        <div class="foro-filters">
+          <button class="foro-filter-tab active" data-cat="">Todos</button>
+          <button class="foro-filter-tab" data-cat="Consulta">Consulta</button>
+          <button class="foro-filter-tab" data-cat="Experiencia">Experiencia</button>
+          <button class="foro-filter-tab" data-cat="Curso">Curso</button>
+          <button class="foro-filter-tab" data-cat="General">General</button>
+        </div>
+      </div>
+
+      <!-- Lista de temas -->
+      <div id="foroTemasList">
+        <div style="padding:40px 20px;text-align:center;color:var(--gray-400);font-size:0.9rem">Cargando temas...</div>
+      </div>
+
+      <!-- CTA crear nuevo tema -->
+      <button class="foro-create-cta" onclick="showForoCreateForm()">
+        <div class="foro-create-cta__title">+ Crear un nuevo tema</div>
+        <div class="foro-create-cta__desc">Comparte tu pregunta o experiencia con la comunidad</div>
+      </button>
+    </div>
+
+    <!-- VISTA 2: FORMULARIO CREAR TEMA -->
+    <div id="foroCreateView" style="display:none">
+      <div class="foro-create-card">
+        <input type="text" id="foroNewTitle" class="foro-input" placeholder="Título del tema..." maxlength="120">
+        <select id="foroNewCategoria" class="foro-input foro-select">
+          <option value="Consulta">Consulta</option>
+          <option value="Experiencia">Experiencia</option>
+          <option value="Curso">Curso</option>
+          <option value="General">General</option>
+        </select>
+        <textarea id="foroNewContent" class="foro-input foro-textarea" placeholder="Describe tu pregunta o experiencia..." maxlength="2000"></textarea>
+        <div class="foro-form-actions">
+          <button class="foro-btn foro-btn--ghost" onclick="showForoListView()">Cancelar</button>
+          <button class="foro-btn foro-btn--primary" onclick="publishForoTema()">Publicar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA 3: DETALLE DE TEMA -->
+    <div id="foroDetailView" style="display:none">
+      <a href="#" class="foro-back-link" onclick="event.preventDefault();showForoListView()">‹ Volver al foro</a>
+      <div class="foro-detail-card">
+        <h2 class="foro-detail__title" id="foroDetailTitle"></h2>
+        <div class="foro-detail__meta">
+          <span class="foro-detail__author" id="foroDetailAuthor"></span>
+          <span>·</span>
+          <span id="foroDetailDate"></span>
+          <span>·</span>
+          <span class="foro-cat-badge" id="foroDetailCat"></span>
+        </div>
+        <div class="foro-detail__content" id="foroDetailContent"></div>
+        <div class="foro-detail__actions">
+          <button class="foro-like-btn" id="foroDetailLikeBtn" onclick="toggleForoLike()">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            <span id="foroDetailLikes">0</span>
+          </button>
+        </div>
+        <div class="foro-respuestas">
+          <div class="foro-respuestas__title" id="foroRespuestasTitle">Aún no hay respuestas.</div>
+          <div id="foroRespuestasList"></div>
+        </div>
+        <div class="foro-respuesta-form">
+          <textarea id="foroNewRespuesta" class="foro-input foro-textarea" placeholder="Escribe tu respuesta..." maxlength="1000"></textarea>
+          <button class="foro-btn foro-btn--primary" onclick="publishForoRespuesta()">Responder</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2625,7 +2769,289 @@ function openCurso(id){
   });
 }
 var origAuthCallback=firebase.auth().onAuthStateChanged;
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();},500)}});
+// ============ FORO ============
+var _foroTemas=[];
+var _foroCurrentTema=null;
+var _foroCurrentCat='';
+
+function loadForoTemas(){
+  db.collection('foro_temas').get().then(function(s){
+    _foroTemas=[];
+    s.forEach(function(d){var c=d.data();c._id=d.id;_foroTemas.push(c);});
+    // Ordenar por fecha descendente
+    _foroTemas.sort(function(a,b){
+      var fa=a.creado||'';var fb=b.creado||'';return fb.localeCompare(fa);
+    });
+    renderForoTemas();
+  }).catch(function(e){
+    console.error('Error cargando foro:',e);
+    var c=document.getElementById('foroTemasList');
+    if(c)c.innerHTML='<div style="padding:40px 20px;text-align:center;color:var(--red-500);font-size:0.9rem">Error al cargar el foro</div>';
+  });
+}
+
+function renderForoTemas(){
+  var cont=document.getElementById('foroTemasList');if(!cont)return;
+  var query=(document.getElementById('foroSearchInput')||{value:''}).value.toLowerCase().trim();
+  var filtrados=_foroTemas.filter(function(t){
+    if(_foroCurrentCat&&t.categoria!==_foroCurrentCat)return false;
+    if(query){
+      var hay=(t.titulo||'').toLowerCase()+' '+(t.contenido||'').toLowerCase()+' '+(t.autorNombre||'').toLowerCase();
+      if(hay.indexOf(query)===-1)return false;
+    }
+    return true;
+  });
+  if(filtrados.length===0){
+    if(_foroTemas.length===0){
+      cont.innerHTML='<div style="padding:50px 20px;text-align:center;color:var(--gray-400);font-size:0.9rem">Aún no hay temas. ¡Sé el primero en publicar!</div>';
+    }else{
+      cont.innerHTML='<div style="padding:50px 20px;text-align:center;color:var(--gray-400);font-size:0.9rem">No se encontraron temas con esos filtros.</div>';
+    }
+    return;
+  }
+  cont.innerHTML='';
+  filtrados.forEach(function(t){
+    var iniciales=(t.autorNombre||'?').split(' ').map(function(w){return w.charAt(0).toUpperCase();}).slice(0,2).join('');
+    var esNuevo=t.creado&&(new Date().getTime()-new Date(t.creado).getTime())<24*60*60*1000;
+    var preview=(t.contenido||'').substring(0,140)+((t.contenido||'').length>140?'...':'');
+    var likes=(t.likesUsuarios&&t.likesUsuarios.length)||0;
+    var vistas=t.vistas||0;
+    var respuestas=t.respuestasCount||0;
+    cont.innerHTML+='<div class="foro-tema-item" onclick="openForoTema(\''+t._id+'\')">'
+      +'<div class="foro-avatar">'+iniciales+'</div>'
+      +'<div class="foro-tema__body">'
+        +'<div class="foro-tema__header">'
+          +'<h3 class="foro-tema__title">'+escapeHtml(t.titulo||'Sin título')+'</h3>'
+          +(esNuevo?'<span class="foro-new-badge">NUEVO</span>':'')
+        +'</div>'
+        +'<p class="foro-tema__preview">'+escapeHtml(preview)+'</p>'
+        +'<div class="foro-tema__meta">'
+          +'<span class="foro-tema__author">'+escapeHtml(t.autorNombre||'Usuario')+'</span>'
+          +'<span class="foro-cat-badge">'+escapeHtml(t.categoria||'General')+'</span>'
+          +'<span>'+foroTimeAgo(t.creado)+'</span>'
+          +'<span class="foro-tema__stat"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> '+vistas+'</span>'
+          +'<span class="foro-tema__stat foro-tema__stat--heart"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> '+likes+'</span>'
+        +'</div>'
+      +'</div>'
+      +'<div style="text-align:center;align-self:center"><div class="foro-tema__count">'+respuestas+'</div><div class="foro-tema__count-label">respuestas</div></div>'
+    +'</div>';
+  });
+}
+
+function escapeHtml(s){if(typeof s!=='string')return s;return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function foroTimeAgo(iso){
+  if(!iso)return '—';
+  var d=new Date(iso);
+  var s=Math.floor((Date.now()-d.getTime())/1000);
+  if(s<60)return 'Ahora';
+  var m=Math.floor(s/60);if(m<60)return 'Hace '+m+' min';
+  var h=Math.floor(m/60);if(h<24)return 'Hace '+h+' h';
+  var dy=Math.floor(h/24);
+  if(dy===1)return 'Ayer';
+  if(dy<7)return 'Hace '+dy+' días';
+  return d.toLocaleDateString('es-MX');
+}
+
+// Click en filtros de categoria
+document.addEventListener('click',function(e){
+  if(e.target.classList&&e.target.classList.contains('foro-filter-tab')){
+    document.querySelectorAll('.foro-filter-tab').forEach(function(b){b.classList.remove('active');});
+    e.target.classList.add('active');
+    _foroCurrentCat=e.target.getAttribute('data-cat')||'';
+    renderForoTemas();
+  }
+});
+
+function showForoCreateForm(){
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión para crear un tema');return;}
+  document.getElementById('foroListView').style.display='none';
+  document.getElementById('foroCreateView').style.display='';
+  document.getElementById('foroDetailView').style.display='none';
+  document.getElementById('foroNewTitle').value='';
+  document.getElementById('foroNewContent').value='';
+  document.getElementById('foroNewCategoria').value='Consulta';
+  setTimeout(function(){document.getElementById('foroNewTitle').focus();},100);
+}
+
+function showForoListView(){
+  document.getElementById('foroListView').style.display='';
+  document.getElementById('foroCreateView').style.display='none';
+  document.getElementById('foroDetailView').style.display='none';
+  _foroCurrentTema=null;
+}
+
+function publishForoTema(){
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión');return;}
+  var titulo=document.getElementById('foroNewTitle').value.trim();
+  var categoria=document.getElementById('foroNewCategoria').value;
+  var contenido=document.getElementById('foroNewContent').value.trim();
+  if(!titulo){alert('Ingresa un título');return;}
+  if(!contenido){alert('Escribe el contenido del tema');return;}
+  var btn=document.querySelector('#foroCreateView .foro-btn--primary');
+  if(btn){btn.disabled=true;btn.textContent='Publicando...';}
+  db.collection('foro_temas').add({
+    titulo:titulo,
+    categoria:categoria,
+    contenido:contenido,
+    autorUid:user.uid,
+    autorNombre:user.displayName||user.email||'Usuario',
+    autorEmail:user.email||'',
+    creado:new Date().toISOString(),
+    vistas:0,
+    likesUsuarios:[],
+    respuestasCount:0
+  }).then(function(){
+    if(btn){btn.disabled=false;btn.textContent='Publicar';}
+    showForoListView();
+    loadForoTemas();
+  }).catch(function(e){
+    if(btn){btn.disabled=false;btn.textContent='Publicar';}
+    alert('Error al publicar: '+e.message);
+  });
+}
+
+function openForoTema(temaId){
+  var tema=_foroTemas.find(function(t){return t._id===temaId;});
+  if(!tema)return;
+  _foroCurrentTema=tema;
+  document.getElementById('foroListView').style.display='none';
+  document.getElementById('foroCreateView').style.display='none';
+  document.getElementById('foroDetailView').style.display='';
+  document.getElementById('foroDetailTitle').textContent=tema.titulo||'';
+  document.getElementById('foroDetailAuthor').textContent=tema.autorNombre||'Usuario';
+  document.getElementById('foroDetailDate').textContent=foroTimeAgo(tema.creado);
+  document.getElementById('foroDetailCat').textContent=tema.categoria||'General';
+  document.getElementById('foroDetailContent').textContent=tema.contenido||'';
+  // Likes
+  var user=firebase.auth().currentUser;
+  var likesArr=tema.likesUsuarios||[];
+  document.getElementById('foroDetailLikes').textContent=likesArr.length;
+  var likeBtn=document.getElementById('foroDetailLikeBtn');
+  if(user&&likesArr.indexOf(user.uid)!==-1){likeBtn.classList.add('liked');}else{likeBtn.classList.remove('liked');}
+  // Incrementar vistas (una sola vez por sesion)
+  var vistasKey='foro_vista_'+temaId;
+  if(!sessionStorage.getItem(vistasKey)){
+    sessionStorage.setItem(vistasKey,'1');
+    db.collection('foro_temas').doc(temaId).update({
+      vistas:firebase.firestore.FieldValue.increment(1)
+    }).catch(function(){});
+  }
+  // Cargar respuestas
+  loadForoRespuestas(temaId);
+  // Reset textarea
+  var ta=document.getElementById('foroNewRespuesta');if(ta)ta.value='';
+  window.scrollTo(0,0);
+}
+
+function loadForoRespuestas(temaId){
+  var list=document.getElementById('foroRespuestasList');
+  var title=document.getElementById('foroRespuestasTitle');
+  list.innerHTML='<div style="padding:14px 0;color:var(--gray-400);font-size:0.83rem">Cargando respuestas...</div>';
+  db.collection('foro_respuestas').where('temaId','==',temaId).get().then(function(s){
+    var respuestas=[];
+    s.forEach(function(d){var r=d.data();r._id=d.id;respuestas.push(r);});
+    respuestas.sort(function(a,b){var fa=a.creado||'';var fb=b.creado||'';return fa.localeCompare(fb);});
+    if(respuestas.length===0){
+      title.textContent='Aún no hay respuestas.';
+      list.innerHTML='';
+      return;
+    }
+    title.textContent=respuestas.length+(respuestas.length===1?' respuesta':' respuestas');
+    list.innerHTML='';
+    respuestas.forEach(function(r){
+      var iniciales=(r.autorNombre||'?').split(' ').map(function(w){return w.charAt(0).toUpperCase();}).slice(0,2).join('');
+      list.innerHTML+='<div class="foro-respuesta-item">'
+        +'<div class="foro-respuesta__avatar">'+iniciales+'</div>'
+        +'<div class="foro-respuesta__body">'
+          +'<div class="foro-respuesta__head">'
+            +'<span class="foro-respuesta__author">'+escapeHtml(r.autorNombre||'Usuario')+'</span>'
+            +'<span class="foro-respuesta__date">'+foroTimeAgo(r.creado)+'</span>'
+          +'</div>'
+          +'<div class="foro-respuesta__text">'+escapeHtml(r.contenido||'')+'</div>'
+        +'</div>'
+      +'</div>';
+    });
+  }).catch(function(e){
+    list.innerHTML='<div style="padding:14px 0;color:var(--red-500);font-size:0.83rem">Error al cargar respuestas</div>';
+  });
+}
+
+function publishForoRespuesta(){
+  if(!_foroCurrentTema)return;
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión');return;}
+  var ta=document.getElementById('foroNewRespuesta');
+  var contenido=ta.value.trim();
+  if(!contenido)return;
+  var btn=document.querySelector('#foroDetailView .foro-respuesta-form .foro-btn--primary');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...';}
+  var temaId=_foroCurrentTema._id;
+  db.collection('foro_respuestas').add({
+    temaId:temaId,
+    contenido:contenido,
+    autorUid:user.uid,
+    autorNombre:user.displayName||user.email||'Usuario',
+    autorEmail:user.email||'',
+    creado:new Date().toISOString()
+  }).then(function(){
+    // Incrementar contador en el tema
+    return db.collection('foro_temas').doc(temaId).update({
+      respuestasCount:firebase.firestore.FieldValue.increment(1)
+    });
+  }).then(function(){
+    if(btn){btn.disabled=false;btn.textContent='Responder';}
+    ta.value='';
+    // Recargar respuestas
+    loadForoRespuestas(temaId);
+    // Recargar lista global para actualizar contador
+    loadForoTemas();
+    // Actualizar tema actual en memoria
+    if(_foroCurrentTema)_foroCurrentTema.respuestasCount=(_foroCurrentTema.respuestasCount||0)+1;
+  }).catch(function(e){
+    if(btn){btn.disabled=false;btn.textContent='Responder';}
+    alert('Error: '+e.message);
+  });
+}
+
+function toggleForoLike(){
+  if(!_foroCurrentTema)return;
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión');return;}
+  var temaId=_foroCurrentTema._id;
+  var likesArr=_foroCurrentTema.likesUsuarios||[];
+  var liked=likesArr.indexOf(user.uid)!==-1;
+  var btn=document.getElementById('foroDetailLikeBtn');
+  var countEl=document.getElementById('foroDetailLikes');
+  // Optimistic update
+  if(liked){
+    likesArr=likesArr.filter(function(u){return u!==user.uid;});
+    btn.classList.remove('liked');
+  }else{
+    likesArr.push(user.uid);
+    btn.classList.add('liked');
+  }
+  _foroCurrentTema.likesUsuarios=likesArr;
+  countEl.textContent=likesArr.length;
+  // Persistir
+  db.collection('foro_temas').doc(temaId).update({
+    likesUsuarios:liked?firebase.firestore.FieldValue.arrayRemove(user.uid):firebase.firestore.FieldValue.arrayUnion(user.uid)
+  }).then(function(){
+    // Actualizar tema en _foroTemas
+    var idx=_foroTemas.findIndex(function(t){return t._id===temaId;});
+    if(idx!==-1)_foroTemas[idx].likesUsuarios=likesArr;
+  }).catch(function(e){
+    console.error('Error like:',e);
+    // Revertir
+    if(liked){likesArr.push(user.uid);btn.classList.add('liked');}else{likesArr=likesArr.filter(function(u){return u!==user.uid;});btn.classList.remove('liked');}
+    _foroCurrentTema.likesUsuarios=likesArr;
+    countEl.textContent=likesArr.length;
+  });
+}
+
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadClubNotificaciones();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();},500)}});
 </script>
 </body>
 </html>
