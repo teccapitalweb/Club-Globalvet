@@ -354,6 +354,59 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .sub-footer a { color: var(--gray-500); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: color var(--transition); }
 .sub-footer a:hover { color: var(--purple-600); }
 
+/* PLANES DE SUSCRIPCION (Stripe) */
+.plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+@media (max-width: 640px) { .plans-grid { grid-template-columns: 1fr; } }
+.plan-card { background: var(--white); border: 2px solid var(--gray-100); border-radius: var(--radius); padding: 28px; position: relative; transition: all var(--transition); }
+.plan-card:hover { border-color: var(--purple-200); transform: translateY(-2px); box-shadow: 0 10px 24px rgba(75,28,113,0.08); }
+.plan-card--featured { border-color: var(--purple-900); background: linear-gradient(135deg, #fff, var(--purple-50)); }
+.plan-card__badge { position: absolute; top: -10px; right: 18px; background: var(--purple-900); color: #fff; font-size: 0.62rem; font-weight: 700; padding: 5px 11px; border-radius: 100px; letter-spacing: 0.05em; text-transform: uppercase; }
+.plan-card__name { font-family: var(--font-display); font-size: 0.95rem; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+.plan-card__price { font-family: var(--font-display); font-size: 2.1rem; font-weight: 800; color: var(--purple-900); line-height: 1; }
+.plan-card__price small { font-size: 0.78rem; font-weight: 500; color: var(--gray-400); margin-left: 4px; }
+.plan-card__old { text-decoration: line-through; color: var(--gray-300); font-size: 0.78rem; margin-top: 6px; }
+.plan-card__saving { display: inline-block; background: #dcfce7; color: #166534; font-size: 0.7rem; font-weight: 600; padding: 4px 10px; border-radius: 100px; margin-top: 8px; }
+.plan-card__btn { display: block; width: 100%; padding: 12px; background: var(--purple-900); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-top: 18px; transition: all var(--transition); font-family: var(--font-body); }
+.plan-card__btn:hover:not(:disabled) { background: var(--purple-600); transform: translateY(-1px); }
+.plan-card__btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.plan-card__btn--outline { background: transparent; color: var(--purple-900); border: 2px solid var(--purple-900); }
+.plan-card__btn--outline:hover:not(:disabled) { background: var(--purple-900); color: #fff; }
+body.dark .plan-card { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .plan-card--featured { background: linear-gradient(135deg, var(--dk-card), #2a1c40); border-color: var(--purple-400); }
+body.dark .plan-card__name { color: var(--dk-muted); }
+body.dark .plan-card__price { color: var(--purple-400); }
+
+/* BANNER DE TRIAL / SUSCRIPCION */
+.trial-banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 22px; border-radius: var(--radius-sm); margin: 0 28px 18px; font-size: 0.85rem; flex-wrap: wrap; }
+.trial-banner--info { background: linear-gradient(90deg, var(--purple-50), #fff); border: 1px solid var(--purple-200); color: var(--purple-900); }
+.trial-banner--warning { background: linear-gradient(90deg, #fef3c7, #fff); border: 1px solid #fde68a; color: #92400e; }
+.trial-banner--danger { background: linear-gradient(90deg, #fee2e2, #fff); border: 1px solid #fecaca; color: #991b1b; }
+.trial-banner__text { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 200px; }
+.trial-banner__btn { background: var(--purple-900); color: #fff; border: none; padding: 8px 16px; border-radius: var(--radius-xs); font-size: 0.78rem; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all var(--transition); }
+.trial-banner__btn:hover { background: var(--purple-600); }
+body.dark .trial-banner--info { background: linear-gradient(90deg, #2a1c40, var(--dk-card)); border-color: var(--purple-400); color: var(--purple-200); }
+body.dark .trial-banner--warning { background: linear-gradient(90deg, #3a2a10, var(--dk-card)); border-color: #92400e; color: #fde68a; }
+body.dark .trial-banner--danger { background: linear-gradient(90deg, #3a1010, var(--dk-card)); border-color: #991b1b; color: #fecaca; }
+
+/* MODAL PAYWALL (modo explorador) */
+.paywall-modal { position: fixed; inset: 0; background: rgba(15,10,30,0.65); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
+.paywall-modal.show { display: flex; }
+.paywall-modal__card { background: var(--white); border-radius: var(--radius); padding: 36px; max-width: 460px; width: 100%; text-align: center; transform: scale(0.92) translateY(20px); opacity: 0; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); }
+.paywall-modal.show .paywall-modal__card { transform: scale(1) translateY(0); opacity: 1; }
+.paywall-modal__icon { width: 64px; height: 64px; margin: 0 auto 18px; background: linear-gradient(135deg, var(--purple-100), var(--purple-50)); border-radius: 50%; display: grid; place-items: center; color: var(--purple-900); }
+.paywall-modal__title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--gray-900); margin-bottom: 10px; }
+.paywall-modal__desc { font-size: 0.88rem; color: var(--gray-500); margin-bottom: 24px; line-height: 1.55; }
+.paywall-modal__actions { display: flex; gap: 10px; justify-content: center; }
+.paywall-modal__actions button { padding: 11px 20px; border-radius: var(--radius-xs); font-size: 0.83rem; font-weight: 600; cursor: pointer; border: none; transition: all var(--transition); font-family: var(--font-body); }
+.paywall-modal__primary { background: var(--purple-900); color: #fff; }
+.paywall-modal__primary:hover { background: var(--purple-600); }
+.paywall-modal__secondary { background: var(--gray-100); color: var(--gray-700); }
+.paywall-modal__secondary:hover { background: var(--gray-200); }
+body.dark .paywall-modal__card { background: var(--dk-card); }
+body.dark .paywall-modal__title { color: var(--dk-text); }
+body.dark .paywall-modal__desc { color: var(--dk-muted); }
+body.dark .paywall-modal__secondary { background: var(--dk-surface); color: var(--dk-text); }
+
 /* NOTIFICATIONS */
 .notif-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .notif-empty { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 60px; text-align: center; }
@@ -1125,6 +1178,19 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   </div>
 </div>
 
+<!-- Modal: Paywall (modo explorador) -->
+<div class="paywall-modal" id="paywallModal" onclick="if(event.target===this)closePaywall()">
+  <div class="paywall-modal__card">
+    <div class="paywall-modal__icon"><svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+    <div class="paywall-modal__title" id="paywallTitle">Suscríbete para acceder</div>
+    <div class="paywall-modal__desc" id="paywallDesc">Tu periodo de prueba terminó. Activa tu suscripción para acceder a todos los cursos, webinars y materiales del Club.</div>
+    <div class="paywall-modal__actions">
+      <button class="paywall-modal__secondary" onclick="closePaywall()">Ahora no</button>
+      <button class="paywall-modal__primary" onclick="closePaywall();nav('suscripcion')">Ver planes</button>
+    </div>
+  </div>
+</div>
+
 <!-- Modal: Eliminar cuenta -->
 <div class="logout-modal" id="deleteAccountModal">
   <div class="logout-modal__box">
@@ -1240,6 +1306,9 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <button class="topbar__btn" onclick="nav('configuracion')" title="Configuración"><svg class="icon" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg></button>
     </div>
   </header>
+
+  <!-- Banner persistente de trial / suscripción -->
+  <div id="trialBannerContainer"></div>
 
   <!-- ==================== INICIO ==================== -->
   <div class="page-content active" data-page="inicio">
@@ -1454,17 +1523,8 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <!-- ==================== SUSCRIPCIÓN ==================== -->
   <div class="page-content" data-page="suscripcion">
     <div class="page-header"><h1 class="page-header__title">Mi Suscripción</h1><p class="page-header__desc">Detalles de tu plan y beneficios activos.</p></div>
-    <div class="sub-card">
-      <div class="sub-label">Plan actual</div>
-      <div class="sub-plan">GlobalVet Mensual</div>
-      <div class="sub-price">$200 MXN <span>/ mes</span></div>
-      <div class="sub-meta">
-        <div class="sub-meta-item"><label>Estado</label><span class="status-active" id="subStatus">Activa</span></div>
-        <div class="sub-meta-item"><label>Próximo cobro</label><span id="subProximoCobro">—</span></div>
-      </div>
-      <div style="margin-top:20px;position:relative;z-index:1"><button class="btn-outline btn-outline--danger" id="subCancelBtn" onclick="openCancelSubModal()">Cancelar suscripción</button></div>
-    </div>
-    <div class="section-header" style="margin-bottom:16px"><h2 class="section-header__title">Lo que incluye tu plan</h2></div>
+    <div id="subContainer"><div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:40px;text-align:center;color:var(--gray-400)">Cargando...</div></div>
+    <div class="section-header" style="margin-top:32px;margin-bottom:16px"><h2 class="section-header__title">Lo que incluye tu plan</h2></div>
     <div class="sub-benefits">
       <div class="sub-benefit"><div class="sub-benefit__check"><svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 13l4 4L19 7"/></svg></div><div class="sub-benefit__text"><h4>Acceso ilimitado</h4><p>A todos los cursos grabados, 24/7</p></div></div>
       <div class="sub-benefit"><div class="sub-benefit__check"><svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M5 13l4 4L19 7"/></svg></div><div class="sub-benefit__text"><h4>Webinars en vivo</h4><p>4 sesiones mensuales con expertos</p></div></div>
@@ -2064,6 +2124,52 @@ firebase.initializeApp({
   appId:"1:146292961707:web:714454893bfcf3c1b8e2ee"
 });
 var db=firebase.firestore();
+
+// =================================================================
+// STRIPE / SUSCRIPCION — Configuracion
+// =================================================================
+var WEBHOOK_URL='https://webhook-globalvet-j-production.up.railway.app';
+var TRIAL_DIAS=7;
+var _subStatus='loading'; // loading | trial_activo | trial_expirado | activa | pago_fallido | cancelada
+var _subData=null;
+var _trialDiasRestantes=0;
+
+// Calcula el estado de suscripcion del usuario
+function calcSubStatus(data){
+  var sub=data&&data.suscripcion?data.suscripcion:null;
+  // Caso 1: tiene suscripcion en Stripe
+  if(sub&&sub.estado){
+    if(sub.estado==='activa')return{status:'activa',sub:sub};
+    if(sub.estado==='pago_fallido')return{status:'pago_fallido',sub:sub};
+    if(sub.estado==='cancelada')return{status:'cancelada',sub:sub};
+    if(sub.estado==='incompleta')return{status:'pago_fallido',sub:sub};
+  }
+  // Caso 2: sin suscripcion -> verificar trial de 7 dias
+  var registro=data&&data.registro?data.registro:null;
+  if(!registro){
+    var u=firebase.auth().currentUser;
+    registro=u&&u.metadata&&u.metadata.creationTime?u.metadata.creationTime:new Date().toISOString();
+  }
+  var diasTranscurridos=Math.floor((Date.now()-new Date(registro).getTime())/(1000*60*60*24));
+  var diasRestantes=TRIAL_DIAS-diasTranscurridos;
+  if(diasRestantes>0)return{status:'trial_activo',diasRestantes:diasRestantes};
+  return{status:'trial_expirado',diasRestantes:0};
+}
+
+// Refresca el estado global desde Firestore
+function refreshSubStatus(){
+  var user=firebase.auth().currentUser;
+  if(!user){_subStatus='loading';return Promise.resolve(null);}
+  return db.collection('miembros').doc(user.uid).get().then(function(doc){
+    var data=doc.exists?doc.data():{};
+    var r=calcSubStatus(data);
+    _subStatus=r.status;
+    _subData=r.sub||null;
+    _trialDiasRestantes=r.diasRestantes||0;
+    return r;
+  });
+}
+
 </script>
 <script>
 function descargarFicha(e){
@@ -2413,6 +2519,7 @@ function loadClubWebinars(){
   }).catch(function(e){console.error('Error webinars:',e);});
 }
 function reservarWebinar(webinarId,btn){
+  if(!tieneAcceso()){openPaywall();return;}
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión para reservar');return;}
   localStorage.setItem('webinar_reserva_'+user.uid+'_'+webinarId,'1');
@@ -2596,54 +2703,185 @@ function loadClubPdfs(){
     s.forEach(function(d){var c=d.data();if(c.estado&&c.estado!=='Publicado')return;
       n++;
       var img=driveImg(c.imagen);
-      cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
+      cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
     if(n===0){
       cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando material descargable para ti. Pronto encontrarás guías, protocolos y documentos aquí.</p></div>';
     }
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
-// ============ SUSCRIPCION / CONFIGURACION / DESCUENTO / CANAL ============
+// ============ SUSCRIPCION / STRIPE ============
 
-// Carga datos de la suscripcion del usuario
+// Renderiza la seccion Suscripcion segun el estado
 function loadSuscripcion(){
   var user=firebase.auth().currentUser;if(!user)return;
-  db.collection('miembros').doc(user.uid).get().then(function(doc){
-    var data=doc.exists?doc.data():{};
-    var statusEl=document.getElementById('subStatus');
-    var proxEl=document.getElementById('subProximoCobro');
-    var cancelBtn=document.getElementById('subCancelBtn');
-    var estado=data.suscripcion&&data.suscripcion.estado?data.suscripcion.estado:'activa';
-    if(estado==='cancelada'){
-      if(statusEl){statusEl.textContent='Cancelada';statusEl.classList.remove('status-active');statusEl.style.color='#dc2626';}
-      if(cancelBtn){cancelBtn.textContent='Suscripción cancelada';cancelBtn.disabled=true;cancelBtn.style.opacity='0.5';cancelBtn.style.cursor='not-allowed';}
-    }else{
-      if(statusEl){statusEl.textContent='Activa';statusEl.classList.add('status-active');statusEl.style.color='';}
-      if(cancelBtn){cancelBtn.textContent='Cancelar suscripción';cancelBtn.disabled=false;cancelBtn.style.opacity='';cancelBtn.style.cursor='';}
-    }
-    // Proximo cobro = registro + 1 mes (mientras no haya Stripe)
-    var registro=data.registro||user.metadata.creationTime||new Date().toISOString();
-    var fr=new Date(registro);
-    var hoy=new Date();
-    // Encontrar el proximo cobro: siguiente mes con el mismo dia del registro
-    var prox=new Date(fr);
-    while(prox.getTime()<hoy.getTime()){
-      prox.setMonth(prox.getMonth()+1);
-    }
+  var cont=document.getElementById('subContainer');if(!cont)return;
+  refreshSubStatus().then(function(r){
+    if(!r)return;
+    renderTrialBanner(); // refresca banner tambien
+    if(r.status==='activa'){renderSubActiva(cont,r.sub);}
+    else if(r.status==='pago_fallido'){renderSubPagoFallido(cont,r.sub);}
+    else if(r.status==='cancelada'){renderSubCancelada(cont,r.sub);}
+    else if(r.status==='trial_activo'){renderTrialActivo(cont,r.diasRestantes);}
+    else{renderTrialExpirado(cont);} // trial_expirado
+  });
+}
+
+// === Renders por estado ===
+function renderSubActiva(cont,sub){
+  var planNombre=sub&&sub.plan==='anual'?'GlobalVet Anual':'GlobalVet Mensual';
+  var precio=sub&&sub.plan==='anual'?'$1,788 MXN / año':'$179 MXN / mes';
+  var cancelaInfo='';
+  if(sub&&sub.cancelacionProgramada&&sub.cancelaEn){
+    var fc=new Date(sub.cancelaEn);
     var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-    var proxStr=prox.getDate()+' de '+meses[prox.getMonth()]+' de '+prox.getFullYear();
-    if(proxEl)proxEl.textContent=proxStr;
-  }).catch(function(){});
+    var fechaStr=fc.getDate()+' de '+meses[fc.getMonth()]+' de '+fc.getFullYear();
+    cancelaInfo='<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:0.78rem;color:#92400e;margin-top:14px">⚠️ Tu suscripción se cancelará el <strong>'+fechaStr+'</strong>. Mantendrás acceso hasta entonces.</div>';
+  }
+  var btn=sub&&sub.cancelacionProgramada?'<button class="btn-outline" disabled style="opacity:0.5;cursor:not-allowed">Cancelación programada</button>':'<button class="btn-outline btn-outline--danger" onclick="openCancelSubModal()">Cancelar suscripción</button>';
+  cont.innerHTML='<div class="sub-card"><div class="sub-label">Plan actual</div><div class="sub-plan">'+planNombre+'</div><div class="sub-price">'+precio+'</div><div class="sub-meta"><div class="sub-meta-item"><label>Estado</label><span class="status-active">Activa</span></div><div class="sub-meta-item"><label>Activada desde</label><span>'+(sub&&sub.activadaEn?new Date(sub.activadaEn).toLocaleDateString('es-MX'):'—')+'</span></div></div>'+cancelaInfo+'<div style="margin-top:20px;position:relative;z-index:1">'+btn+'</div></div>';
+}
+
+function renderSubPagoFallido(cont,sub){
+  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca"><div class="sub-label" style="color:#dc2626">⚠️ Pago fallido</div><div class="sub-plan">Actualiza tu método de pago</div><div style="font-size:0.88rem;color:var(--gray-600);margin-top:10px;line-height:1.55">Tu último cobro no se pudo procesar. Para mantener tu acceso al Club, actualiza tu tarjeta cuanto antes.</div><div style="margin-top:20px"><button class="plan-card__btn" onclick="iniciarCheckout(\'mensual\')">Actualizar pago</button></div></div>';
+}
+
+function renderSubCancelada(cont,sub){
+  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,#f9fafb,#fff);border-color:var(--gray-200)"><div class="sub-label" style="color:var(--gray-500)">Suscripción cancelada</div><div class="sub-plan" style="color:var(--gray-700)">Vuelve cuando quieras</div><div style="font-size:0.88rem;color:var(--gray-500);margin-top:10px;line-height:1.55">Tu suscripción está cancelada. Puedes reactivarla en cualquier momento.</div></div>'+plansHTML(false);
+}
+
+function renderTrialActivo(cont,dias){
+  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,var(--purple-50),#fff);border-color:var(--purple-200)"><div class="sub-label">🎁 Periodo de prueba</div><div class="sub-plan">Te quedan '+dias+' '+(dias===1?'día':'días')+' gratis</div><div style="font-size:0.88rem;color:var(--gray-600);margin-top:10px;line-height:1.55">Estás disfrutando tu prueba gratuita. Suscríbete ahora para que no se interrumpa tu acceso al Club al terminar.</div></div>'+plansHTML(true);
+}
+
+function renderTrialExpirado(cont){
+  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca"><div class="sub-label" style="color:#dc2626">Periodo de prueba terminado</div><div class="sub-plan">Suscríbete para volver a entrar</div><div style="font-size:0.88rem;color:var(--gray-600);margin-top:10px;line-height:1.55">Tu trial de 7 días terminó. Estás en <strong>modo explorador</strong>: puedes navegar pero no abrir el contenido. Suscríbete para reactivar todo.</div></div>'+plansHTML(true);
+}
+
+// HTML compartido: cards de los 2 planes
+function plansHTML(showTrial){
+  var trialLabel=showTrial?'<div style="font-size:0.7rem;color:var(--gray-400);text-align:center;margin-top:8px">Empieza tu prueba gratuita de 7 días</div>':'';
+  return '<div class="section-header" style="margin:24px 0 14px"><h2 class="section-header__title">Elige tu plan</h2></div>'+
+  '<div class="plans-grid">'+
+    '<div class="plan-card"><div class="plan-card__name">Plan Mensual</div><div class="plan-card__price">$179<small>MXN/mes</small></div><div style="font-size:0.78rem;color:var(--gray-400);margin-top:6px">Cancela cuando quieras</div><button class="plan-card__btn plan-card__btn--outline" onclick="iniciarCheckout(\'mensual\')">Suscribirme mensual</button>'+trialLabel+'</div>'+
+    '<div class="plan-card plan-card--featured"><div class="plan-card__badge">Más popular</div><div class="plan-card__name">Plan Anual</div><div class="plan-card__price">$1,788<small>MXN/año</small></div><div class="plan-card__old">Equivalente mensual: $2,148</div><div class="plan-card__saving">🎉 Ahorras $360 (2 meses gratis)</div><button class="plan-card__btn" onclick="iniciarCheckout(\'anual\')">Suscribirme anual</button>'+trialLabel+'</div>'+
+  '</div>';
+}
+
+// Inicia el flujo de Checkout (llama al webhook -> redirige a Stripe)
+function iniciarCheckout(plan){
+  var user=firebase.auth().currentUser;
+  if(!user){alert('Debes iniciar sesión primero');return;}
+  // Encontrar el boton clickeado y mostrar loading
+  var btns=document.querySelectorAll('.plan-card__btn');
+  btns.forEach(function(b){b.disabled=true;});
+  var clicked=event&&event.target?event.target:null;
+  var orig='';
+  if(clicked){orig=clicked.innerHTML;clicked.innerHTML='Redirigiendo...';}
+  fetch(WEBHOOK_URL+'/create-checkout-session',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({uid:user.uid,email:user.email,plan:plan})
+  }).then(function(r){return r.json();}).then(function(data){
+    if(data.url){window.location.href=data.url;}
+    else{alert('Error al iniciar el pago: '+(data.error||'desconocido'));btns.forEach(function(b){b.disabled=false;});if(clicked)clicked.innerHTML=orig;}
+  }).catch(function(err){
+    console.error('[STRIPE] Error:',err);
+    alert('No se pudo conectar con el servidor de pagos. Intenta de nuevo.');
+    btns.forEach(function(b){b.disabled=false;});
+    if(clicked)clicked.innerHTML=orig;
+  });
 }
 
 function openCancelSubModal(){document.getElementById('cancelSubModal').classList.add('show');}
 
+// Cancelar suscripcion via webhook (cancelacion programada al final del periodo)
 function confirmCancelSub(){
   var user=firebase.auth().currentUser;if(!user)return;
-  db.collection('miembros').doc(user.uid).set({suscripcion:{estado:'cancelada',canceladoEn:new Date().toISOString()}},{merge:true}).then(function(){
-    document.getElementById('cancelSubModal').classList.remove('show');
-    loadSuscripcion();
-    alert('Tu suscripción ha sido cancelada. Mantendrás acceso hasta el próximo cobro.');
-  }).catch(function(e){alert('Error al cancelar: '+e.message);});
+  var btn=document.querySelector('#cancelSubModal .logout-modal__confirm');
+  if(btn){btn.disabled=true;btn.textContent='Cancelando...';}
+  fetch(WEBHOOK_URL+'/cancel-subscription',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({uid:user.uid})
+  }).then(function(r){return r.json();}).then(function(data){
+    if(data.ok){
+      document.getElementById('cancelSubModal').classList.remove('show');
+      if(btn){btn.disabled=false;btn.textContent='Sí, cancelar';}
+      var fc=new Date(data.cancelaEn);
+      alert('Tu suscripción se cancelará el '+fc.toLocaleDateString('es-MX')+'. Mantendrás acceso hasta entonces.');
+      loadSuscripcion();
+    }else{
+      if(btn){btn.disabled=false;btn.textContent='Sí, cancelar';}
+      alert('Error al cancelar: '+(data.error||'desconocido'));
+    }
+  }).catch(function(err){
+    if(btn){btn.disabled=false;btn.textContent='Sí, cancelar';}
+    alert('No se pudo conectar con el servidor. Intenta de nuevo.');
+  });
+}
+
+// ============ BANNER DE TRIAL / MODO EXPLORADOR ============
+function renderTrialBanner(){
+  var cont=document.getElementById('trialBannerContainer');
+  if(!cont)return;
+  if(_subStatus==='trial_activo'){
+    cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>🎁 Prueba gratuita: te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong></span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+  }else if(_subStatus==='trial_expirado'){
+    cont.innerHTML='<div class="trial-banner trial-banner--danger"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>Tu periodo de prueba terminó. Estás en <strong>modo explorador</strong>.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+  }else if(_subStatus==='pago_fallido'){
+    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Tu pago falló. Actualiza tu método de pago para no perder acceso.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Actualizar</button></div>';
+  }else if(_subStatus==='activa'&&_subData&&_subData.cancelacionProgramada){
+    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg><span>Tu suscripción se cancelará pronto. Aún tienes acceso completo.</span></div></div>';
+  }else{
+    cont.innerHTML='';
+  }
+}
+
+// ============ PAYWALL (Modo Explorador) ============
+function openPaywall(motivo){
+  var titleEl=document.getElementById('paywallTitle');
+  var descEl=document.getElementById('paywallDesc');
+  if(_subStatus==='trial_expirado'){
+    if(titleEl)titleEl.textContent='Suscríbete para acceder';
+    if(descEl)descEl.textContent='Tu periodo de prueba terminó. Activa tu suscripción para volver a usar todos los cursos, webinars y materiales del Club.';
+  }else if(_subStatus==='pago_fallido'){
+    if(titleEl)titleEl.textContent='Actualiza tu pago';
+    if(descEl)descEl.textContent='Tu último cobro no se procesó. Actualiza tu método de pago para seguir accediendo al Club.';
+  }else if(_subStatus==='cancelada'){
+    if(titleEl)titleEl.textContent='Reactiva tu suscripción';
+    if(descEl)descEl.textContent='Tu suscripción fue cancelada. Reactívala para volver a acceder al catálogo completo.';
+  }
+  document.getElementById('paywallModal').classList.add('show');
+}
+function closePaywall(){document.getElementById('paywallModal').classList.remove('show');}
+
+// Decide si el usuario puede acceder a contenido pagado
+function tieneAcceso(){
+  return _subStatus==='trial_activo'||_subStatus==='activa';
+}
+
+// Wrapper: si tiene acceso ejecuta fn, sino abre paywall
+function gateAcceso(fn){
+  if(tieneAcceso()){fn();}else{openPaywall();}
+}
+
+// Bloquea descarga de PDFs si no tiene acceso
+function descargarPdf(ev,el){
+  if(!tieneAcceso()){ev.preventDefault();openPaywall();return false;}
+  return true;
+}
+
+// ============ DETECCION DE RETORNO DE STRIPE ============
+function handleStripeReturn(){
+  var params=new URLSearchParams(window.location.search);
+  var sus=params.get('suscripcion');
+  if(sus==='ok'){
+    setTimeout(function(){alert('🎉 ¡Bienvenido al Club! Tu suscripción está activa.');refreshSubStatus().then(function(){renderTrialBanner();loadSuscripcion();});},800);
+    history.replaceState({},'',window.location.pathname);
+  }else if(sus==='cancel'){
+    setTimeout(function(){alert('Cancelaste el proceso de pago. Puedes intentarlo de nuevo cuando quieras.');},500);
+    history.replaceState({},'',window.location.pathname);
+  }
 }
 
 // Configuracion: toggles de notificaciones
@@ -3222,6 +3460,7 @@ function openVideo(url,title,idx){
 function closeVideo(){document.getElementById('videoModal').classList.remove('show');document.getElementById('videoFrame').src=''}
 
 function openCurso(id){
+  if(!tieneAcceso()){openPaywall();return;}
   currentCursoId=id;
   db.collection('cursos').doc(id).get().then(function(doc){
     if(!doc.exists)return;var c=doc.data();
@@ -3808,6 +4047,8 @@ function showLogroToast(logro){
 firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
   // Cargar prefs ANTES de notificaciones para que el filtro funcione
   loadNotifPrefsCache().then(function(){loadClubNotificaciones();});
+  // Cargar estado de suscripcion para banner y bloqueos
+  refreshSubStatus().then(function(){renderTrialBanner();handleStripeReturn();});
 },500)}});
 </script>
 </body>
