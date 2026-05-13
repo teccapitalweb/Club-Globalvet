@@ -2763,7 +2763,7 @@ function renderSubActiva(cont,sub){
     var fechaStr=fc.getDate()+' de '+meses[fc.getMonth()]+' de '+fc.getFullYear();
     cancelaInfo='<div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;font-size:0.78rem;color:#92400e;margin-top:14px">⚠️ Tu suscripción se cancelará el <strong>'+fechaStr+'</strong>. Mantendrás acceso hasta entonces.</div>';
   }
-  var btn=sub&&sub.cancelacionProgramada?'<button class="btn-outline" disabled style="opacity:0.5;cursor:not-allowed">Cancelación programada</button>':'<button class="btn-outline btn-outline--danger" onclick="openCancelSubModal()">Cancelar suscripción</button>';
+  var btn=sub&&sub.cancelacionProgramada?'<button class="plan-card__btn" style="background:#22c55e;color:#fff;margin-top:0" onclick="reactivarSuscripcion(this)">♻️ Reactivar suscripción</button>':'<button class="btn-outline btn-outline--danger" onclick="openCancelSubModal()">Cancelar suscripción</button>';
   cont.innerHTML='<div class="sub-card"><div class="sub-label">Plan actual</div><div class="sub-plan">'+planNombre+'</div><div class="sub-price">'+precio+'</div><div class="sub-meta"><div class="sub-meta-item"><label>Estado</label><span class="status-active">Activa</span></div><div class="sub-meta-item"><label>Activada desde</label><span>'+(sub&&sub.activadaEn?new Date(sub.activadaEn).toLocaleDateString('es-MX'):'—')+'</span></div></div>'+cancelaInfo+'<div style="margin-top:20px;position:relative;z-index:1">'+btn+'</div></div>';
 }
 
@@ -2872,6 +2872,30 @@ function closeCheckout(){
 }
 
 function openCancelSubModal(){document.getElementById('cancelSubModal').classList.add('show');}
+
+// Reactivar suscripcion (deshacer cancelacion programada)
+function reactivarSuscripcion(btn){
+  var user=firebase.auth().currentUser;if(!user)return;
+  if(!confirm('¿Reactivar tu suscripción? Se cobrará normalmente cuando termine tu trial.'))return;
+  var orig=btn.innerHTML;
+  btn.disabled=true;btn.innerHTML='Reactivando...';
+  fetch(WEBHOOK_URL+'/reactivate-subscription',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({uid:user.uid})
+  }).then(function(r){return r.json();}).then(function(data){
+    if(data.ok){
+      alert('🎉 ¡Suscripción reactivada! Sigues con acceso completo.');
+      refreshSubStatus().then(function(){renderTrialBanner();loadSuscripcion();});
+    }else{
+      btn.disabled=false;btn.innerHTML=orig;
+      alert('Error al reactivar: '+(data.error||'desconocido'));
+    }
+  }).catch(function(err){
+    btn.disabled=false;btn.innerHTML=orig;
+    alert('No se pudo conectar con el servidor. Intenta de nuevo.');
+  });
+}
 
 // Cancelar suscripcion via webhook (cancelacion programada al final del periodo)
 function confirmCancelSub(){
