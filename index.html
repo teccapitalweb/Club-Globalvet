@@ -407,6 +407,16 @@ body.dark .paywall-modal__title { color: var(--dk-text); }
 body.dark .paywall-modal__desc { color: var(--dk-muted); }
 body.dark .paywall-modal__secondary { background: var(--dk-surface); color: var(--dk-text); }
 
+/* CHECKOUT MODAL (Stripe Embedded) */
+.checkout-modal { position: fixed; inset: 0; background: rgba(15,10,30,0.75); z-index: 10000; display: none; align-items: flex-start; justify-content: center; padding: 30px 20px; overflow-y: auto; backdrop-filter: blur(4px); }
+.checkout-modal.show { display: flex; }
+.checkout-modal__card { background: #fff; border-radius: var(--radius); padding: 24px; max-width: 540px; width: 100%; position: relative; transform: scale(0.94) translateY(20px); opacity: 0; transition: all 0.3s cubic-bezier(0.16,1,0.3,1); margin-top: 20px; margin-bottom: 40px; }
+.checkout-modal.show .checkout-modal__card { transform: scale(1) translateY(0); opacity: 1; }
+.checkout-modal__close { position: absolute; top: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--gray-100); color: var(--gray-600); cursor: pointer; display: grid; place-items: center; transition: all var(--transition); z-index: 10; }
+.checkout-modal__close:hover { background: var(--gray-200); color: var(--gray-800); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) { .checkout-modal { padding: 0; align-items: stretch; } .checkout-modal__card { border-radius: 0; margin: 0; min-height: 100vh; } }
+
 /* NOTIFICATIONS */
 .notif-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .notif-empty { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 60px; text-align: center; }
@@ -1187,6 +1197,18 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="paywall-modal__actions">
       <button class="paywall-modal__secondary" onclick="closePaywall()">Ahora no</button>
       <button class="paywall-modal__primary" onclick="closePaywall();nav('suscripcion')">Ver planes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Stripe Embedded Checkout -->
+<div class="checkout-modal" id="checkoutModal" onclick="if(event.target===this)closeCheckout()">
+  <div class="checkout-modal__card">
+    <button class="checkout-modal__close" onclick="closeCheckout()" title="Cerrar"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div id="checkoutContainer" style="min-height:600px;"></div>
+    <div id="checkoutLoading" style="text-align:center;padding:80px 20px;color:var(--gray-400)">
+      <div style="display:inline-block;width:32px;height:32px;border:3px solid var(--purple-100);border-top-color:var(--purple-900);border-radius:50%;animation:spin 0.7s linear infinite;margin-bottom:16px"></div>
+      <div style="font-size:0.88rem">Preparando tu pago...</div>
     </div>
   </div>
 </div>
@@ -2114,6 +2136,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://js.stripe.com/v3/"></script>
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyD_28_ODOJWqzEgN4kagOf4lszt8Y1Zlog",
@@ -2129,7 +2152,10 @@ var db=firebase.firestore();
 // STRIPE / SUSCRIPCION — Configuracion
 // =================================================================
 var WEBHOOK_URL='https://webhook-globalvet-j-production.up.railway.app';
+var STRIPE_PK='pk_test_51TMAcSA7If2CqXs95MzeJgFKo6uOwe9VsycHRUcsVRWoy6LjdCcR3gHR8B58a3rEv3PIdH6mNUdClHOyujK6jJ5t00afIrW22P';
 var TRIAL_DIAS=7;
+var _stripe=null;
+var _embeddedCheckout=null;
 var _subStatus='loading'; // loading | trial_activo | trial_expirado | activa | pago_fallido | cancelada
 var _subData=null;
 var _trialDiasRestantes=0;
@@ -2767,29 +2793,82 @@ function plansHTML(showTrial){
   '</div>';
 }
 
-// Inicia el flujo de Checkout (llama al webhook -> redirige a Stripe)
+// Inicia el flujo de Checkout EMBEBIDO en un modal
 function iniciarCheckout(plan){
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión primero');return;}
-  // Encontrar el boton clickeado y mostrar loading
+  // Bloquear botones para evitar dobles clicks
   var btns=document.querySelectorAll('.plan-card__btn');
   btns.forEach(function(b){b.disabled=true;});
   var clicked=event&&event.target?event.target:null;
   var orig='';
-  if(clicked){orig=clicked.innerHTML;clicked.innerHTML='Redirigiendo...';}
+  if(clicked){orig=clicked.innerHTML;clicked.innerHTML='Cargando...';}
+
+  // Abrir modal con loader
+  document.getElementById('checkoutLoading').style.display='block';
+  document.getElementById('checkoutContainer').innerHTML='';
+  document.getElementById('checkoutModal').classList.add('show');
+
   fetch(WEBHOOK_URL+'/create-checkout-session',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({uid:user.uid,email:user.email,plan:plan})
   }).then(function(r){return r.json();}).then(function(data){
-    if(data.url){window.location.href=data.url;}
-    else{alert('Error al iniciar el pago: '+(data.error||'desconocido'));btns.forEach(function(b){b.disabled=false;});if(clicked)clicked.innerHTML=orig;}
+    if(!data.clientSecret){
+      alert('Error al iniciar el pago: '+(data.error||'desconocido'));
+      closeCheckout();
+      btns.forEach(function(b){b.disabled=false;});
+      if(clicked)clicked.innerHTML=orig;
+      return;
+    }
+    // Inicializar Stripe.js si aun no lo esta
+    if(!_stripe){_stripe=Stripe(STRIPE_PK);}
+    // Montar el Embedded Checkout
+    _stripe.initEmbeddedCheckout({
+      clientSecret:data.clientSecret,
+      onComplete:function(){
+        // Pago completado dentro del modal (sin redirect)
+        console.log('[STRIPE] Checkout completado');
+        setTimeout(function(){
+          closeCheckout();
+          alert('🎉 ¡Bienvenido al Club! Tu suscripción está activa.');
+          refreshSubStatus().then(function(){
+            renderTrialBanner();
+            loadSuscripcion();
+          });
+        },800);
+      }
+    }).then(function(checkout){
+      _embeddedCheckout=checkout;
+      document.getElementById('checkoutLoading').style.display='none';
+      checkout.mount('#checkoutContainer');
+      btns.forEach(function(b){b.disabled=false;});
+      if(clicked)clicked.innerHTML=orig;
+    }).catch(function(err){
+      console.error('[STRIPE] Error montando:',err);
+      alert('Error al cargar el formulario de pago. Intenta de nuevo.');
+      closeCheckout();
+      btns.forEach(function(b){b.disabled=false;});
+      if(clicked)clicked.innerHTML=orig;
+    });
   }).catch(function(err){
     console.error('[STRIPE] Error:',err);
     alert('No se pudo conectar con el servidor de pagos. Intenta de nuevo.');
+    closeCheckout();
     btns.forEach(function(b){b.disabled=false;});
     if(clicked)clicked.innerHTML=orig;
   });
+}
+
+// Cerrar modal de checkout y limpiar instancia
+function closeCheckout(){
+  document.getElementById('checkoutModal').classList.remove('show');
+  if(_embeddedCheckout){
+    try{_embeddedCheckout.destroy();}catch(e){}
+    _embeddedCheckout=null;
+  }
+  document.getElementById('checkoutContainer').innerHTML='';
+  document.getElementById('checkoutLoading').style.display='block';
 }
 
 function openCancelSubModal(){document.getElementById('cancelSubModal').classList.add('show');}
