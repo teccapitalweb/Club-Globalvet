@@ -388,6 +388,21 @@ body.dark .trial-banner--info { background: linear-gradient(90deg, #2a1c40, var(
 body.dark .trial-banner--warning { background: linear-gradient(90deg, #3a2a10, var(--dk-card)); border-color: #92400e; color: #fde68a; }
 body.dark .trial-banner--danger { background: linear-gradient(90deg, #3a1010, var(--dk-card)); border-color: #991b1b; color: #fecaca; }
 
+/* INICIO — Widget destacado de Suscripcion */
+.inicio-sub-widget { display: flex; align-items: center; gap: 18px; padding: 22px 26px; border-radius: var(--radius); position: relative; overflow: hidden; }
+.inicio-sub-widget--trial { background: linear-gradient(135deg, var(--purple-900), #6b2c8f); color: #fff; box-shadow: 0 12px 30px rgba(75,28,113,0.18); }
+.inicio-sub-widget--expired { background: linear-gradient(135deg, #1f2937, #374151); color: #fff; box-shadow: 0 12px 30px rgba(31,41,55,0.18); }
+.inicio-sub-widget--warning { background: linear-gradient(135deg, #92400e, #c2410c); color: #fff; box-shadow: 0 12px 30px rgba(146,64,14,0.18); }
+.inicio-sub-widget__icon { width: 54px; height: 54px; border-radius: 14px; background: rgba(255,255,255,0.14); display: grid; place-items: center; font-size: 1.7rem; flex-shrink: 0; backdrop-filter: blur(8px); }
+.inicio-sub-widget__body { flex: 1; min-width: 0; }
+.inicio-sub-widget__title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+.inicio-sub-widget__desc { font-size: 0.83rem; opacity: 0.92; line-height: 1.45; }
+.inicio-sub-widget__btn { background: #fff; color: var(--purple-900); border: none; padding: 11px 20px; border-radius: var(--radius-xs); font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: all var(--transition); font-family: var(--font-body); flex-shrink: 0; }
+.inicio-sub-widget__btn:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,0.18); }
+.inicio-sub-widget--expired .inicio-sub-widget__btn { color: #1f2937; }
+.inicio-sub-widget--warning .inicio-sub-widget__btn { color: #92400e; }
+@media (max-width: 640px) { .inicio-sub-widget { flex-direction: column; align-items: flex-start; text-align: left; } .inicio-sub-widget__btn { width: 100%; } }
+
 /* MODAL PAYWALL (modo explorador) */
 .paywall-modal { position: fixed; inset: 0; background: rgba(15,10,30,0.65); z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(4px); }
 .paywall-modal.show { display: flex; }
@@ -1336,6 +1351,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <div class="page-content active" data-page="inicio">
     <div class="home-layout"><div class="main-col">
       <div class="greeting"><div class="greeting__text"><h1 id="greetingTitle">Buenas tardes, Doctor.</h1><p>Tienes acceso completo al catálogo. Retoma donde te quedaste.</p></div><div class="greeting__streak"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg><span class="greeting__streak-days">5</span> días de racha</div></div>
+      <div id="inicioSubWidget" style="display:none;margin-bottom:18px"></div>
       <div class="feature-row">
         <div class="webinar-card" id="featuredWebinarCard"><div class="webinar-card__tag">Próximo Webinar</div><div class="webinar-card__title" id="featuredWebinarTitle">Cargando...</div><div class="webinar-card__timer"><div class="cd-block"><div class="cd-val" id="cd-days">00</div><div class="cd-lbl">Días</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-hrs">00</div><div class="cd-lbl">Hrs</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-min">00</div><div class="cd-lbl">Min</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-sec">00</div><div class="cd-lbl">Seg</div></div></div><div class="webinar-card__date" id="featuredWebinarDate"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> &mdash;</div></div>
         <div class="resume-card" id="resumeCard" style="display:none"><div class="resume-card__label">Retomar curso</div><div class="resume-card__course"><div class="resume-card__progress-ring"><svg width="52" height="52" viewBox="0 0 52 52"><circle class="ring-bg" cx="26" cy="26" r="22"/><circle class="ring-fill" cx="26" cy="26" r="22" id="resumeRingFill" stroke-dasharray="138.23" stroke-dashoffset="138.23"/></svg><div class="resume-card__progress-pct" id="resumePct">0%</div></div><div class="resume-card__info"><h3 id="resumeCourseName">&mdash;</h3><span id="resumeCourseMeta">&mdash;</span></div></div><button class="resume-card__btn" id="resumeContinueBtn"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Continuar</button></div>
@@ -2927,16 +2943,59 @@ function confirmCancelSub(){
 function renderTrialBanner(){
   var cont=document.getElementById('trialBannerContainer');
   if(!cont)return;
+  // Calcular fecha exacta de fin de trial si aplica
+  var fechaFinTrial='';
   if(_subStatus==='trial_activo'){
-    cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>🎁 Prueba gratuita: te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong></span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+    var user=firebase.auth().currentUser;
+    if(user){
+      db.collection('miembros').doc(user.uid).get().then(function(doc){
+        var data=doc.exists?doc.data():{};
+        var registro=data.registro||(user.metadata&&user.metadata.creationTime)||new Date().toISOString();
+        var fin=new Date(registro);
+        fin.setDate(fin.getDate()+TRIAL_DIAS);
+        var meses=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+        fechaFinTrial=fin.getDate()+' '+meses[fin.getMonth()];
+        // Re-render con la fecha
+        cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>🎁 Prueba gratuita activa · Te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong> (termina el '+fechaFinTrial+')</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Activar suscripción</button></div>';
+        // Si tambien existe el widget en Inicio, refrescarlo
+        renderInicioTrialWidget(fechaFinTrial);
+      });
+    }
+    // Render provisional sin fecha hasta que llegue Firestore
+    cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>🎁 Prueba gratuita activa · Te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong></span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Activar suscripción</button></div>';
   }else if(_subStatus==='trial_expirado'){
-    cont.innerHTML='<div class="trial-banner trial-banner--danger"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>Tu periodo de prueba terminó. Estás en <strong>modo explorador</strong>.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+    cont.innerHTML='<div class="trial-banner trial-banner--danger"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>Tu periodo de prueba terminó · Estás en <strong>modo explorador</strong>. Suscríbete para volver a tener acceso completo.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+    renderInicioTrialWidget(null);
   }else if(_subStatus==='pago_fallido'){
-    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Tu pago falló. Actualiza tu método de pago para no perder acceso.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Actualizar</button></div>';
+    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Tu pago falló · Actualiza tu método de pago para no perder acceso.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Actualizar</button></div>';
+    renderInicioTrialWidget(null);
   }else if(_subStatus==='activa'&&_subData&&_subData.cancelacionProgramada){
-    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg><span>Tu suscripción se cancelará pronto. Aún tienes acceso completo.</span></div></div>';
+    var fc=_subData.cancelaEn?new Date(_subData.cancelaEn):null;
+    var fechaCancela=fc?(fc.getDate()+' de '+['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][fc.getMonth()]):'pronto';
+    cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01"/><circle cx="12" cy="12" r="10"/></svg><span>Tu suscripción se cancelará el <strong>'+fechaCancela+'</strong>. Aún tienes acceso completo.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Reactivar</button></div>';
+    renderInicioTrialWidget(null);
   }else{
     cont.innerHTML='';
+    renderInicioTrialWidget(null);
+  }
+}
+
+// Widget destacado en el Dashboard Inicio para reforzar mensaje de suscripcion
+function renderInicioTrialWidget(fechaFinTrial){
+  var widget=document.getElementById('inicioSubWidget');
+  if(!widget)return;
+  if(_subStatus==='trial_activo'){
+    widget.style.display='block';
+    widget.innerHTML='<div class="inicio-sub-widget inicio-sub-widget--trial"><div class="inicio-sub-widget__icon">🎁</div><div class="inicio-sub-widget__body"><div class="inicio-sub-widget__title">Estás en prueba gratuita</div><div class="inicio-sub-widget__desc">Te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong>'+(fechaFinTrial?' · termina el '+fechaFinTrial:'')+'. Activa tu suscripción para que tu acceso no se interrumpa.</div></div><button class="inicio-sub-widget__btn" onclick="nav(\'suscripcion\')">Ver planes</button></div>';
+  }else if(_subStatus==='trial_expirado'){
+    widget.style.display='block';
+    widget.innerHTML='<div class="inicio-sub-widget inicio-sub-widget--expired"><div class="inicio-sub-widget__icon">🔒</div><div class="inicio-sub-widget__body"><div class="inicio-sub-widget__title">Tu prueba terminó</div><div class="inicio-sub-widget__desc">Estás en modo explorador. Suscríbete para acceder de nuevo a cursos, webinars y materiales.</div></div><button class="inicio-sub-widget__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+  }else if(_subStatus==='pago_fallido'){
+    widget.style.display='block';
+    widget.innerHTML='<div class="inicio-sub-widget inicio-sub-widget--warning"><div class="inicio-sub-widget__icon">⚠️</div><div class="inicio-sub-widget__body"><div class="inicio-sub-widget__title">Pago fallido</div><div class="inicio-sub-widget__desc">Tu último cobro no se procesó. Actualiza tu tarjeta para no perder acceso.</div></div><button class="inicio-sub-widget__btn" onclick="nav(\'suscripcion\')">Actualizar pago</button></div>';
+  }else{
+    widget.style.display='none';
+    widget.innerHTML='';
   }
 }
 
