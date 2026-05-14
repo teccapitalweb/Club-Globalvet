@@ -1635,6 +1635,32 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="toggle-row"><div class="toggle-row__text"><h4>Anuncios generales</h4><p>Avisos importantes del Club</p></div><div class="toggle on" id="togGeneral" onclick="toggleNotif(this,'general')"></div></div>
     </div>
 
+    <div class="s-card" id="pwaSettingsCard">
+      <div class="s-card__title">Instalar aplicación</div>
+      <div class="s-card__desc">Instala GlobalVet en tu dispositivo para acceso rápido y uso offline. Aparece como app nativa en tu pantalla de inicio.</div>
+      <div id="pwaSettingsBox">
+        <div id="pwaInstallableBox" style="display:none;background:linear-gradient(135deg,var(--purple-50),var(--purple-100));border:1px solid var(--purple-200);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <div style="font-size:42px;line-height:1">📱</div>
+          <div style="flex:1;min-width:200px">
+            <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--purple-900);margin:0 0 4px">Instala GlobalVet</h4>
+            <p style="margin:0;font-size:0.83rem;color:var(--gray-500);line-height:1.5">Acceso rápido desde tu home screen, funciona offline y se ve como una app nativa.</p>
+          </div>
+          <button id="pwaSettingsBtn" class="btn-primary" style="white-space:nowrap">Instalar ahora</button>
+        </div>
+        <div id="pwaInstalledBox" style="display:none;background:var(--green-50);border:1px solid #86efac;border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:12px">
+          <div style="font-size:28px">✅</div>
+          <div style="flex:1">
+            <h4 style="font-family:var(--font-display);font-size:0.95rem;font-weight:700;color:#166534;margin:0 0 2px">App instalada</h4>
+            <p style="margin:0;font-size:0.8rem;color:#15803d">GlobalVet ya está en tu dispositivo. Búscala en tu pantalla de inicio.</p>
+          </div>
+        </div>
+        <div id="pwaNotSupportedBox" style="display:none;background:var(--gray-50);border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px 20px">
+          <p style="margin:0 0 8px;font-size:0.86rem;color:var(--gray-700);font-weight:600">📱 Cómo instalar en este dispositivo</p>
+          <div id="pwaInstructions" style="font-size:0.82rem;color:var(--gray-500);line-height:1.6"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="s-card">
       <div class="s-card__title">Idioma y Región</div>
       <div class="form-group"><label class="form-label">Idioma de la plataforma</label><input class="form-input" type="text" value="Español (México)" readonly style="cursor:default"></div>
@@ -4422,7 +4448,89 @@ function showInstallBanner(){
 window.addEventListener('appinstalled',function(){
   console.log('✅ PWA instalada');
   var b=document.getElementById('pwaInstallBanner');if(b)b.remove();
+  // Refrescar el card de Configuración
+  renderPwaSettings();
 });
+
+// ===== Card PWA en Configuración =====
+function isPwaInstalled(){
+  // iOS standalone
+  if(window.navigator.standalone===true)return true;
+  // Otras: display-mode standalone
+  if(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)return true;
+  return false;
+}
+
+function getInstallInstructions(){
+  var ua=navigator.userAgent.toLowerCase();
+  var isIOS=/iphone|ipad|ipod/.test(ua);
+  var isAndroid=/android/.test(ua);
+  var isSafari=/safari/.test(ua)&&!/chrome|crios|fxios/.test(ua);
+  var isChrome=/chrome|crios/.test(ua)&&!/edge|edg/.test(ua);
+  var isFirefox=/firefox|fxios/.test(ua);
+  if(isIOS){
+    return '<strong>iOS Safari:</strong><br>1. Toca el botón <strong>Compartir</strong> <span style="display:inline-block;padding:1px 6px;background:var(--gray-200);border-radius:4px">⬆️</span> en la barra inferior<br>2. Desplázate y toca <strong>"Agregar a inicio"</strong><br>3. Confirma con "Agregar"';
+  }
+  if(isAndroid&&isChrome){
+    return '<strong>Android Chrome:</strong><br>1. Toca los <strong>3 puntos ⋮</strong> arriba a la derecha<br>2. Toca <strong>"Instalar aplicación"</strong> o "Agregar a pantalla de inicio"<br>3. Confirma con "Instalar"';
+  }
+  if(isAndroid&&isFirefox){
+    return '<strong>Firefox Android:</strong><br>1. Toca los 3 puntos arriba a la derecha<br>2. Toca <strong>"Instalar"</strong>';
+  }
+  if(isChrome){
+    return '<strong>Chrome en escritorio:</strong><br>1. Mira la barra de direcciones arriba<br>2. Click en el ícono <strong>📥 Instalar</strong> al final de la URL<br>3. O ve a Menú ⋮ → "Instalar GlobalVet"';
+  }
+  if(isFirefox){
+    return 'Tu navegador no soporta instalación directa. Para mejor experiencia, abre el sitio en <strong>Chrome</strong> o <strong>Edge</strong>.';
+  }
+  return 'En tu navegador, busca la opción "Instalar app" o "Agregar a inicio" en el menú principal. Si no aparece, intenta con Chrome o Safari.';
+}
+
+function renderPwaSettings(){
+  var inst=document.getElementById('pwaInstallableBox');
+  var done=document.getElementById('pwaInstalledBox');
+  var ns=document.getElementById('pwaNotSupportedBox');
+  if(!inst||!done||!ns)return;
+  inst.style.display='none';
+  done.style.display='none';
+  ns.style.display='none';
+  if(isPwaInstalled()){
+    done.style.display='flex';
+    return;
+  }
+  if(_deferredInstall){
+    inst.style.display='flex';
+    return;
+  }
+  // No se puede instalar via prompt (iOS Safari, o ya instalada antes)
+  ns.style.display='block';
+  document.getElementById('pwaInstructions').innerHTML=getInstallInstructions();
+}
+
+// Conectar el botón "Instalar ahora" del card
+document.addEventListener('click',function(e){
+  if(e.target&&e.target.id==='pwaSettingsBtn'){
+    if(!_deferredInstall){renderPwaSettings();return;}
+    _deferredInstall.prompt();
+    _deferredInstall.userChoice.then(function(){
+      _deferredInstall=null;
+      renderPwaSettings();
+    });
+  }
+});
+
+// Cuando se navega a la sección Configuración, refrescar el card
+document.addEventListener('click',function(e){
+  var link=e.target.closest&&e.target.closest('[data-page="config"]');
+  if(link)setTimeout(renderPwaSettings,100);
+});
+
+// Refrescar al captar el beforeinstallprompt
+var _origAddInstall=window.addEventListener;
+window.addEventListener('beforeinstallprompt',function(){setTimeout(renderPwaSettings,300);});
+
+// Render inicial cuando ya cargó todo
+setTimeout(renderPwaSettings,1500);
 </script>
 </body>
 </html>
