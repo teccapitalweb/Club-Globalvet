@@ -4209,6 +4209,29 @@ firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){club
   // Cargar estado de suscripcion para banner y bloqueos
   refreshSubStatus().then(function(){renderTrialBanner();handleStripeReturn();});
 },500)}});
+
+// ===== MODO MANTENIMIENTO (lee de Firestore /config/maintenance) =====
+function checkMaintenance(){
+  db.collection('config').doc('maintenance').get().then(function(doc){
+    if(!doc.exists)return;
+    var d=doc.data();
+    if(!d.active)return;
+    // Mostrar overlay de mantenimiento que bloquea todo
+    var ov=document.createElement('div');
+    ov.id='maintOverlay';
+    ov.style.cssText='position:fixed;inset:0;background:linear-gradient(135deg,#4b1c71 0%,#2d1148 100%);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif';
+    var msg=d.mensaje||'Estamos realizando mejoras en la plataforma. Volvemos pronto.';
+    var hora=d.horaRegreso?'<p style="margin:18px 0 0;font-size:0.92rem;color:#dbb6ee">Estimamos volver a las <strong>'+d.horaRegreso+'</strong></p>':'';
+    ov.innerHTML='<div style="background:#fff;border-radius:20px;padding:48px 38px;max-width:480px;width:100%;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.3)">'+
+      '<div style="font-size:60px;margin-bottom:18px">🔧</div>'+
+      '<h1 style="font-family:Sora,sans-serif;font-size:1.5rem;font-weight:700;color:#2d1148;margin:0 0 14px;letter-spacing:-0.02em">En mantenimiento</h1>'+
+      '<p style="font-size:0.95rem;color:#6b7280;line-height:1.55;margin:0">'+msg+'</p>'+hora+
+      '<p style="margin:28px 0 0;font-size:0.78rem;color:#9ca3af">¿Urgencias? Contáctanos por WhatsApp <a href="https://wa.me/522361130601" style="color:#4b1c71;text-decoration:none;font-weight:600">236 113 0601</a></p>'+
+    '</div>';
+    document.body.appendChild(ov);
+  }).catch(function(){});
+}
+checkMaintenance();
 </script>
 </body>
 </html>
