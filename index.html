@@ -4,6 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GlobalVet México — Club</title>
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4b1c71">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="GlobalVet">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="description" content="Club GlobalVet México — Plataforma de educación continua para profesionales veterinarios">
+<meta property="og:title" content="GlobalVet México - Club">
+<meta property="og:description" content="Educación continua para profesionales veterinarios en México">
+<meta property="og:type" content="website">
 <link rel="icon" type="image/png" href="data:image/png;base64,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">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1478,6 +1490,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
             <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
             <span id="foroDetailLikes">0</span>
           </button>
+          <div id="foroTemaAcciones" style="margin-left:auto"></div>
         </div>
         <div class="foro-respuestas">
           <div class="foro-respuestas__title" id="foroRespuestasTitle">Aún no hay respuestas.</div>
@@ -3295,13 +3308,29 @@ function loadClubNotificaciones(){
       if(t.indexOf('webinar')!==-1)return 'webinars';
       if(t.indexOf('pdf')!==-1||t.indexOf('material')!==-1)return 'pdfs';
       if(t.indexOf('promo')!==-1||t.indexOf('descuento')!==-1||t.indexOf('oferta')!==-1)return 'promos';
+      if(t.indexOf('foro')!==-1)return 'general'; // foro usa la preferencia "general"
       return 'general';
     }
     var notifs=[];
-    var debug={total:0,filtradoPor24h:0,filtradoPorDismiss:0,filtradoPorPref:0,mostradas:0,sinLeer:0};
+    // Calcular mi estado actual de suscripcion para filtro de audiencia
+    var miEstadoAud='sin_sub';
+    var miSubData=_subData;
+    if(miSubData&&miSubData.estado==='activa')miEstadoAud='activos';
+    else if(miSubData&&miSubData.estado==='pago_fallido')miEstadoAud='fallidos';
+    else if(miSubData&&miSubData.estado==='cancelada')miEstadoAud='cancelados';
+    else if(_subStatus==='trial_activo')miEstadoAud='trial';
+    function pasaAudiencia(aud){
+      if(!aud||aud==='todos')return true;
+      return aud===miEstadoAud;
+    }
+    var debug={total:0,filtradoPor24h:0,filtradoPorDismiss:0,filtradoPorPref:0,filtradoPorAud:0,filtradoPorUid:0,mostradas:0,sinLeer:0};
     s.forEach(function(d){
       debug.total++;
       var c=d.data();c._id=d.id;
+      // Notificaciones dirigidas a un UID específico (asignación de curso, etc.)
+      if(c.uid&&user&&c.uid!==user.uid){debug.filtradoPorUid++;return;}
+      // Filtro de audiencia (solo si es notif global, no dirigida)
+      if(!c.uid&&!pasaAudiencia(c.audiencia)){debug.filtradoPorAud++;return;}
       var fcreado=0;
       if(c.creado){
         if(typeof c.creado==='string'){fcreado=new Date(c.creado).getTime();}
@@ -3826,7 +3855,7 @@ function openForoTema(temaId){
   document.getElementById('foroDetailView').style.display='';
   document.getElementById('foroDetailTitle').textContent=tema.titulo||'';
   document.getElementById('foroDetailAuthor').textContent=tema.autorNombre||'Usuario';
-  document.getElementById('foroDetailDate').textContent=foroTimeAgo(tema.creado);
+  document.getElementById('foroDetailDate').textContent=foroTimeAgo(tema.creado)+(tema.actualizado?' (editado)':'');
   document.getElementById('foroDetailCat').textContent=tema.categoria||'General';
   document.getElementById('foroDetailContent').textContent=tema.contenido||'';
   // Likes
@@ -3835,6 +3864,15 @@ function openForoTema(temaId){
   document.getElementById('foroDetailLikes').textContent=likesArr.length;
   var likeBtn=document.getElementById('foroDetailLikeBtn');
   if(user&&likesArr.indexOf(user.uid)!==-1){likeBtn.classList.add('liked');}else{likeBtn.classList.remove('liked');}
+  // Mostrar botones editar/eliminar si el tema es del usuario
+  var accionesCont=document.getElementById('foroTemaAcciones');
+  if(accionesCont){
+    if(user&&tema.autorUid===user.uid){
+      accionesCont.innerHTML='<button onclick="editarTemaForo(\''+temaId+'\')" style="background:none;border:1px solid var(--purple-200);color:var(--purple-700);padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;font-weight:600;margin-right:6px">Editar tema</button><button onclick="eliminarTemaForo(\''+temaId+'\')" style="background:none;border:1px solid #fca5a5;color:#dc2626;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;font-weight:600">Eliminar</button>';
+    }else{
+      accionesCont.innerHTML='';
+    }
+  }
   // Incrementar vistas (una sola vez por sesion)
   var vistasKey='foro_vista_'+temaId;
   if(!sessionStorage.getItem(vistasKey)){
@@ -3848,6 +3886,82 @@ function openForoTema(temaId){
   // Reset textarea
   var ta=document.getElementById('foroNewRespuesta');if(ta)ta.value='';
   window.scrollTo(0,0);
+}
+
+// ===== EDITAR / ELIMINAR temas y respuestas del foro =====
+function editarTemaForo(temaId){
+  var tema=_foroTemas.find(function(t){return t._id===temaId;});
+  if(!tema)return;
+  var user=firebase.auth().currentUser;
+  if(!user||tema.autorUid!==user.uid){alert('Solo puedes editar tus propios temas');return;}
+  var nuevoTitulo=prompt('Editar título:',tema.titulo||'');
+  if(nuevoTitulo===null)return;
+  nuevoTitulo=nuevoTitulo.trim();if(!nuevoTitulo)return;
+  var nuevoContenido=prompt('Editar contenido:',tema.contenido||'');
+  if(nuevoContenido===null)return;
+  nuevoContenido=nuevoContenido.trim();if(!nuevoContenido)return;
+  db.collection('foro_temas').doc(temaId).update({
+    titulo:nuevoTitulo,contenido:nuevoContenido,actualizado:new Date().toISOString()
+  }).then(function(){
+    tema.titulo=nuevoTitulo;tema.contenido=nuevoContenido;tema.actualizado=new Date().toISOString();
+    document.getElementById('foroDetailTitle').textContent=nuevoTitulo;
+    document.getElementById('foroDetailContent').textContent=nuevoContenido;
+    document.getElementById('foroDetailDate').textContent=foroTimeAgo(tema.creado)+' (editado)';
+    loadForoTemas();
+  }).catch(function(e){alert('Error: '+e.message);});
+}
+
+function eliminarTemaForo(temaId){
+  var tema=_foroTemas.find(function(t){return t._id===temaId;});
+  if(!tema)return;
+  var user=firebase.auth().currentUser;
+  if(!user||tema.autorUid!==user.uid){alert('Solo puedes eliminar tus propios temas');return;}
+  if(!confirm('¿Eliminar este tema? Se borrarán también todas las respuestas. Esta acción no se puede deshacer.'))return;
+  // Borrar respuestas primero
+  db.collection('foro_respuestas').where('temaId','==',temaId).get().then(function(s){
+    var batch=db.batch();
+    s.forEach(function(d){batch.delete(d.ref);});
+    batch.delete(db.collection('foro_temas').doc(temaId));
+    return batch.commit();
+  }).then(function(){
+    // Volver a la lista del foro
+    document.getElementById('foroDetailView').style.display='none';
+    document.getElementById('foroListView').style.display='';
+    loadForoTemas();
+  }).catch(function(e){alert('Error: '+e.message);});
+}
+
+function editarRespuestaForo(respuestaId,temaId){
+  db.collection('foro_respuestas').doc(respuestaId).get().then(function(doc){
+    if(!doc.exists)return;
+    var r=doc.data();
+    var user=firebase.auth().currentUser;
+    if(!user||r.autorUid!==user.uid){alert('Solo puedes editar tus respuestas');return;}
+    var nuevo=prompt('Editar respuesta:',r.contenido||'');
+    if(nuevo===null)return;
+    nuevo=nuevo.trim();if(!nuevo)return;
+    db.collection('foro_respuestas').doc(respuestaId).update({
+      contenido:nuevo,actualizado:new Date().toISOString()
+    }).then(function(){loadForoRespuestas(temaId);}).catch(function(e){alert('Error: '+e.message);});
+  });
+}
+
+function eliminarRespuestaForo(respuestaId,temaId){
+  if(!confirm('¿Eliminar esta respuesta?'))return;
+  db.collection('foro_respuestas').doc(respuestaId).get().then(function(doc){
+    if(!doc.exists)return;
+    var r=doc.data();
+    var user=firebase.auth().currentUser;
+    if(!user||r.autorUid!==user.uid){alert('Solo puedes eliminar tus respuestas');return;}
+    return db.collection('foro_respuestas').doc(respuestaId).delete();
+  }).then(function(){
+    // Decrementar contador
+    db.collection('foro_temas').doc(temaId).update({
+      respuestasCount:firebase.firestore.FieldValue.increment(-1)
+    }).catch(function(){});
+    loadForoRespuestas(temaId);
+    loadForoTemas();
+  }).catch(function(e){alert('Error: '+e.message);});
 }
 
 function loadForoRespuestas(temaId){
@@ -3867,14 +3981,19 @@ function loadForoRespuestas(temaId){
     list.innerHTML='';
     respuestas.forEach(function(r){
       var iniciales=(r.autorNombre||'?').split(' ').map(function(w){return w.charAt(0).toUpperCase();}).slice(0,2).join('');
-      list.innerHTML+='<div class="foro-respuesta-item">'
+      var user=firebase.auth().currentUser;
+      var esMia=user&&r.autorUid===user.uid;
+      var editado=r.actualizado?'<span style="font-size:0.7rem;color:var(--gray-400);font-style:italic;margin-left:6px">(editado)</span>':'';
+      var acciones=esMia?'<div style="display:flex;gap:8px;margin-top:6px"><button onclick="editarRespuestaForo(\''+r._id+'\',\''+temaId+'\')" style="background:none;border:none;color:var(--purple-600);font-size:0.75rem;cursor:pointer;font-weight:600;padding:0">Editar</button><button onclick="eliminarRespuestaForo(\''+r._id+'\',\''+temaId+'\')" style="background:none;border:none;color:#dc2626;font-size:0.75rem;cursor:pointer;font-weight:600;padding:0">Eliminar</button></div>':'';
+      list.innerHTML+='<div class="foro-respuesta-item" data-id="'+r._id+'">'
         +'<div class="foro-respuesta__avatar">'+iniciales+'</div>'
         +'<div class="foro-respuesta__body">'
           +'<div class="foro-respuesta__head">'
             +'<span class="foro-respuesta__author">'+escapeHtml(r.autorNombre||'Usuario')+'</span>'
-            +'<span class="foro-respuesta__date">'+foroTimeAgo(r.creado)+'</span>'
+            +'<span class="foro-respuesta__date">'+foroTimeAgo(r.creado)+editado+'</span>'
           +'</div>'
-          +'<div class="foro-respuesta__text">'+escapeHtml(r.contenido||'')+'</div>'
+          +'<div class="foro-respuesta__text" id="respText_'+r._id+'">'+escapeHtml(r.contenido||'')+'</div>'
+          +acciones
         +'</div>'
       +'</div>';
     });
@@ -3906,6 +4025,21 @@ function publishForoRespuesta(){
       respuestasCount:firebase.firestore.FieldValue.increment(1)
     });
   }).then(function(){
+    // Notificar al autor del tema (si no soy yo mismo)
+    var tema=_foroCurrentTema;
+    if(tema&&tema.autorUid&&tema.autorUid!==user.uid){
+      var nombreAutorRespuesta=user.displayName||user.email||'Alguien';
+      var tituloTema=(tema.titulo||'tu tema').substring(0,60);
+      db.collection('notificaciones').add({
+        uid:tema.autorUid, // Dirigida solo al autor del tema
+        titulo:'💬 Nueva respuesta en tu tema',
+        mensaje:nombreAutorRespuesta+' respondió a "'+tituloTema+'"',
+        tipo:'foro',
+        emoji:'💬',
+        temaId:temaId,
+        creado:new Date().toISOString()
+      }).catch(function(){});
+    }
     if(btn){btn.disabled=false;btn.textContent='Responder';}
     ta.value='';
     // Recargar respuestas
@@ -4232,6 +4366,63 @@ function checkMaintenance(){
   }).catch(function(){});
 }
 checkMaintenance();
+
+// ===== PWA: Service Worker + prompt de instalación =====
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('service-worker.js').then(function(reg){
+      console.log('✅ Service Worker registrado:',reg.scope);
+    }).catch(function(err){
+      console.warn('Service Worker no se registró:',err);
+    });
+  });
+}
+
+// Capturar el evento beforeinstallprompt para mostrar nuestro propio botón
+var _deferredInstall=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();
+  _deferredInstall=e;
+  // Mostrar banner de instalación (solo si no se ha cerrado antes)
+  if(localStorage.getItem('pwa_install_dismissed')==='1')return;
+  setTimeout(showInstallBanner,5000); // Esperar 5s para no ser intrusivo
+});
+
+function showInstallBanner(){
+  if(!_deferredInstall)return;
+  if(document.getElementById('pwaInstallBanner'))return;
+  var b=document.createElement('div');
+  b.id='pwaInstallBanner';
+  b.style.cssText='position:fixed;bottom:18px;left:18px;right:18px;background:linear-gradient(135deg,#4b1c71,#7f4ca5);color:#fff;border-radius:14px;padding:14px 18px;box-shadow:0 12px 32px rgba(75,28,113,0.4);z-index:9999;display:flex;align-items:center;gap:14px;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;max-width:480px;margin:0 auto;animation:pwaSlideUp 0.4s ease-out';
+  b.innerHTML='<div style="font-size:32px">📱</div>'+
+    '<div style="flex:1;min-width:0">'+
+      '<div style="font-weight:700;font-size:0.9rem;margin-bottom:2px">Instala GlobalVet</div>'+
+      '<div style="font-size:0.78rem;opacity:0.9">Acceso rápido como app, funciona offline</div>'+
+    '</div>'+
+    '<button id="pwaInstallBtn" style="background:#fff;color:#4b1c71;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer">Instalar</button>'+
+    '<button id="pwaInstallDismiss" style="background:transparent;color:#fff;border:none;font-size:1.4rem;cursor:pointer;padding:0 4px;opacity:0.7">×</button>';
+  var style=document.createElement('style');
+  style.textContent='@keyframes pwaSlideUp{from{transform:translateY(120%);opacity:0}to{transform:translateY(0);opacity:1}}';
+  document.head.appendChild(style);
+  document.body.appendChild(b);
+  document.getElementById('pwaInstallBtn').onclick=function(){
+    if(!_deferredInstall)return;
+    _deferredInstall.prompt();
+    _deferredInstall.userChoice.then(function(){
+      _deferredInstall=null;
+      b.remove();
+    });
+  };
+  document.getElementById('pwaInstallDismiss').onclick=function(){
+    localStorage.setItem('pwa_install_dismissed','1');
+    b.remove();
+  };
+}
+
+window.addEventListener('appinstalled',function(){
+  console.log('✅ PWA instalada');
+  var b=document.getElementById('pwaInstallBanner');if(b)b.remove();
+});
 </script>
 </body>
 </html>
