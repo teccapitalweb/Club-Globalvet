@@ -2489,24 +2489,35 @@ function loadProfile(){
   });
 }
 
+// === HELPER: lee el progreso del usuario doc-por-doc por ID ===
+// Las reglas de Firestore solo permiten leer docs cuyo ID empiece con `uid_`,
+// por eso NO podemos hacer db.collection('progreso').get() (devuelve permission-denied
+// para usuarios no-admin). Leemos por ID conocido (uid_cursoId) en paralelo.
+// Devuelve un mapa {cursoId: dataDelProgreso}.
+function getMisProgresos(user,cursosSnap){
+  if(!user)return Promise.resolve({});
+  var cursoIds=[];
+  cursosSnap.forEach(function(d){cursoIds.push(d.id);});
+  if(cursoIds.length===0)return Promise.resolve({});
+  var promises=cursoIds.map(function(cId){
+    return db.collection('progreso').doc(user.uid+'_'+cId).get()
+      .then(function(doc){return doc.exists?{cursoId:cId,data:doc.data()}:null;})
+      .catch(function(){return null;});
+  });
+  return Promise.all(promises).then(function(results){
+    var map={};
+    results.forEach(function(r){if(r)map[r.cursoId]=r.data;});
+    return map;
+  });
+}
+
 function loadClubCursos(){
   var user=firebase.auth().currentUser;
-  Promise.all([
-    db.collection('cursos').get(),
-    // Solo cargar progreso si hay usuario logueado
-    user?db.collection('progreso').get():Promise.resolve(null)
-  ]).then(function(results){
-    var s=results[0];
-    var progSnap=results[1];
-    // Construir mapa de progreso del usuario actual {cursoId: {completadas:[], total:N}}
-    var progMap={};
-    if(progSnap&&user){
-      progSnap.forEach(function(d){
-        if(d.id.indexOf(user.uid+'_')!==0)return;
-        var cursoId=d.id.substring(user.uid.length+1);
-        progMap[cursoId]=d.data();
-      });
-    }
+  // MODIFICADO: progreso ya no se lee con .get() global (rompía con reglas Firestore).
+  // Usamos getMisProgresos(user, cursosSnap) que lee per-doc por ID.
+  db.collection('cursos').get().then(function(s){
+    var progPromise=user?getMisProgresos(user,s):Promise.resolve({});
+    return progPromise.then(function(progMap){
     var cont=document.getElementById('libGrid')||document.querySelector('[data-page="biblioteca"] .lib-grid');
     var scroll=document.getElementById('coursesHScroll')||document.querySelector('.courses-h-scroll');
     // Filtrar cursos publicados (más flexible: acepta cualquier estado salvo Borrador/Oculto)
@@ -2556,6 +2567,7 @@ function loadClubCursos(){
         scroll.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">No hay cursos disponibles aún.</div>';
       }
     }
+    });
   }).catch(function(e){console.log('Error cursos:',e)});
 }
 function loadClubWebinars(){
@@ -2655,13 +2667,14 @@ function loadResumeCard(){
   var user=firebase.auth().currentUser;if(!user)return;
   var card=document.getElementById('resumeCard');
   if(!card)return;
-  // Buscar progreso del usuario (filtrado por prefijo de doc id)
-  db.collection('progreso').get().then(function(s){
+  // MODIFICADO: lee progreso doc-por-doc por ID via getMisProgresos.
+  // Antes hacía db.collection('progreso').get() que falla con reglas Firestore.
+  db.collection('cursos').get().then(function(cursosSnap){
+    return getMisProgresos(user,cursosSnap).then(function(progMap){
     var docs=[];
-    s.forEach(function(d){
-      if(d.id.indexOf(user.uid+'_')!==0)return;
-      var data=d.data();
-      data._cursoId=d.id.substring(user.uid.length+1);
+    Object.keys(progMap).forEach(function(cId){
+      var data=progMap[cId];
+      data._cursoId=cId;
       docs.push(data);
     });
     if(docs.length===0){card.style.display='none';return;}
@@ -2703,29 +2716,29 @@ function loadResumeCard(){
       }).catch(function(){tryNext(idx+1);});
     }
     tryNext(0);
+    });
   }).catch(function(e){console.warn('Error resume card:',e);card.style.display='none';});
 }
 
 function loadInicioStats(){
   var user=firebase.auth().currentUser;if(!user)return;
-  // En progreso, completados, horas
-  db.collection('progreso').get().then(function(s){
-    var enProgreso=0,completados=0,horas=0;
-    var cursoPromises=[];
-    s.forEach(function(d){
-      if(d.id.indexOf(user.uid+'_')!==0)return;
-      var p=d.data();
-      var cursoId=d.id.substring(user.uid.length+1);
-      cursoPromises.push(db.collection('cursos').doc(cursoId).get().then(function(doc){
-        if(!doc.exists)return;
-        var c=doc.data();
+  // MODIFICADO: lee progreso doc-por-doc por ID via getMisProgresos.
+  // Antes hacía db.collection('progreso').get() que falla con reglas Firestore.
+  // Bonus: elimina el N+1 fetch de cursos individuales (usa cursosSnap directo).
+  db.collection('cursos').get().then(function(cursosSnap){
+    var cursosMap={};
+    cursosSnap.forEach(function(d){cursosMap[d.id]=d.data();});
+    return getMisProgresos(user,cursosSnap).then(function(progMap){
+      var enProgreso=0,completados=0,horas=0;
+      Object.keys(progMap).forEach(function(cursoId){
+        var p=progMap[cursoId];
+        var c=cursosMap[cursoId];
+        if(!c)return;
         var total=(c.clases&&c.clases.length)||0;
         var done=(p.completadas&&p.completadas.length)||0;
         if(total>0&&done>=total){completados++;horas+=parseInt(c.duracion)||0;}
         else if(done>0)enProgreso++;
-      }).catch(function(){}));
-    });
-    Promise.all(cursoPromises).then(function(){
+      });
       var el;
       if(el=document.getElementById('statEnProgreso'))el.textContent=enProgreso;
       if(el=document.getElementById('statCompletados'))el.textContent=completados;
@@ -4192,28 +4205,24 @@ function loadLogros(){
 function renderLogros(){
   var grid=document.getElementById('logrosGrid');if(!grid)return;
   var user=firebase.auth().currentUser;if(!user){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-400);font-size:0.9rem">Inicia sesión para ver tus logros</div>';return;}
-  // Calcular progreso actual de cada categoria en paralelo
-  Promise.all([
-    // Cursos completados + horas
-    db.collection('progreso').get(),
-    db.collection('cursos').get(),
-    // Certificados
-    db.collection('certificados').where('uid','==',user.uid).get(),
-    // Foro temas del usuario
-    db.collection('foro_temas').where('autorUid','==',user.uid).get(),
-    // Reservas de webinars
-    db.collection('reservas_webinars').get(),
-    // Foro respuestas (para mentor y likes recibidos)
-  ]).then(function(results){
-    var progSnap=results[0],cursosSnap=results[1],certSnap=results[2],temasSnap=results[3],reservasSnap=results[4];
+  // MODIFICADO: progreso ya no se lee con .get() global (reglas Firestore lo bloquean).
+  // Primero traemos cursos, luego getMisProgresos lee per-doc, luego el resto en paralelo.
+  db.collection('cursos').get().then(function(cursosSnap){
+    return Promise.all([
+      cursosSnap,
+      getMisProgresos(user,cursosSnap),
+      db.collection('certificados').where('uid','==',user.uid).get(),
+      db.collection('foro_temas').where('autorUid','==',user.uid).get(),
+      db.collection('reservas_webinars').get()
+    ]);
+  }).then(function(results){
+    var cursosSnap=results[0],progMap=results[1],certSnap=results[2],temasSnap=results[3],reservasSnap=results[4];
     // === Calcular metricas ===
     var cursosMap={};
     cursosSnap.forEach(function(d){cursosMap[d.id]=d.data();});
     var cursosCompletados=0;var horasAcum=0;
-    progSnap.forEach(function(d){
-      if(d.id.indexOf(user.uid+'_')!==0)return;
-      var p=d.data();
-      var cId=d.id.substring(user.uid.length+1);
+    Object.keys(progMap).forEach(function(cId){
+      var p=progMap[cId];
       var c=cursosMap[cId];if(!c)return;
       var totalCl=(c.clases&&c.clases.length)||0;
       var doneCl=(p.completadas&&p.completadas.length)||0;
@@ -4288,22 +4297,24 @@ function renderLogros(){
 function checkLogros(){
   if(!_logrosLoaded)return;
   var user=firebase.auth().currentUser;if(!user)return;
-  // Recalcular metricas y comparar
-  Promise.all([
-    db.collection('progreso').get(),
-    db.collection('cursos').get(),
-    db.collection('certificados').where('uid','==',user.uid).get(),
-    db.collection('foro_temas').where('autorUid','==',user.uid).get(),
-    db.collection('reservas_webinars').get(),
-    db.collection('foro_temas').get(),
-    db.collection('miembros').doc(user.uid).get()
-  ]).then(function(r){
-    var progSnap=r[0],cursosSnap=r[1],certSnap=r[2],temasUserSnap=r[3],reservasSnap=r[4],todosTemas=r[5],memDoc=r[6];
+  // MODIFICADO: progreso ya no se lee con .get() global (reglas Firestore lo bloquean).
+  // Primero traemos cursos, luego getMisProgresos lee per-doc, luego el resto en paralelo.
+  db.collection('cursos').get().then(function(cursosSnap){
+    return Promise.all([
+      cursosSnap,
+      getMisProgresos(user,cursosSnap),
+      db.collection('certificados').where('uid','==',user.uid).get(),
+      db.collection('foro_temas').where('autorUid','==',user.uid).get(),
+      db.collection('reservas_webinars').get(),
+      db.collection('foro_temas').get(),
+      db.collection('miembros').doc(user.uid).get()
+    ]);
+  }).then(function(r){
+    var cursosSnap=r[0],progMap=r[1],certSnap=r[2],temasUserSnap=r[3],reservasSnap=r[4],todosTemas=r[5],memDoc=r[6];
     var cursosMap={};cursosSnap.forEach(function(d){cursosMap[d.id]=d.data();});
     var cursosCompletados=0,horasAcum=0;
-    progSnap.forEach(function(d){
-      if(d.id.indexOf(user.uid+'_')!==0)return;
-      var p=d.data();var cId=d.id.substring(user.uid.length+1);
+    Object.keys(progMap).forEach(function(cId){
+      var p=progMap[cId];
       var c=cursosMap[cId];if(!c)return;
       var totalCl=(c.clases&&c.clases.length)||0;
       var doneCl=(p.completadas&&p.completadas.length)||0;
