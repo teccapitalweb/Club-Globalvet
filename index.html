@@ -3204,7 +3204,7 @@ function loadNotifPrefsCache(){
   }).catch(function(){return null;});
 }
 var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
-var NEWSDATA_CACHE_KEY='newsdata_cache_v2';
+var NEWSDATA_CACHE_KEY='newsdata_cache_v3';
 var NEWSDATA_CACHE_HOURS=6;
 
 // Trae noticias automaticas con cache de 6h
@@ -3233,7 +3233,11 @@ function fetchAutoNews(){
         resolve([]);
         return;
       }
-      var noticias=data.results.filter(function(n){return n.image_url;}).slice(0,10).map(function(n){
+      // MODIFICADO: deduplicar por título normalizado. NewsData devuelve la misma
+      // nota de agencia replicada por varios periódicos (LNE, DiarioDeMallorca, etc.).
+      // Nos quedamos solo con la primera aparición de cada título.
+      var vistos={};
+      var noticias=data.results.filter(function(n){return n.image_url;}).map(function(n){
         return {
           _id:'news_'+(n.article_id||Math.random().toString(36).slice(2)),
           titulo:n.title||'',
@@ -3244,7 +3248,12 @@ function fetchAutoNews(){
           creado:n.pubDate||new Date().toISOString(),
           _auto:true
         };
-      });
+      }).filter(function(n){
+        var key=(n.titulo||'').toLowerCase().replace(/\s+/g,' ').trim();
+        if(!key||vistos[key])return false;
+        vistos[key]=true;
+        return true;
+      }).slice(0,10);
       // Guardar en cache
       try{localStorage.setItem(NEWSDATA_CACHE_KEY,JSON.stringify({timestamp:Date.now(),noticias:noticias}));}catch(e){}
       console.log('[NEWS] '+noticias.length+' noticias obtenidas y cacheadas');
