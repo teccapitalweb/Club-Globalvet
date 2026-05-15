@@ -2511,6 +2511,23 @@ function getMisProgresos(user,cursosSnap){
   });
 }
 
+// === HELPER: lee las reservas de webinars del usuario doc-por-doc por ID ===
+// Mismo principio que getMisProgresos. Devuelve el número de reservas del usuario.
+function getMisReservas(user,webinarsSnap){
+  if(!user)return Promise.resolve(0);
+  var ids=[];
+  webinarsSnap.forEach(function(d){ids.push(d.id);});
+  if(ids.length===0)return Promise.resolve(0);
+  var promises=ids.map(function(wId){
+    return db.collection('reservas_webinars').doc(user.uid+'_'+wId).get()
+      .then(function(doc){return doc.exists?1:0;})
+      .catch(function(){return 0;});
+  });
+  return Promise.all(promises).then(function(results){
+    return results.reduce(function(a,b){return a+b;},0);
+  });
+}
+
 function loadClubCursos(){
   var user=firebase.auth().currentUser;
   // MODIFICADO: progreso ya no se lee con .get() global (rompía con reglas Firestore).
@@ -4205,18 +4222,28 @@ function loadLogros(){
 function renderLogros(){
   var grid=document.getElementById('logrosGrid');if(!grid)return;
   var user=firebase.auth().currentUser;if(!user){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray-400);font-size:0.9rem">Inicia sesión para ver tus logros</div>';return;}
-  // MODIFICADO: progreso ya no se lee con .get() global (reglas Firestore lo bloquean).
-  // Primero traemos cursos, luego getMisProgresos lee per-doc, luego el resto en paralelo.
-  db.collection('cursos').get().then(function(cursosSnap){
+  // MODIFICADO: lecturas seguras compatibles con reglas Firestore estrictas.
+  // - progreso: per-doc via getMisProgresos
+  // - reservas_webinars: per-doc via getMisReservas
+  // - foro_temas (likes recibidos / respuestas recibidas): se calculan desde
+  //   temasUserSnap (tus propios temas) — no se necesita scan global
+  // - foro_temas (likes dados): where('likesUsuarios','array-contains',uid)
+  Promise.all([
+    db.collection('cursos').get(),
+    db.collection('webinars').get()
+  ]).then(function(snaps){
+    var cursosSnap=snaps[0],webinarsSnap=snaps[1];
     return Promise.all([
       cursosSnap,
       getMisProgresos(user,cursosSnap),
       db.collection('certificados').where('uid','==',user.uid).get(),
       db.collection('foro_temas').where('autorUid','==',user.uid).get(),
-      db.collection('reservas_webinars').get()
+      getMisReservas(user,webinarsSnap),
+      db.collection('foro_temas').where('likesUsuarios','array-contains',user.uid).get(),
+      db.collection('miembros').doc(user.uid).get()
     ]);
   }).then(function(results){
-    var cursosSnap=results[0],progMap=results[1],certSnap=results[2],temasSnap=results[3],reservasSnap=results[4];
+    var cursosSnap=results[0],progMap=results[1],certSnap=results[2],temasUserSnap=results[3],reservas=results[4],likesDadosSnap=results[5],memDoc=results[6];
     // === Calcular metricas ===
     var cursosMap={};
     cursosSnap.forEach(function(d){cursosMap[d.id]=d.data();});
@@ -4229,67 +4256,55 @@ function renderLogros(){
       if(totalCl>0&&doneCl>=totalCl){cursosCompletados++;horasAcum+=parseInt(c.duracion)||0;}
     });
     var certs=certSnap.size;
-    var temas=temasSnap.size;
-    var likesDados=0; // likes que el usuario ha dado (recorrer todos los temas)
-    var likesRecibidos=0;
-    var respuestasRecibidas=0;
-    // Calcular likes recibidos y respuestas - necesita scan global
-    db.collection('foro_temas').get().then(function(allTemas){
-      allTemas.forEach(function(td){
-        var t=td.data();
-        var lu=t.likesUsuarios||[];
-        if(lu.indexOf(user.uid)!==-1)likesDados++;
-        if(t.autorUid===user.uid){
-          likesRecibidos+=lu.length;
-          respuestasRecibidas+=(t.respuestasCount||0);
-        }
-      });
-      // Reservas
-      var reservas=0;
-      reservasSnap.forEach(function(d){if(d.id.indexOf(user.uid+'_')===0)reservas++;});
-      // Racha actual
-      db.collection('miembros').doc(user.uid).get().then(function(memDoc){
-        var racha=memDoc.exists&&memDoc.data().racha?(memDoc.data().racha.dias||0):0;
-        // Construir mapa de progreso por logro
-        var metricas={
-          'curso_1':cursosCompletados,'curso_3':cursosCompletados,'curso_5':cursosCompletados,'curso_10':cursosCompletados,'curso_15':cursosCompletados,
-          'cert_1':certs,'cert_5':certs,'cert_10':certs,
-          'racha_7':racha,'racha_30':racha,'racha_100':racha,
-          'foro_1tema':temas,'foro_5tema':temas,'foro_10like':likesDados,'foro_10resp':respuestasRecibidas,'foro_25like':likesRecibidos,
-          'web_1':reservas,'web_5':reservas,
-          'horas_10':horasAcum,'horas_50':horasAcum,'horas_100':horasAcum,
-          'estrella':(cursosCompletados>=5&&racha>=15)?1:0
-        };
-        // Renderizar
-        grid.innerHTML='';
-        var totalDesbloqueados=0;
-        LOGROS_DEF.forEach(function(l){
-          var actual=metricas[l.id]||0;
-          var unlocked=_logrosDesbloqueados.has(l.id)||actual>=l.meta;
-          if(unlocked)totalDesbloqueados++;
-          var pct=Math.min(100,Math.round(100*actual/l.meta));
-          grid.innerHTML+='<div class="logro-card '+(unlocked?'unlocked':'locked')+'">'
-            +'<div class="logro-card__head">'
-              +'<div class="logro-card__icon">'+l.icon+'</div>'
-              +'<div style="flex:1">'
-                +'<div class="logro-card__title">'+l.nombre+'</div>'
-                +(unlocked?'<span class="logro-card__check">✓ Desbloqueado</span>':'<span class="logro-card__lock"><svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Bloqueado</span>')
-              +'</div>'
-            +'</div>'
-            +'<div class="logro-card__desc">'+l.desc+'</div>'
-            +(!unlocked?'<div class="logro-card__progress"><div class="logro-card__progress-bar"><div class="logro-card__progress-fill" style="width:'+pct+'%"></div></div><div class="logro-card__progress-text"><span>'+actual+'/'+l.meta+'</span><span>'+pct+'%</span></div></div>':'')
-          +'</div>';
-        });
-        // Actualizar resumen
-        var countEl=document.getElementById('logrosCountDesbloqueados');
-        var barEl=document.getElementById('logrosBarFill');
-        var pctEl=document.getElementById('logrosPct');
-        if(countEl)countEl.textContent=totalDesbloqueados;
-        var pctTotal=Math.round(100*totalDesbloqueados/LOGROS_DEF.length);
-        if(barEl)barEl.style.width=pctTotal+'%';
-        if(pctEl)pctEl.textContent=pctTotal+'%';
-      });
+    var temas=temasUserSnap.size;
+    // likes recibidos y respuestas recibidas: sumar sobre TUS propios temas
+    var likesRecibidos=0,respuestasRecibidas=0;
+    temasUserSnap.forEach(function(td){
+      var t=td.data();
+      likesRecibidos+=((t.likesUsuarios||[]).length);
+      respuestasRecibidas+=(t.respuestasCount||0);
     });
+    // likes dados: temas donde el usuario aparece en likesUsuarios
+    var likesDados=likesDadosSnap.size;
+    var racha=memDoc.exists&&memDoc.data().racha?(memDoc.data().racha.dias||0):0;
+    // Construir mapa de progreso por logro
+    var metricas={
+      'curso_1':cursosCompletados,'curso_3':cursosCompletados,'curso_5':cursosCompletados,'curso_10':cursosCompletados,'curso_15':cursosCompletados,
+      'cert_1':certs,'cert_5':certs,'cert_10':certs,
+      'racha_7':racha,'racha_30':racha,'racha_100':racha,
+      'foro_1tema':temas,'foro_5tema':temas,'foro_10like':likesDados,'foro_10resp':respuestasRecibidas,'foro_25like':likesRecibidos,
+      'web_1':reservas,'web_5':reservas,
+      'horas_10':horasAcum,'horas_50':horasAcum,'horas_100':horasAcum,
+      'estrella':(cursosCompletados>=5&&racha>=15)?1:0
+    };
+    // Renderizar
+    grid.innerHTML='';
+    var totalDesbloqueados=0;
+    LOGROS_DEF.forEach(function(l){
+      var actual=metricas[l.id]||0;
+      var unlocked=_logrosDesbloqueados.has(l.id)||actual>=l.meta;
+      if(unlocked)totalDesbloqueados++;
+      var pct=Math.min(100,Math.round(100*actual/l.meta));
+      grid.innerHTML+='<div class="logro-card '+(unlocked?'unlocked':'locked')+'">'
+        +'<div class="logro-card__head">'
+          +'<div class="logro-card__icon">'+l.icon+'</div>'
+          +'<div style="flex:1">'
+            +'<div class="logro-card__title">'+l.nombre+'</div>'
+            +(unlocked?'<span class="logro-card__check">✓ Desbloqueado</span>':'<span class="logro-card__lock"><svg viewBox="0 0 24 24" style="width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Bloqueado</span>')
+          +'</div>'
+        +'</div>'
+        +'<div class="logro-card__desc">'+l.desc+'</div>'
+        +(!unlocked?'<div class="logro-card__progress"><div class="logro-card__progress-bar"><div class="logro-card__progress-fill" style="width:'+pct+'%"></div></div><div class="logro-card__progress-text"><span>'+actual+'/'+l.meta+'</span><span>'+pct+'%</span></div></div>':'')
+      +'</div>';
+    });
+    // Actualizar resumen
+    var countEl=document.getElementById('logrosCountDesbloqueados');
+    var barEl=document.getElementById('logrosBarFill');
+    var pctEl=document.getElementById('logrosPct');
+    if(countEl)countEl.textContent=totalDesbloqueados;
+    var pctTotal=Math.round(100*totalDesbloqueados/LOGROS_DEF.length);
+    if(barEl)barEl.style.width=pctTotal+'%';
+    if(pctEl)pctEl.textContent=pctTotal+'%';
   }).catch(function(e){console.warn('Error renderLogros:',e);});
 }
 
@@ -4297,20 +4312,23 @@ function renderLogros(){
 function checkLogros(){
   if(!_logrosLoaded)return;
   var user=firebase.auth().currentUser;if(!user)return;
-  // MODIFICADO: progreso ya no se lee con .get() global (reglas Firestore lo bloquean).
-  // Primero traemos cursos, luego getMisProgresos lee per-doc, luego el resto en paralelo.
-  db.collection('cursos').get().then(function(cursosSnap){
+  // MODIFICADO: mismas mejoras que renderLogros (lecturas seguras con reglas Firestore).
+  Promise.all([
+    db.collection('cursos').get(),
+    db.collection('webinars').get()
+  ]).then(function(snaps){
+    var cursosSnap=snaps[0],webinarsSnap=snaps[1];
     return Promise.all([
       cursosSnap,
       getMisProgresos(user,cursosSnap),
       db.collection('certificados').where('uid','==',user.uid).get(),
       db.collection('foro_temas').where('autorUid','==',user.uid).get(),
-      db.collection('reservas_webinars').get(),
-      db.collection('foro_temas').get(),
+      getMisReservas(user,webinarsSnap),
+      db.collection('foro_temas').where('likesUsuarios','array-contains',user.uid).get(),
       db.collection('miembros').doc(user.uid).get()
     ]);
   }).then(function(r){
-    var cursosSnap=r[0],progMap=r[1],certSnap=r[2],temasUserSnap=r[3],reservasSnap=r[4],todosTemas=r[5],memDoc=r[6];
+    var cursosSnap=r[0],progMap=r[1],certSnap=r[2],temasUserSnap=r[3],reservas=r[4],likesDadosSnap=r[5],memDoc=r[6];
     var cursosMap={};cursosSnap.forEach(function(d){cursosMap[d.id]=d.data();});
     var cursosCompletados=0,horasAcum=0;
     Object.keys(progMap).forEach(function(cId){
@@ -4320,13 +4338,14 @@ function checkLogros(){
       var doneCl=(p.completadas&&p.completadas.length)||0;
       if(totalCl>0&&doneCl>=totalCl){cursosCompletados++;horasAcum+=parseInt(c.duracion)||0;}
     });
-    var likesDados=0,likesRecibidos=0,respuestasRecibidas=0;
-    todosTemas.forEach(function(td){
-      var t=td.data();var lu=t.likesUsuarios||[];
-      if(lu.indexOf(user.uid)!==-1)likesDados++;
-      if(t.autorUid===user.uid){likesRecibidos+=lu.length;respuestasRecibidas+=(t.respuestasCount||0);}
+    // likes recibidos / respuestas recibidas: sobre TUS temas (no scan global)
+    var likesRecibidos=0,respuestasRecibidas=0;
+    temasUserSnap.forEach(function(td){
+      var t=td.data();
+      likesRecibidos+=((t.likesUsuarios||[]).length);
+      respuestasRecibidas+=(t.respuestasCount||0);
     });
-    var reservas=0;reservasSnap.forEach(function(d){if(d.id.indexOf(user.uid+'_')===0)reservas++;});
+    var likesDados=likesDadosSnap.size;
     var racha=memDoc.exists&&memDoc.data().racha?(memDoc.data().racha.dias||0):0;
     var metricas={
       'curso_1':cursosCompletados,'curso_3':cursosCompletados,'curso_5':cursosCompletados,'curso_10':cursosCompletados,'curso_15':cursosCompletados,
