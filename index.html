@@ -245,13 +245,19 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .lib-card__progress-fill { height: 100%; border-radius: 2px; background: var(--purple-400); }
 
 /* ============ DRIP CONTENT (cursos bloqueados por goteo) ============ */
-.lib-card.locked, .course-h-card.locked { position: relative; filter: grayscale(0.85) opacity(0.7); cursor: not-allowed; }
+.lib-card.locked, .course-h-card.locked { position: relative; cursor: not-allowed; }
 .lib-card.locked:hover, .course-h-card.locked:hover { transform: none; box-shadow: none; border-color: var(--gray-100); }
-.lib-card.locked .lib-card__img, .course-h-card.locked .course-h-card__img { filter: grayscale(1); }
-.lock-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(40,30,60,0.92); color: #fff; border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; z-index: 5; box-shadow: 0 6px 20px rgba(0,0,0,0.25); white-space: nowrap; pointer-events: none; }
-.lock-overlay svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.lib-card.locked .lib-card__badge { background: var(--gray-200); color: var(--gray-500); }
-body.dark .lock-overlay { background: rgba(220,200,255,0.95); color: #2d1148; }
+.lib-card.locked .lib-card__img, .course-h-card.locked .course-h-card__img { filter: grayscale(0.65) brightness(0.92); }
+/* Candado solo sobre la imagen */
+.lock-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.92); display: flex; align-items: center; justify-content: center; z-index: 5; box-shadow: 0 4px 14px rgba(0,0,0,0.18); pointer-events: none; backdrop-filter: blur(4px); }
+.lock-overlay svg { width: 18px; height: 18px; fill: none; stroke: #2d1148; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+/* Meta abajo: "En X días" pegado a la categoria */
+.lock-meta { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 600; color: var(--purple-700); margin-left: auto; }
+.lock-meta svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.lib-card.locked .lib-card__progress { display: none; }
+body.dark .lock-overlay { background: rgba(45,17,72,0.92); }
+body.dark .lock-overlay svg { stroke: #fff; }
+body.dark .lock-meta { color: var(--purple-300); }
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes fadeOut { from { opacity: 1 } to { opacity: 0 } }
 @keyframes scaleIn { from { opacity: 0; transform: scale(0.92) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -2606,13 +2612,15 @@ function loadClubCursos(){
         var drip=getDripStatus(c,user);
         var lockedClass=drip.locked?' locked':'';
         var lockOverlay='';
+        var lockMetaHtml='';
         var clickHandler='onclick="openCurso(\''+c._id+'\')"';
         if(drip.locked){
           var diasTxt=drip.diasFaltan===1?'1 día':drip.diasFaltan+' días';
-          lockOverlay='<div class="lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Disponible en '+diasTxt+'</div>';
+          lockOverlay='<div class="lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>';
+          lockMetaHtml='<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:0.8rem;color:var(--gray-400)"><span>'+(c.categoria||'').toLowerCase()+'</span><span class="lock-meta"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>En '+diasTxt+'</span></div>';
           clickHandler='onclick="showLockedCourseModal(\''+c._id+'\','+drip.diasFaltan+',\''+drip.fechaDesbloqueo.toISOString()+'\')"';
         }
-        cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative">'+lockOverlay+'<div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+(c.categoria||'')+'</span><h3 class="lib-card__title">'+(c.nombre||'')+'</h3><p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div></div></div>';
+        cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative"><div class="lib-card__img" style="position:relative;'+(img?'background:url('+img+') center/cover':'')+'">'+lockOverlay+'<div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body">'+(drip.locked?'':'<span class="lib-card__badge">'+(c.categoria||'')+'</span>')+'<h3 class="lib-card__title">'+(c.nombre||'')+'</h3>'+(drip.locked?'':'<p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>')+lockMetaHtml+'</div></div>';
       });
       if(cursos.length===0){
         cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.</p></div>';
