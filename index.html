@@ -1409,7 +1409,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <!-- ==================== BIBLIOTECA ==================== -->
   <div class="page-content" data-page="biblioteca">
     <div class="page-header"><h1 class="page-header__title">Biblioteca de cursos</h1><p class="page-header__desc">Todo nuestro catálogo de cursos grabados, disponibles 24/7.</p></div>
-    <div class="filter-tabs"><button class="filter-tab active">Todos</button><button class="filter-tab">Cirugía</button><button class="filter-tab">Diagnóstico</button><button class="filter-tab">Nutrición</button><button class="filter-tab">Dermatología</button><button class="filter-tab">Urgencias</button></div>
+    <div class="filter-tabs" id="libFilterTabs"><button class="filter-tab active" data-cat="">Todos</button></div>
     <div class="lib-grid" id="libGrid">
       <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando catálogo...</div>
     </div>
@@ -2577,6 +2577,40 @@ function getMisReservas(user,webinarsSnap){
   });
 }
 
+// ============ CATEGORIAS DEL CLUB (filtro de Biblioteca) ============
+var CLUB_CATEGORIAS_FALLBACK=['Cirugía','Medicina Interna','Dermatología','Imagenología','Urgencias','Nutrición','Animales Exóticos'];
+var _clubCategoriaFiltro=''; // '' = todos
+
+function loadClubCategorias(){
+  return db.collection('categorias').orderBy('nombre').get().then(function(s){
+    var nombres=[];
+    s.forEach(function(d){var c=d.data();if(c.nombre)nombres.push(c.nombre);});
+    if(nombres.length===0)nombres=CLUB_CATEGORIAS_FALLBACK.slice();
+    renderFilterTabs(nombres);
+  }).catch(function(){
+    renderFilterTabs(CLUB_CATEGORIAS_FALLBACK.slice());
+  });
+}
+
+function renderFilterTabs(nombres){
+  var cont=document.getElementById('libFilterTabs');
+  if(!cont)return;
+  var html='<button class="filter-tab '+(_clubCategoriaFiltro===''?'active':'')+'" data-cat="">Todos</button>';
+  nombres.forEach(function(n){
+    var active=_clubCategoriaFiltro===n?'active':'';
+    html+='<button class="filter-tab '+active+'" data-cat="'+n.replace(/"/g,'&quot;')+'">'+n+'</button>';
+  });
+  cont.innerHTML=html;
+  cont.querySelectorAll('.filter-tab').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      _clubCategoriaFiltro=this.getAttribute('data-cat')||'';
+      cont.querySelectorAll('.filter-tab').forEach(function(b){b.classList.remove('active');});
+      this.classList.add('active');
+      loadClubCursos(); // re-render con el filtro
+    });
+  });
+}
+
 function loadClubCursos(){
   var user=firebase.auth().currentUser;
   // MODIFICADO: progreso ya no se lee con .get() global (rompía con reglas Firestore).
@@ -2594,6 +2628,8 @@ function loadClubCursos(){
       if(c.estado==='Borrador'||c.estado==='Oculto')return;
       c._id=d.id;cursos.push(c);
     });
+    // Aplicar filtro de categoria (solo a Biblioteca, no a Continuar aprendiendo)
+    var cursosFiltrados=_clubCategoriaFiltro?cursos.filter(function(c){return (c.categoria||'')===_clubCategoriaFiltro;}):cursos;
     // Calcular pct para cada curso
     function getPct(curso){
       var total=(curso.clases&&curso.clases.length)||0;
@@ -2604,7 +2640,7 @@ function loadClubCursos(){
     // === BIBLIOTECA ===
     if(cont){
       cont.innerHTML='';
-      cursos.forEach(function(c){
+      cursosFiltrados.forEach(function(c){
         var img=driveImg(c.imagen);
         var pct=getPct(c);
         var totalClases=(c.clases&&c.clases.length)||0;
@@ -2622,8 +2658,10 @@ function loadClubCursos(){
         }
         cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative"><div class="lib-card__img" style="position:relative;'+(img?'background:url('+img+') center/cover':'')+'">'+lockOverlay+'<div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body">'+(drip.locked?'':'<span class="lib-card__badge">'+(c.categoria||'')+'</span>')+'<h3 class="lib-card__title">'+(c.nombre||'')+'</h3>'+(drip.locked?'':'<p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>')+lockMetaHtml+'</div></div>';
       });
-      if(cursos.length===0){
-        cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.</p></div>';
+      if(cursosFiltrados.length===0){
+        var msg=_clubCategoriaFiltro?'No hay cursos en "'+_clubCategoriaFiltro+'" todavía.':'Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.';
+        var titulo=_clubCategoriaFiltro?'Sin cursos en esta categoría':'Próximamente';
+        cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">'+titulo+'</h3><p style="font-size:0.85rem;color:var(--gray-400)">'+msg+'</p></div>';
       }
     }
     // === CONTINUAR APRENDIENDO (solo cursos en progreso y NO bloqueados por drip) ===
@@ -4537,7 +4575,7 @@ function showLogroToast(logro){
   },3000);
 }
 
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){checkAdminStatus(user).then(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){checkAdminStatus(user).then(function(){loadProfile();loadClubCategorias();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
   // Cargar prefs ANTES de notificaciones para que el filtro funcione
   loadNotifPrefsCache().then(function(){loadClubNotificaciones();});
   // Cargar estado de suscripcion para banner y bloqueos
