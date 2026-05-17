@@ -244,6 +244,15 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .lib-card__progress-bar { height: 4px; background: var(--gray-100); border-radius: 2px; overflow: hidden; }
 .lib-card__progress-fill { height: 100%; border-radius: 2px; background: var(--purple-400); }
 
+/* ============ DRIP CONTENT (cursos bloqueados por goteo) ============ */
+.lib-card.locked, .course-h-card.locked { position: relative; filter: grayscale(0.85) opacity(0.7); cursor: not-allowed; }
+.lib-card.locked:hover, .course-h-card.locked:hover { transform: none; box-shadow: none; border-color: var(--gray-100); }
+.lib-card.locked .lib-card__img, .course-h-card.locked .course-h-card__img { filter: grayscale(1); }
+.lock-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(40,30,60,0.92); color: #fff; border-radius: 12px; padding: 10px 16px; display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; z-index: 5; box-shadow: 0 6px 20px rgba(0,0,0,0.25); white-space: nowrap; pointer-events: none; }
+.lock-overlay svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.lib-card.locked .lib-card__badge { background: var(--gray-200); color: var(--gray-500); }
+body.dark .lock-overlay { background: rgba(220,200,255,0.95); color: #2d1148; }
+
 /* ============ WEBINARS ============ */
 .webinar-list { display: flex; flex-direction: column; gap: 12px; }
 .webinar-item { display: flex; align-items: center; gap: 20px; background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 20px 24px; transition: all var(--transition); }
@@ -2489,6 +2498,37 @@ function loadProfile(){
   });
 }
 
+// === HELPER: drip content. Devuelve si el curso esta bloqueado por goteo. ===
+// Cada curso tiene un campo `dripDias` (numero). Si dripDias > 0, el curso
+// solo se desbloquea N dias DESPUES de que el usuario se registro.
+// Admins (doc en /admins/{uid}) siempre tienen todo desbloqueado.
+// La verificacion de admin se cachea en window._gvIsAdmin tras login.
+// Devuelve {locked: bool, diasFaltan: number, fechaDesbloqueo: Date|null}
+function getDripStatus(curso, user){
+  if(!curso||!user)return {locked:false,diasFaltan:0,fechaDesbloqueo:null};
+  var dripDias=parseInt(curso.dripDias)||0;
+  if(dripDias<=0)return {locked:false,diasFaltan:0,fechaDesbloqueo:null};
+  // Admins siempre desbloqueados
+  if(window._gvIsAdmin===true)return {locked:false,diasFaltan:0,fechaDesbloqueo:null};
+  // Fecha de registro: prioridad metadata.creationTime, fallback ahora
+  var ts=user.metadata&&user.metadata.creationTime?new Date(user.metadata.creationTime).getTime():Date.now();
+  var ahora=Date.now();
+  var transcurridoMs=ahora-ts;
+  var diasTrans=Math.floor(transcurridoMs/(1000*60*60*24));
+  if(diasTrans>=dripDias)return {locked:false,diasFaltan:0,fechaDesbloqueo:null};
+  var fechaDesb=new Date(ts+dripDias*24*60*60*1000);
+  return {locked:true,diasFaltan:dripDias-diasTrans,fechaDesbloqueo:fechaDesb};
+}
+
+// Cachear estado admin del usuario actual (se llama al login).
+function checkAdminStatus(user){
+  if(!user){window._gvIsAdmin=false;return Promise.resolve(false);}
+  return db.collection('admins').doc(user.uid).get().then(function(doc){
+    window._gvIsAdmin=doc.exists;
+    return doc.exists;
+  }).catch(function(){window._gvIsAdmin=false;return false;});
+}
+
 // === HELPER: lee el progreso del usuario doc-por-doc por ID ===
 // Las reglas de Firestore solo permiten leer docs cuyo ID empiece con `uid_`,
 // por eso NO podemos hacer db.collection('progreso').get() (devuelve permission-denied
@@ -2559,18 +2599,29 @@ function loadClubCursos(){
         var img=driveImg(c.imagen);
         var pct=getPct(c);
         var totalClases=(c.clases&&c.clases.length)||0;
-        cont.innerHTML+='<div class="lib-card" onclick="openCurso(\''+c._id+'\')" style="cursor:pointer"><div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+(c.categoria||'')+'</span><h3 class="lib-card__title">'+(c.nombre||'')+'</h3><p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div></div></div>';
+        // DRIP: revisar bloqueo
+        var drip=getDripStatus(c,user);
+        var lockedClass=drip.locked?' locked':'';
+        var lockOverlay='';
+        var clickHandler='onclick="openCurso(\''+c._id+'\')"';
+        if(drip.locked){
+          var diasTxt=drip.diasFaltan===1?'1 día':drip.diasFaltan+' días';
+          lockOverlay='<div class="lock-overlay"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> Disponible en '+diasTxt+'</div>';
+          clickHandler='onclick="showLockedCourseModal(\''+c._id+'\','+drip.diasFaltan+',\''+drip.fechaDesbloqueo.toISOString()+'\')"';
+        }
+        cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative">'+lockOverlay+'<div class="lib-card__img" style="'+(img?'background:url('+img+') center/cover':'')+'"><div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body"><span class="lib-card__badge">'+(c.categoria||'')+'</span><h3 class="lib-card__title">'+(c.nombre||'')+'</h3><p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div></div></div>';
       });
       if(cursos.length===0){
         cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.</p></div>';
       }
     }
-    // === CONTINUAR APRENDIENDO (solo cursos en progreso, no 0% ni 100%) ===
+    // === CONTINUAR APRENDIENDO (solo cursos en progreso y NO bloqueados por drip) ===
     if(scroll){
       scroll.innerHTML='';
-      // Filtrar: cursos en progreso (>0% y <100%) o todos si no hay ninguno en progreso
-      var enProgreso=cursos.filter(function(c){var p=getPct(c);return p>0&&p<100;});
-      var paraMostrar=enProgreso.length>0?enProgreso:cursos.slice(0,5);
+      // Filtrar: cursos en progreso (>0% y <100%) Y no bloqueados
+      var disponibles=cursos.filter(function(c){return !getDripStatus(c,user).locked;});
+      var enProgreso=disponibles.filter(function(c){var p=getPct(c);return p>0&&p<100;});
+      var paraMostrar=enProgreso.length>0?enProgreso:disponibles.slice(0,5);
       paraMostrar.forEach(function(c){
         var img=driveImg(c.imagen);
         var pct=getPct(c);
@@ -3728,10 +3779,47 @@ function openVideo(url,title,idx){
 }
 function closeVideo(){document.getElementById('videoModal').classList.remove('show');document.getElementById('videoFrame').src=''}
 
+// Modal que se muestra cuando un curso esta bloqueado por goteo (drip).
+function showLockedCourseModal(cursoId, dias, fechaIso){
+  var fecha=new Date(fechaIso);
+  var f=fecha.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
+  var diasTxt=dias===1?'1 día':dias+' días';
+  // Reusar la estructura de toast: modal simple inline.
+  var existing=document.getElementById('lockedModal');
+  if(existing)existing.remove();
+  var ov=document.createElement('div');
+  ov.id='lockedModal';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(20,10,40,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)';
+  ov.onclick=function(e){if(e.target===ov)ov.remove();};
+  ov.innerHTML='<div style="background:var(--white);border-radius:16px;padding:32px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:scaleIn 0.3s ease"><div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--purple-100),var(--purple-200));margin:0 auto 16px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" style="width:32px;height:32px;fill:none;stroke:var(--purple-700);stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><h3 style="font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--gray-800);margin-bottom:8px">Curso bloqueado</h3><p style="font-size:0.88rem;color:var(--gray-500);margin-bottom:6px">Este curso forma parte del catálogo, pero se libera más adelante para que avances con calma.</p><p style="font-size:0.92rem;color:var(--purple-700);font-weight:600;margin-bottom:20px">Disponible en '+diasTxt+'<br><span style="font-size:0.78rem;color:var(--gray-400);font-weight:400">a partir del '+f+'</span></p><button onclick="document.getElementById(\'lockedModal\').remove()" style="background:var(--purple-700);color:white;border:none;padding:10px 28px;border-radius:8px;font-weight:600;font-size:0.88rem;cursor:pointer">Entendido</button></div>';
+  document.body.appendChild(ov);
+}
+
 function openCurso(id){
   if(!tieneAcceso()){openPaywall();return;}
+  // DRIP: bloquear si el curso aun no se desbloquea
+  var user=firebase.auth().currentUser;
+  if(user){
+    // Buscar en cache local primero (rapido); si no, fetch
+    db.collection('cursos').doc(id).get().then(function(doc){
+      if(!doc.exists)return;var c=doc.data();
+      var drip=getDripStatus(c,user);
+      if(drip.locked){
+        showLockedCourseModal(id,drip.diasFaltan,drip.fechaDesbloqueo.toISOString());
+        return;
+      }
+      _openCursoInterno(id,c);
+    });
+    return;
+  }
+  // Sin user: flujo viejo (no deberia pasar, pero por seguridad)
+  _openCursoInterno(id,null);
+}
+
+function _openCursoInterno(id, cachedDoc){
   currentCursoId=id;
-  db.collection('cursos').doc(id).get().then(function(doc){
+  var promise=cachedDoc?Promise.resolve({exists:true,data:function(){return cachedDoc;}}):db.collection('cursos').doc(id).get();
+  promise.then(function(doc){
     if(!doc.exists)return;var c=doc.data();
     currentCursoClases=c.clases||[];
     document.getElementById('cursoCat').textContent=c.categoria||'';
@@ -4418,11 +4506,12 @@ function showLogroToast(logro){
   },3000);
 }
 
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){checkAdminStatus(user).then(function(){loadProfile();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
   // Cargar prefs ANTES de notificaciones para que el filtro funcione
   loadNotifPrefsCache().then(function(){loadClubNotificaciones();});
   // Cargar estado de suscripcion para banner y bloqueos
   refreshSubStatus().then(function(){renderTrialBanner();handleStripeReturn();});
+});
 },500)}});
 
 // ===== MODO MANTENIMIENTO (lee de Firestore /config/maintenance) =====
