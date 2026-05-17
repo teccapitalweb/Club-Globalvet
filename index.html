@@ -3204,7 +3204,7 @@ function loadNotifPrefsCache(){
   }).catch(function(){return null;});
 }
 var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
-var NEWSDATA_CACHE_KEY='newsdata_cache_v3';
+var NEWSDATA_CACHE_KEY='newsdata_cache_v4';
 var NEWSDATA_CACHE_HOURS=6;
 
 // Trae noticias automaticas con cache de 6h
@@ -3223,41 +3223,52 @@ function fetchAutoNews(){
         }
       }
     }catch(e){}
-    // Llamar API: noticias en español sobre veterinaria/mascotas/animales
-    var query=encodeURIComponent('veterinaria OR veterinario OR mascotas OR animales OR perros OR gatos');
-    var url='https://newsdata.io/api/1/news?apikey='+NEWSDATA_API_KEY+'&q='+query+'&language=es&category=health,science';
+    // MODIFICADO: query ampliada para más variedad veterinaria/mascotas/zoonosis,
+    // filtro de imagen aflojado (placeholder si no hay), tope a 30, dos páginas.
+    var query=encodeURIComponent('veterinaria OR veterinario OR mascotas OR animales OR perros OR gatos OR caballos OR zoonosis OR rabia OR vacunación animal OR fauna OR ganado OR equino OR canino OR felino');
+    var urlBase='https://newsdata.io/api/1/news?apikey='+NEWSDATA_API_KEY+'&q='+query+'&language=es&category=health,science';
+    var PLACEHOLDER='https://placehold.co/600x400/4b1c71/ffffff?text=GlobalVet';
     console.log('[NEWS] Fetching NewsData.io...');
-    fetch(url).then(function(r){return r.json();}).then(function(data){
-      if(!data.results||!Array.isArray(data.results)){
-        console.warn('[NEWS] Sin resultados:',data);
+    function fetchPage(url){
+      return fetch(url).then(function(r){return r.json();}).catch(function(){return null;});
+    }
+    fetchPage(urlBase).then(function(data){
+      if(!data||!data.results||!Array.isArray(data.results)){
+        console.warn('[NEWS] Sin resultados pagina 1:',data);
         resolve([]);
         return;
       }
-      // MODIFICADO: deduplicar por título normalizado. NewsData devuelve la misma
-      // nota de agencia replicada por varios periódicos (LNE, DiarioDeMallorca, etc.).
-      // Nos quedamos solo con la primera aparición de cada título.
-      var vistos={};
-      var noticias=data.results.filter(function(n){return n.image_url;}).map(function(n){
-        return {
-          _id:'news_'+(n.article_id||Math.random().toString(36).slice(2)),
-          titulo:n.title||'',
-          contenido:n.description||n.content||'',
-          fuente:n.source_id||n.source_name||'NewsData',
-          imagen:n.image_url||'',
-          link:n.link||'',
-          creado:n.pubDate||new Date().toISOString(),
-          _auto:true
-        };
-      }).filter(function(n){
-        var key=(n.titulo||'').toLowerCase().replace(/\s+/g,' ').trim();
-        if(!key||vistos[key])return false;
-        vistos[key]=true;
-        return true;
-      }).slice(0,10);
+      var combinado=data.results.slice();
+      // Si hay nextPage, traer una segunda tanda para tener más variedad
+      var p2=data.nextPage?fetchPage(urlBase+'&page='+data.nextPage):Promise.resolve(null);
+      p2.then(function(data2){
+        if(data2&&data2.results&&Array.isArray(data2.results)){
+          combinado=combinado.concat(data2.results);
+        }
+        // Mapear + deduplicar por título normalizado
+        var vistos={};
+        var noticias=combinado.map(function(n){
+          return {
+            _id:'news_'+(n.article_id||Math.random().toString(36).slice(2)),
+            titulo:n.title||'',
+            contenido:n.description||n.content||'',
+            fuente:n.source_id||n.source_name||'NewsData',
+            imagen:n.image_url||PLACEHOLDER,
+            link:n.link||'',
+            creado:n.pubDate||new Date().toISOString(),
+            _auto:true
+          };
+        }).filter(function(n){
+          var key=(n.titulo||'').toLowerCase().replace(/\s+/g,' ').trim();
+          if(!key||vistos[key])return false;
+          vistos[key]=true;
+          return true;
+        }).slice(0,30);
       // Guardar en cache
       try{localStorage.setItem(NEWSDATA_CACHE_KEY,JSON.stringify({timestamp:Date.now(),noticias:noticias}));}catch(e){}
       console.log('[NEWS] '+noticias.length+' noticias obtenidas y cacheadas');
       resolve(noticias);
+      }); // cierre p2.then
     }).catch(function(e){
       console.warn('[NEWS] Error fetch:',e);
       // Si falla, intentar usar cache aunque sea viejo
