@@ -2629,7 +2629,14 @@ function loadClubCursos(){
       c._id=d.id;cursos.push(c);
     });
     // Aplicar filtro de categoria (solo a Biblioteca, no a Continuar aprendiendo)
-    var cursosFiltrados=_clubCategoriaFiltro?cursos.filter(function(c){return (c.categoria||'')===_clubCategoriaFiltro;}):cursos;
+    var cursosFiltrados=_clubCategoriaFiltro?cursos.filter(function(c){return (c.categoria||'')===_clubCategoriaFiltro;}):cursos.slice();
+    // ORDEN: desbloqueados arriba, bloqueados abajo. Dentro de cada grupo, los que se desbloquean antes primero.
+    cursosFiltrados.sort(function(a,b){
+      var da=getDripStatus(a,user),dbb=getDripStatus(b,user);
+      if(da.locked!==dbb.locked)return da.locked?1:-1; // desbloqueados primero
+      if(da.locked)return da.diasFaltan-dbb.diasFaltan; // bloqueados: los que faltan menos arriba
+      return 0; // ambos desbloqueados: mantener orden original
+    });
     // Calcular pct para cada curso
     function getPct(curso){
       var total=(curso.clases&&curso.clases.length)||0;
