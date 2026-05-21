@@ -3419,7 +3419,7 @@ function loadNotifPrefsCache(){
   }).catch(function(){return null;});
 }
 var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
-var NEWSDATA_CACHE_KEY='newsdata_cache_v5';
+var NEWSDATA_CACHE_KEY='newsdata_cache_v6';
 var NEWSDATA_CACHE_HOURS=6;
 
 // Trae noticias automaticas con cache de 6h
@@ -3460,7 +3460,18 @@ function fetchAutoNews(){
         if(data2&&data2.results&&Array.isArray(data2.results)){
           combinado=combinado.concat(data2.results);
         }
-        // Mapear + deduplicar por título normalizado
+        // Mapear + filtro temático veterinario + deduplicar por título normalizado
+        // Lista BLANCA: palabras que son del tema (si aparecen, pasa)
+        var VET_WHITE=['veterinari','veterinario','veterinaria','vet ','mascot','animal','perro','perra','gato','gata','canin','felin','equin','caballo','yegua','potro','ganad','vacun','bovino','bovina','porcin','cerdo','cerda','ave ','aves','pollo','gallina','ovin','caprin','cabra','oveja','cordero','zoonos','rabia','fauna','silvestr','reptil','exótico','exotico','tortuga','iguana','serpient','loro','perico','conejo','hámster','hamster','roedor','peces','acuícola','acuicultur','apícol','abeja','colmena','etolog','adiestr','jaur','manada','rebaño','rebano','razas','raza canina','raza felina','clínica veterinaria','clinica veterinaria','medicina veterinaria','zootecn','reproducción animal','reproduccion animal','nutrición animal','nutricion animal','dermatolog','imagenolog','urgencias veterinarias','cirugía veterinaria','cirugia veterinaria'];
+        // Lista NEGRA: si aparecen Y no hay palabra blanca, se descarta
+        var VET_BLACK=['humano','humana','humanos','humanas','en personas','en pacientes','en niños','en adultos','obesidad humana','ultraprocesado','café ','cafe ','arqueolog','restos humanos','restos óseos','restos oseos','hallazgo arqueológico','hallazgo arqueologico','momia','pirámide','piramide','política','politica','elecciones','presidente','futbol','fútbol','liga mx','champions','nfl','nba','olímpic','olimpic','musulm','iglesia','vaticano','papa francisco','sismo','terremoto','huracán','huracan','volcán','volcan','sars-cov','covid-19','covid','vacuna humana','vacuna pfizer','vacuna moderna','vacuna astrazeneca','viruela del mono','dengue humano'];
+        function pasaTemaVet(n){
+          var txt=((n.titulo||'')+' '+(n.contenido||'')).toLowerCase();
+          var enBlanca=VET_WHITE.some(function(w){return txt.indexOf(w)!==-1;});
+          if(enBlanca)return true; // si menciona algo veterinario, pasa
+          var enNegra=VET_BLACK.some(function(w){return txt.indexOf(w)!==-1;});
+          return !enNegra; // si no es claramente off-topic, también pasa (moderado)
+        }
         var vistos={};
         var noticias=combinado.map(function(n){
           return {
@@ -3473,7 +3484,7 @@ function fetchAutoNews(){
             creado:n.pubDate||new Date().toISOString(),
             _auto:true
           };
-        }).filter(function(n){
+        }).filter(pasaTemaVet).filter(function(n){
           var key=(n.titulo||'').toLowerCase().replace(/\s+/g,' ').trim();
           if(!key||vistos[key])return false;
           vistos[key]=true;
