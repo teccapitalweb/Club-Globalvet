@@ -258,6 +258,14 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 body.dark .lock-overlay { background: rgba(45,17,72,0.92); }
 body.dark .lock-overlay svg { stroke: #fff; }
 body.dark .lock-meta { color: var(--purple-300); }
+/* ============ MODO EXPLORADOR (sin acceso): blur encima del contenido ============ */
+.page-content.explorador-blocked > *:not(#exploradorOverlay){
+  filter: blur(6px) brightness(0.96);
+  pointer-events: none;
+  user-select: none;
+  transition: filter 0.25s ease;
+}
+.page-content.explorador-blocked{ position: relative; min-height: 600px; }
 @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
 @keyframes fadeOut { from { opacity: 1 } to { opacity: 0 } }
 @keyframes scaleIn { from { opacity: 0; transform: scale(0.92) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -2262,6 +2270,13 @@ function refreshSubStatus(){
     _subStatus=r.status;
     _subData=r.sub||null;
     _trialDiasRestantes=r.diasRestantes||0;
+    // Re-evaluar overlay de modo explorador en la sección actual
+    try{
+      var active=document.querySelector('.page-content.active');
+      if(active&&typeof applyExploradorOverlay==='function'){
+        applyExploradorOverlay(active.getAttribute('data-page')||'inicio');
+      }
+    }catch(e){}
     return r;
   });
 }
@@ -2436,21 +2451,53 @@ function toggleDark(){document.body.classList.toggle('dark');localStorage.setIte
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
 function scrollC(d){document.getElementById('newsCarousel').scrollBy({left:d*280,behavior:'smooth'})}
-// Secciones accesibles aun en modo explorador (sin acceso pagado)
-var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad'];
+// Secciones libres (no se bloquean ni con overlay) — el resto se bloquea visualmente con blur+CTA
+var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle'];
 
 function nav(page){
-  // Bloqueo modo explorador: si no tiene acceso y la sección no es libre, abrir paywall
-  // Admins se saltan el bloqueo
-  if(window._gvIsAdmin!==true && typeof tieneAcceso==='function' && !tieneAcceso() && SECCIONES_LIBRES.indexOf(page)===-1){
-    openPaywall();
-    return;
-  }
   document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));
   document.querySelector('.page-content[data-page="'+page+'"]').classList.add('active');
   document.querySelectorAll('.sidebar__link').forEach(l=>{l.classList.remove('active');if(l.dataset.page===page)l.classList.add('active')});
   window.scrollTo(0,0);
   closeSidebar();
+  // Aplicar/quitar overlay de modo explorador
+  applyExploradorOverlay(page);
+}
+
+// === MODO EXPLORADOR: blur + CTA encima del contenido ===
+function applyExploradorOverlay(page){
+  // Admins se saltan
+  if(window._gvIsAdmin===true)return;
+  // Solo si NO tiene acceso y la sección NO es libre
+  var bloquear=(typeof tieneAcceso==='function')&&!tieneAcceso()&&SECCIONES_LIBRES.indexOf(page)===-1;
+  // Quitar overlay viejo si lo hay
+  var oldOv=document.getElementById('exploradorOverlay');
+  if(oldOv)oldOv.remove();
+  // Quitar blur de todas las secciones
+  document.querySelectorAll('.page-content').forEach(function(p){p.classList.remove('explorador-blocked');});
+  if(!bloquear)return;
+  // Aplicar blur a la sección activa
+  var pageEl=document.querySelector('.page-content[data-page="'+page+'"]');
+  if(!pageEl)return;
+  pageEl.classList.add('explorador-blocked');
+  // Crear overlay con CTA centrado
+  var titulo=({biblioteca:'la Biblioteca de cursos',webinar:'los Webinars',pdf:'el Material PDF',noticias:'las Noticias',foro:'el Foro',ficha:'la Ficha de Paciente',vacunacion:'la Tabla de Vacunación',score:'el Score Corporal',urgencias:'la Guía de Urgencias',descuento:'el Descuento 20%',canal:'el Canal',notificaciones:'las Notificaciones',logros:'los Logros'})[page]||'esta sección';
+  var ov=document.createElement('div');
+  ov.id='exploradorOverlay';
+  ov.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:140px;z-index:50;pointer-events:none';
+  ov.innerHTML='<div style="background:#fff;border-radius:20px;padding:36px 32px 28px;max-width:380px;width:calc(100% - 32px);text-align:center;box-shadow:0 24px 64px rgba(45,17,72,0.18);pointer-events:auto;position:sticky;top:140px">'
+    +'<div style="width:56px;height:56px;border-radius:50%;background:#f4ecfb;margin:0 auto 18px;display:flex;align-items:center;justify-content:center">'
+      +'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7f4ca5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+        +'<rect x="3" y="11" width="18" height="11" rx="2.5" ry="2.5"></rect>'
+        +'<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>'
+      +'</svg>'
+    +'</div>'
+    +'<h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:#1c1c1c;margin:0 0 10px;letter-spacing:-0.01em">Sección bloqueada</h3>'
+    +'<p style="font-size:0.86rem;color:#777;margin:0 0 22px;line-height:1.5">Suscríbete para acceder a '+titulo+' y a todo el contenido del Club.</p>'
+    +'<button onclick="nav(\'suscripcion\')" style="background:#4b1c71;color:white;border:none;padding:12px 0;border-radius:10px;font-weight:600;font-size:0.86rem;cursor:pointer;width:100%;letter-spacing:0.01em;transition:background 0.15s ease" onmouseover="this.style.background=\'#2d1148\'" onmouseout="this.style.background=\'#4b1c71\'">Suscribirme</button>'
+  +'</div>';
+  pageEl.style.position='relative';
+  pageEl.appendChild(ov);
 }
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
 function showVac(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('vac-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
