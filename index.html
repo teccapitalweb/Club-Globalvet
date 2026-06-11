@@ -1384,7 +1384,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <h1>Domina los casos que llegan a tu <em style="font-style:normal;color:#c9a3f5;">consulta</em>.</h1>
     <p style="margin-bottom:6px;">Cursos veterinarios, webinars con especialistas y herramientas clínicas listas para usar.</p>
 
-    <div class="gvh-flix" id="gvhFlix" aria-hidden="true"><div class="gvh-flix__track" id="gvhFlixTrack"></div></div>
+    <div class="gvh-flix show" id="gvhFlix" aria-hidden="true"><div class="gvh-flix__track" id="gvhFlixTrack"><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"><span>Cirugía Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"><span>Oncología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"><span>Radiología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"><span>Hematología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"><span>Neonatología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"><span>Endocrinología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"><span>Etología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"><span>Bioquímica Clínica</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"><span>Fisioterapia Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"><span>Primeros Auxilios</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"><span>Manejo Clínico</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"><span>Medicina Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"><span>Cirugía Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"><span>Oncología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"><span>Radiología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"><span>Hematología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"><span>Neonatología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"><span>Endocrinología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"><span>Etología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"><span>Bioquímica Clínica</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"><span>Fisioterapia Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"><span>Primeros Auxilios</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"><span>Manejo Clínico</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"><span>Medicina Veterinaria</span></div></div></div>
 
     <p class="gvh-hook">Todo esto por <b>menos de $6 al día</b>:</p>
     <ul class="gvh-benefits">
@@ -2481,33 +2481,7 @@ function switchTab(mode){
 function toggleLoginMode(){switchTab(isRegisterMode?'login':'register')}
 switchTab('register'); // MODIFICADO: registro por default
 
-// MODIFICADO: carrusel tipo Netflix del splash con portadas reales de Firestore
-(function(){
-  function driveImgSafe(u){
-    try{ return (typeof driveImg==='function')?driveImg(u):u; }catch(e){ return u; }
-  }
-  try{
-    db.collection('cursos').get().then(function(s){
-      var covers=[];
-      s.forEach(function(d){
-        var c=d.data();
-        if(c.estado==='Borrador'||c.estado==='Oculto')return;
-        if(c.imagen)covers.push({img:driveImgSafe(c.imagen),nombre:c.nombre||''});
-      });
-      if(!covers.length)return;
-      covers=covers.slice(0,10);
-      var track=document.getElementById('gvhFlixTrack');
-      var box=document.getElementById('gvhFlix');
-      if(!track||!box)return;
-      var html='';
-      covers.concat(covers).forEach(function(c){
-        html+='<div class="gvh-flix__card" style="background-image:url('+c.img+')"><span>'+(c.nombre||'').replace(/</g,'&lt;')+'</span></div>';
-      });
-      track.innerHTML=html;
-      box.classList.add('show');
-    }).catch(function(){ /* reglas no permiten lectura sin login: el carrusel simplemente no se muestra */ });
-  }catch(e){}
-})();
+// MODIFICADO: carrusel con portadas locales (img/splash) — sin dependencia de Firestore
 function showLoginError(msg){var el=document.getElementById('loginError');el.textContent=msg;el.classList.add('show');document.getElementById('loginSuccess').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 function showLoginSuccess(msg){var el=document.getElementById('loginSuccess');el.textContent=msg;el.classList.add('show');document.getElementById('loginError').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 
