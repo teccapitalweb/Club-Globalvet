@@ -998,8 +998,8 @@ body.dark .login-hero{background:#0f0a18}
 .login-hero__stats{display:flex;gap:44px;position:absolute;bottom:52px;left:72px;z-index:1}
 .login-hero__stat-val{font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:white}
 .login-hero__stat-lbl{font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.4);margin-top:2px}
-.login-form-side{width:50%;min-width:0;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 52px;overflow-y:auto;background:#fff}
-.login-form-inner{width:100%;max-width:380px}
+.login-form-side{width:50%;min-width:0;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 52px;overflow-y:auto;background:#fff}
+.login-form-inner{width:100%;max-width:380px;margin:auto}
 body.dark .login-form-side{background:var(--dk-surface)}
 .login-tabs{display:inline-flex;border:1.5px solid var(--gray-200);border-radius:50px;padding:3px;margin-bottom:28px}
 body.dark .login-tabs{border-color:var(--dk-border)}
@@ -1056,7 +1056,7 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
 .gvh-flix:hover .gvh-flix__track{animation-play-state:paused}
 @keyframes gvhFlixSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .gvh-flix__card{
-  width:132px;height:132px;flex:none;border-radius:12px;overflow:hidden;position:relative;
+  width:148px;height:148px;flex:none;border-radius:14px;overflow:hidden;position:relative;
   background:rgba(255,255,255,.08) center/contain no-repeat;
   background-size:cover;
   border:1px solid rgba(255,255,255,.16);
@@ -1064,11 +1064,7 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
   transition:transform .25s ease,border-color .25s ease;
 }
 .gvh-flix__card:hover{transform:translateY(-5px) scale(1.03);border-color:#c9a3f5}
-.gvh-flix__card span{
-  position:absolute;inset:auto 0 0 0;padding:20px 9px 7px;
-  background:linear-gradient(180deg,transparent,rgba(20,6,35,.92));
-  font-family:var(--font-display);font-weight:700;font-size:.7rem;line-height:1.25;color:#fff;
-}
+
 .gvh-hook{font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:#fff;margin:26px 0 18px;position:relative;z-index:1}
 .gvh-hook b{color:#e9d5ff}
 .gvh-benefits{list-style:none;display:grid;gap:12px;margin:0 0 30px;padding:0;max-width:420px;position:relative;z-index:1}
@@ -1113,8 +1109,7 @@ body.dark .gvh-free b{color:#c9a3f5}
   .login-hero p{font-size:.84rem;line-height:1.55}
   .login-hero__stats{display:none}
   .gvh-flix{margin:14px 0 6px}
-  .gvh-flix__card{width:104px;height:104px}
-  .gvh-flix__card span{font-size:.58rem;padding:15px 7px 6px}
+  .gvh-flix__card{width:108px;height:108px}
   .gvh-hook{font-size:1.1rem;margin:18px 0 14px}
   .gvh-benefits{margin:0 auto 22px;max-width:340px;text-align:left;gap:10px}
   .gvh-benefits li{font-size:.76rem}
@@ -1385,7 +1380,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <h1>Domina los casos que llegan a tu <em style="font-style:normal;color:#c9a3f5;">consulta</em>.</h1>
     <p style="margin-bottom:6px;">Cursos veterinarios, webinars con especialistas y herramientas clínicas listas para usar.</p>
 
-    <div class="gvh-flix show" id="gvhFlix" aria-hidden="true"><div class="gvh-flix__track" id="gvhFlixTrack"><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"><span>Cirugía Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"><span>Oncología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"><span>Radiología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"><span>Hematología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"><span>Neonatología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"><span>Endocrinología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"><span>Etología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"><span>Bioquímica Clínica</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"><span>Fisioterapia Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"><span>Primeros Auxilios</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"><span>Manejo Clínico</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"><span>Medicina Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"><span>Cirugía Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"><span>Oncología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"><span>Radiología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"><span>Hematología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"><span>Neonatología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"><span>Endocrinología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"><span>Etología</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"><span>Bioquímica Clínica</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"><span>Fisioterapia Veterinaria</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"><span>Primeros Auxilios</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"><span>Manejo Clínico</span></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"><span>Medicina Veterinaria</span></div></div></div>
+    <div class="gvh-flix show" id="gvhFlix" aria-hidden="true"><div class="gvh-flix__track" id="gvhFlixTrack"><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/cirugia-veterinaria.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/oncologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/radiologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/hematologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/neonatologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/endocrinologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/etologia.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/bioquimica-clinica.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/fisioterapia-veterinaria.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/primeros-auxilios.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/manejo-clinico.webp)"></div><div class="gvh-flix__card" style="background-image:url(img/splash/medicina-veterinaria.webp)"></div></div></div>
 
     <p class="gvh-hook">Todo esto por <b>menos de $6 al día</b>:</p>
     <ul class="gvh-benefits">
