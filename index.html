@@ -1040,7 +1040,84 @@ body.dark .login-box__success{background:rgba(34,197,94,0.1);border-color:rgba(3
 .login-or span{font-size:0.72rem;color:var(--gray-300);white-space:nowrap}
 .login-or::before,.login-or::after{content:'';flex:1;height:1px;background:var(--gray-200)}
 body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-border)}
-@media(max-width:900px){.login-hero{display:none}.login-form-side{width:100%;max-width:420px;margin:0 auto;padding:40px 28px}}
+/* ═══ MODIFICADO: componentes de venta (Fase Ads) ═══ */
+.login-hero h1{font-size:clamp(1.7rem,2.6vw,2.3rem);margin-bottom:14px}
+.login-hero__stats{position:static;margin-top:30px}
+.login-hero{justify-content:center;padding:110px 72px 50px}
+.gvh-flix{
+  display:none;margin:20px 0 8px;max-width:100%;position:relative;z-index:1;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
+  overflow:hidden;
+}
+.gvh-flix.show{display:block}
+.gvh-flix__track{display:flex;gap:13px;width:max-content;animation:gvhFlixSlide 55s linear infinite}
+.gvh-flix:hover .gvh-flix__track{animation-play-state:paused}
+@keyframes gvhFlixSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.gvh-flix__card{
+  width:195px;height:112px;flex:none;border-radius:11px;overflow:hidden;position:relative;
+  background:rgba(255,255,255,.08) center/cover no-repeat;
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 10px 26px rgba(0,0,0,.35);
+  transition:transform .25s ease,border-color .25s ease;
+}
+.gvh-flix__card:hover{transform:translateY(-5px) scale(1.03);border-color:#c9a3f5}
+.gvh-flix__card span{
+  position:absolute;inset:auto 0 0 0;padding:26px 11px 9px;
+  background:linear-gradient(180deg,transparent,rgba(20,6,35,.92));
+  font-family:var(--font-display);font-weight:700;font-size:.7rem;line-height:1.25;color:#fff;
+}
+.gvh-hook{font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:#fff;margin:18px 0 14px;position:relative;z-index:1}
+.gvh-hook b{color:#e9d5ff}
+.gvh-benefits{list-style:none;display:grid;gap:9px;margin:0 0 22px;padding:0;max-width:420px;position:relative;z-index:1}
+.gvh-benefits li{display:flex;gap:10px;align-items:flex-start;font-size:.84rem;color:rgba(255,255,255,.82);line-height:1.45}
+.gvh-benefits li b{color:#fff}
+.gvh-benefits svg{width:17px;height:17px;flex:none;margin-top:1px;stroke:var(--purple-900);background:#e9d5ff;border-radius:50%;padding:3.5px;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.gvh-price{display:grid;gap:9px;max-width:400px;margin-bottom:22px;position:relative;z-index:1}
+.gvh-price .opt{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:9px 15px}
+.gvh-price .opt b{font-family:var(--font-display);font-size:1.3rem;font-weight:800;color:#fff;white-space:nowrap}
+.gvh-price .opt small{display:block;color:rgba(255,255,255,.72);font-size:.74rem;line-height:1.45}
+.gvh-price .opt--star{background:rgba(233,213,255,.14);border:1.5px solid #c9a3f5;position:relative}
+.gvh-price .opt--star b{color:#e9d5ff}
+.gvh-price .opt--star .badge{position:absolute;top:-10px;right:12px;background:#e9d5ff;color:var(--purple-900);font-size:.58rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.gvh-price .tachado{text-decoration:line-through;opacity:.55;margin-right:4px}
+.gvh-refs-title{font-size:.64rem;letter-spacing:2.2px;text-transform:uppercase;color:#c9a3f5;margin:0 0 10px;font-weight:700;position:relative;z-index:1}
+.gvh-refs{display:grid;gap:12px;max-width:430px;margin-bottom:18px;position:relative;z-index:1}
+.gvh-ref{display:flex;gap:9px;align-items:flex-start}
+.gvh-ref .avi{width:30px;height:30px;border-radius:50%;flex:none;margin-top:2px;display:grid;place-items:center;font-size:.6rem;font-weight:800;color:var(--purple-900);background:linear-gradient(135deg,#e9d5ff,#c9a3f5)}
+.gvh-ref .avi--b{background:linear-gradient(135deg,#c9a3f5,#9d6fd8);color:#fff}
+.gvh-ref .bub{position:relative;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);border-radius:4px 14px 14px 14px;padding:.5rem .85rem .55rem}
+.gvh-ref .bub b{display:block;font-size:.72rem;color:#fff}
+.gvh-ref .bub b small{font-weight:400;color:rgba(255,255,255,.55);margin-left:4px;font-size:.64rem}
+.gvh-ref .bub p{margin:2px 0 0;font-size:.76rem;line-height:1.45;color:rgba(255,255,255,.8)}
+.gvh-ref .lk{position:absolute;bottom:-9px;right:-5px;display:inline-flex;align-items:center;gap:3px;background:var(--purple-900);border:1px solid rgba(255,255,255,.25);border-radius:20px;padding:2px 7px 2px 3px;font-size:.56rem;font-weight:700;color:rgba(255,255,255,.75)}
+.gvh-ref .lk i{width:13px;height:13px;border-radius:50%;display:grid;place-items:center;background:#e9d5ff;font-style:normal}
+.gvh-ref .lk svg{width:8px;height:8px;fill:var(--purple-900)}
+.gvh-ref .meta{display:flex;gap:.8rem;margin:.25rem 0 0 .8rem;font-size:.58rem;color:rgba(255,255,255,.5)}
+.gvh-ref .meta b{font-weight:700}
+.gvh-trust{font-size:.6rem;letter-spacing:1.8px;text-transform:uppercase;color:rgba(255,255,255,.5);position:relative;z-index:1}
+.gvh-free{display:flex;align-items:center;justify-content:center;gap:7px;margin:0 0 14px;font-size:.88rem;color:var(--gray-600)}
+.gvh-free b{color:var(--purple-900);font-weight:800}
+.gvh-free svg{width:16px;height:16px;flex:none;stroke:#fff;background:var(--purple-900);border-radius:50%;padding:3px}
+body.dark .gvh-free{color:var(--dk-text-2)}
+body.dark .gvh-free b{color:#c9a3f5}
+@media(max-width:900px){
+  .login-hero{display:flex !important;padding:26px 20px 24px;min-height:0;align-items:center;text-align:center;overflow:hidden}
+  .login-hero__logo{position:static;justify-content:center;margin-bottom:14px}
+  .login-hero h1{font-size:1.35rem;margin-bottom:8px;max-width:100%}
+  .login-hero p{font-size:.84rem}
+  .login-hero__stats{display:none}
+  .gvh-flix{margin:14px 0 6px}
+  .gvh-flix__card{width:150px;height:88px}
+  .gvh-flix__card span{font-size:.62rem;padding:18px 9px 7px}
+  .gvh-hook{font-size:1.1rem;margin:12px 0 10px}
+  .gvh-benefits{margin:0 auto 16px;max-width:340px;text-align:left;gap:8px}
+  .gvh-benefits li{font-size:.76rem}
+  .gvh-price{margin:0 auto 16px;max-width:340px;text-align:left}
+  .gvh-price .opt b{font-size:1.1rem}
+  .gvh-refs{margin:0 auto 14px;max-width:340px;text-align:left}
+  .login-form-side{width:100%;max-width:420px;margin:0 auto;padding:40px 28px}
+}
 
 /* Logout confirmation modal */
 .logout-modal {
@@ -1259,7 +1336,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <div class="paywall-modal__card">
     <div class="paywall-modal__icon"><svg viewBox="0 0 24 24" style="width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
     <div class="paywall-modal__title" id="paywallTitle">Suscríbete para acceder</div>
-    <div class="paywall-modal__desc" id="paywallDesc">Tu periodo de prueba terminó. Activa tu suscripción para acceder a todos los cursos, webinars y materiales del Club.</div>
+    <div class="paywall-modal__desc" id="paywallDesc">Estás en modo invitado. Activa tu suscripción para ver las clases, usar las herramientas clínicas y participar en el foro.</div>
     <div class="paywall-modal__actions">
       <button class="paywall-modal__secondary" onclick="closePaywall()">Ahora no</button>
       <button class="paywall-modal__primary" onclick="closePaywall();nav('suscripcion')">Ver planes</button>
@@ -1300,8 +1377,33 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <img src="data:image/png;base64,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" alt="GV">
       <span>GlobalVet México</span>
     </div>
-    <h1>Te damos la bienvenida al club de miembros GlobalVet.</h1>
-    <p>Acceso exclusivo a cursos online, webinars con expertos, material descargable y beneficios diseñados para profesionales de la medicina veterinaria.</p>
+    <h1>Domina los casos que llegan a tu <em style="font-style:normal;color:#c9a3f5;">consulta</em>.</h1>
+    <p style="margin-bottom:6px;">Cursos veterinarios, webinars con especialistas y herramientas clínicas listas para usar.</p>
+
+    <div class="gvh-flix" id="gvhFlix" aria-hidden="true"><div class="gvh-flix__track" id="gvhFlixTrack"></div></div>
+
+    <p class="gvh-hook">Todo esto por <b>menos de $6 al día</b>:</p>
+    <ul class="gvh-benefits">
+      <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Biblioteca con 18+ cursos</b> de medicina veterinaria</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Webinars en vivo</b> con especialistas</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Herramientas clínicas</b>: ficha, urgencias y vacunación</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>Foro de colegas</b> + materiales PDF descargables</span></li>
+      <li><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><span><b>20% de descuento</b> permanente en cursos</span></li>
+    </ul>
+
+    <div class="gvh-price">
+      <div class="opt"><b>$179</b><small>MXN al mes · menos de $6 al día<br>Cancela cuando quieras</small></div>
+      <div class="opt opt--star"><span class="badge">Ahorras $360</span><b>$1,788</b><small>MXN al año · sale en <span class="tachado">$179</span><strong style="color:#e9d5ff;">$149/mes</strong><br>2 meses gratis incluidos</small></div>
+    </div>
+
+    <!-- ⚠️ BORRADORES: reemplazar con testimonios REALES antes de pautar fuerte -->
+    <p class="gvh-refs-title">Referencias</p>
+    <div class="gvh-refs">
+      <div class="gvh-ref"><span class="avi">DR</span><div style="flex:1;"><div class="bub"><b>Dra. Rodríguez <small>· Clínica de pequeñas especies</small></b><p>La herramienta de urgencias la tengo abierta en cada guardia. Los cursos me actualizaron en lo que de verdad llega a consulta</p><span class="lk"><i><svg viewBox="0 0 24 24"><path d="M2 10h4v12H2zM22 11c0-1.1-.9-2-2-2h-5.2l.9-4.4v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9c0 1.1.9 2 2 2h7c.8 0 1.5-.5 1.8-1.2l2.1-5c.1-.2.1-.5.1-.8v-2z"/></svg></i>11</span></div><div class="meta"><b>Me gusta</b><b>Responder</b><span>2 sem</span></div></div></div>
+      <div class="gvh-ref"><span class="avi avi--b">MV</span><div style="flex:1;"><div class="bub"><b>MVZ Vargas <small>· Práctica mixta</small></b><p>El calendario de vacunación y el foro valen la membresía solos. Y el 20% en cursos ya me ahorró más de lo que pago</p><span class="lk"><i><svg viewBox="0 0 24 24"><path d="M2 10h4v12H2zM22 11c0-1.1-.9-2-2-2h-5.2l.9-4.4v-.3c0-.4-.2-.8-.4-1.1L14.2 2 8.6 7.6c-.4.4-.6.9-.6 1.4v9c0 1.1.9 2 2 2h7c.8 0 1.5-.5 1.8-1.2l2.1-5c.1-.2.1-.5.1-.8v-2z"/></svg></i>8</span></div><div class="meta"><b>Me gusta</b><b>Responder</b><span>1 mes</span></div></div></div>
+    </div>
+
+    <p class="gvh-trust">Pago seguro con Stripe · Acceso inmediato · Sin permanencia</p>
     <div class="login-hero__stats">
       <div><div class="login-hero__stat-val">18+</div><div class="login-hero__stat-lbl">Cursos</div></div>
       <div><div class="login-hero__stat-val">24/7</div><div class="login-hero__stat-lbl">Acceso</div></div>
@@ -1310,6 +1412,10 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   </div>
   <div class="login-form-side">
     <div class="login-form-inner">
+    <p class="gvh-free">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+      Regístrate <b>completamente gratis</b>
+    </p>
     <div class="login-tabs">
       <button class="login-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</button>
       <button class="login-tab" id="tabRegister" onclick="switchTab('register')">Registrarme</button>
@@ -1487,7 +1593,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       </div>
 
       <!-- CTA crear nuevo tema -->
-      <button class="foro-create-cta" onclick="showForoCreateForm()">
+      <button class="foro-create-cta" onclick="if(!tieneAcceso()){openPaywall();return;}showForoCreateForm()">
         <div class="foro-create-cta__title">+ Crear un nuevo tema</div>
         <div class="foro-create-cta__desc">Comparte tu pregunta o experiencia con la comunidad</div>
       </button>
@@ -1525,7 +1631,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
         </div>
         <div class="foro-detail__content" id="foroDetailContent"></div>
         <div class="foro-detail__actions">
-          <button class="foro-like-btn" id="foroDetailLikeBtn" onclick="toggleForoLike()">
+          <button class="foro-like-btn" id="foroDetailLikeBtn" onclick="if(!tieneAcceso()){openPaywall();return;}toggleForoLike()">
             <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
             <span id="foroDetailLikes">0</span>
           </button>
@@ -2244,7 +2350,7 @@ var db=firebase.firestore();
 // =================================================================
 var WEBHOOK_URL='https://webhook-globalvet-j-production.up.railway.app';
 var STRIPE_PK='pk_live_51TMAcSA7If2CqXs9NuKsM1cVT9n5agProkMR8HFiT6QTXzS0g9PtiokZ4cpT1Qo3rk9bbsrZHx9sOUbE9UEOjgGs00n1OM3Y9b';
-var TRIAL_DIAS=7;
+var TRIAL_DIAS=0; // MODIFICADO: sin prueba — modo invitado desde el día 1
 var _stripe=null;
 var _embeddedCheckout=null;
 var _subStatus='loading'; // loading | trial_activo | trial_expirado | activa | pago_fallido | cancelada
@@ -2369,6 +2475,35 @@ function switchTab(mode){
   document.getElementById('loginSuccess').classList.remove('show');
 }
 function toggleLoginMode(){switchTab(isRegisterMode?'login':'register')}
+switchTab('register'); // MODIFICADO: registro por default
+
+// MODIFICADO: carrusel tipo Netflix del splash con portadas reales de Firestore
+(function(){
+  function driveImgSafe(u){
+    try{ return (typeof driveImg==='function')?driveImg(u):u; }catch(e){ return u; }
+  }
+  try{
+    db.collection('cursos').get().then(function(s){
+      var covers=[];
+      s.forEach(function(d){
+        var c=d.data();
+        if(c.estado==='Borrador'||c.estado==='Oculto')return;
+        if(c.imagen)covers.push({img:driveImgSafe(c.imagen),nombre:c.nombre||''});
+      });
+      if(!covers.length)return;
+      covers=covers.slice(0,10);
+      var track=document.getElementById('gvhFlixTrack');
+      var box=document.getElementById('gvhFlix');
+      if(!track||!box)return;
+      var html='';
+      covers.concat(covers).forEach(function(c){
+        html+='<div class="gvh-flix__card" style="background-image:url('+c.img+')"><span>'+(c.nombre||'').replace(/</g,'&lt;')+'</span></div>';
+      });
+      track.innerHTML=html;
+      box.classList.add('show');
+    }).catch(function(){ /* reglas no permiten lectura sin login: el carrusel simplemente no se muestra */ });
+  }catch(e){}
+})();
 function showLoginError(msg){var el=document.getElementById('loginError');el.textContent=msg;el.classList.add('show');document.getElementById('loginSuccess').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 function showLoginSuccess(msg){var el=document.getElementById('loginSuccess');el.textContent=msg;el.classList.add('show');document.getElementById('loginError').classList.remove('show');document.getElementById('loginLoading').classList.remove('show')}
 
@@ -2465,7 +2600,7 @@ if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
 function scrollC(d){document.getElementById('newsCarousel').scrollBy({left:d*280,behavior:'smooth'})}
 // Secciones libres (no se bloquean ni con overlay) — el resto se bloquea visualmente con blur+CTA
-var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle'];
+var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','noticias','logros','score','notificaciones']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
 
 function nav(page){
   document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));
@@ -3082,16 +3217,16 @@ function renderTrialActivo(cont,dias){
 }
 
 function renderTrialExpirado(cont){
-  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,#fef2f2,#fff);border-color:#fecaca"><div class="sub-label" style="color:#dc2626">Periodo de prueba terminado</div><div class="sub-plan">Suscríbete para volver a entrar</div><div style="font-size:0.88rem;color:var(--gray-600);margin-top:10px;line-height:1.55">Tu trial de 7 días terminó. Estás en <strong>modo explorador</strong>: puedes navegar pero no abrir el contenido. Suscríbete para reactivar todo.</div></div>'+plansHTML(true);
+  cont.innerHTML='<div class="sub-card" style="background:linear-gradient(135deg,var(--purple-50),#fff);border-color:var(--purple-200)"><div class="sub-label" style="color:var(--purple-900)">Modo invitado</div><div class="sub-plan">Suscríbete para desbloquear todo</div><div style="font-size:0.88rem;color:var(--gray-600);margin-top:10px;line-height:1.55">Puedes navegar todo el club, pero <strong>ver clases, usar las herramientas y participar en el foro</strong> requiere suscripción activa.</div></div>'+plansHTML(true);
 }
 
 // HTML compartido: cards de los 2 planes
 function plansHTML(showTrial){
-  var trialLabel=showTrial?'<div style="font-size:0.7rem;color:var(--gray-400);text-align:center;margin-top:8px">Empieza tu prueba gratuita de 7 días</div>':'';
+  var trialLabel=''; // MODIFICADO: sin trial
   return '<div class="section-header" style="margin:24px 0 14px"><h2 class="section-header__title">Elige tu plan</h2></div>'+
   '<div class="plans-grid">'+
     '<div class="plan-card"><div class="plan-card__name">Plan Mensual</div><div class="plan-card__price">$179<small>MXN/mes</small></div><div style="font-size:0.78rem;color:var(--gray-400);margin-top:6px">Cancela cuando quieras</div><button class="plan-card__btn plan-card__btn--outline" onclick="iniciarCheckout(\'mensual\')">Suscribirme mensual</button>'+trialLabel+'</div>'+
-    '<div class="plan-card plan-card--featured"><div class="plan-card__badge">Más popular</div><div class="plan-card__name">Plan Anual</div><div class="plan-card__price">$1,788<small>MXN/año</small></div><div class="plan-card__old">Equivalente mensual: $2,148</div><div class="plan-card__saving">🎉 Ahorras $360 (2 meses gratis)</div><button class="plan-card__btn" onclick="iniciarCheckout(\'anual\')">Suscribirme anual</button>'+trialLabel+'</div>'+
+    '<div class="plan-card plan-card--featured"><div class="plan-card__badge">Más popular</div><div class="plan-card__name">Plan Anual</div><div class="plan-card__price">$1,788<small>MXN/año</small></div><div class="plan-card__old">Equivalente mensual: $2,148</div><div class="plan-card__saving">Ahorras $360 (2 meses gratis)</div><button class="plan-card__btn" onclick="iniciarCheckout(\'anual\')">Suscribirme anual</button>'+trialLabel+'</div>'+
   '</div>';
 }
 
@@ -3250,7 +3385,7 @@ function renderTrialBanner(){
     // Render provisional sin fecha hasta que llegue Firestore
     cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 8v4l3 3M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>🎁 Prueba gratuita activa · Te quedan <strong>'+_trialDiasRestantes+' '+(_trialDiasRestantes===1?'día':'días')+'</strong></span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Activar suscripción</button></div>';
   }else if(_subStatus==='trial_expirado'){
-    cont.innerHTML='<div class="trial-banner trial-banner--danger"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg><span>Tu periodo de prueba terminó · Estás en <strong>modo explorador</strong>. Suscríbete para volver a tener acceso completo.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
+    cont.innerHTML='<div class="trial-banner trial-banner--info"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>Estás en <strong>modo invitado</strong> · Navega todo el club; suscríbete para ver clases, usar herramientas y participar en el foro.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Suscribirme</button></div>';
     renderInicioTrialWidget(null);
   }else if(_subStatus==='pago_fallido'){
     cont.innerHTML='<div class="trial-banner trial-banner--warning"><div class="trial-banner__text"><svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Tu pago falló · Actualiza tu método de pago para no perder acceso.</span></div><button class="trial-banner__btn" onclick="nav(\'suscripcion\')">Actualizar</button></div>';
@@ -3291,7 +3426,7 @@ function openPaywall(motivo){
   var descEl=document.getElementById('paywallDesc');
   if(_subStatus==='trial_expirado'){
     if(titleEl)titleEl.textContent='Suscríbete para acceder';
-    if(descEl)descEl.textContent='Tu periodo de prueba terminó. Activa tu suscripción para volver a usar todos los cursos, webinars y materiales del Club.';
+    if(descEl)descEl.textContent='Estás en modo invitado. Activa tu suscripción para ver las clases, usar las herramientas clínicas y participar en el foro.';
   }else if(_subStatus==='pago_fallido'){
     if(titleEl)titleEl.textContent='Actualiza tu pago';
     if(descEl)descEl.textContent='Tu último cobro no se procesó. Actualiza tu método de pago para seguir accediendo al Club.';
@@ -3324,7 +3459,7 @@ function handleStripeReturn(){
   var params=new URLSearchParams(window.location.search);
   var sus=params.get('suscripcion');
   if(sus==='ok'){
-    setTimeout(function(){alert('🎉 ¡Bienvenido al Club! Tu suscripción está activa.');refreshSubStatus().then(function(){renderTrialBanner();loadSuscripcion();});},800);
+    setTimeout(function(){alert('¡Bienvenido al Club! Tu suscripción está activa.');refreshSubStatus().then(function(){renderTrialBanner();loadSuscripcion();});},800);
     history.replaceState({},'',window.location.pathname);
   }else if(sus==='cancel'){
     setTimeout(function(){alert('Cancelaste el proceso de pago. Puedes intentarlo de nuevo cuando quieras.');},500);
@@ -4179,6 +4314,7 @@ function showForoListView(){
 }
 
 function publishForoTema(){
+  if(!tieneAcceso()){openPaywall();return;} // MODIFICADO: participar requiere suscripción
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión');return;}
   var titulo=document.getElementById('foroNewTitle').value.trim();
@@ -4367,6 +4503,7 @@ function loadForoRespuestas(temaId){
 }
 
 function publishForoRespuesta(){
+  if(!tieneAcceso()){openPaywall();return;} // MODIFICADO
   if(!_foroCurrentTema)return;
   var user=firebase.auth().currentUser;
   if(!user){alert('Debes iniciar sesión');return;}
