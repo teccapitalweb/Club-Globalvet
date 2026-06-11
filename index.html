@@ -1046,7 +1046,7 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
 .login-hero{justify-content:flex-start;padding:42px 72px 50px}
 .login-hero__logo{position:static;margin-bottom:30px}
 .gvh-flix{
-  display:none;margin:26px 0 12px;max-width:100%;position:relative;z-index:1;
+  display:none;margin:26px auto 12px;max-width:100%;width:100%;position:relative;z-index:1;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   overflow:hidden;
@@ -1056,15 +1056,16 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
 .gvh-flix:hover .gvh-flix__track{animation-play-state:paused}
 @keyframes gvhFlixSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .gvh-flix__card{
-  width:195px;height:112px;flex:none;border-radius:11px;overflow:hidden;position:relative;
-  background:rgba(255,255,255,.08) center/cover no-repeat;
+  width:132px;height:132px;flex:none;border-radius:12px;overflow:hidden;position:relative;
+  background:rgba(255,255,255,.08) center/contain no-repeat;
+  background-size:cover;
   border:1px solid rgba(255,255,255,.16);
   box-shadow:0 10px 26px rgba(0,0,0,.35);
   transition:transform .25s ease,border-color .25s ease;
 }
 .gvh-flix__card:hover{transform:translateY(-5px) scale(1.03);border-color:#c9a3f5}
 .gvh-flix__card span{
-  position:absolute;inset:auto 0 0 0;padding:26px 11px 9px;
+  position:absolute;inset:auto 0 0 0;padding:20px 9px 7px;
   background:linear-gradient(180deg,transparent,rgba(20,6,35,.92));
   font-family:var(--font-display);font-weight:700;font-size:.7rem;line-height:1.25;color:#fff;
 }
@@ -1112,8 +1113,8 @@ body.dark .gvh-free b{color:#c9a3f5}
   .login-hero p{font-size:.84rem;line-height:1.55}
   .login-hero__stats{display:none}
   .gvh-flix{margin:14px 0 6px}
-  .gvh-flix__card{width:150px;height:88px}
-  .gvh-flix__card span{font-size:.62rem;padding:18px 9px 7px}
+  .gvh-flix__card{width:104px;height:104px}
+  .gvh-flix__card span{font-size:.58rem;padding:15px 7px 6px}
   .gvh-hook{font-size:1.1rem;margin:18px 0 14px}
   .gvh-benefits{margin:0 auto 22px;max-width:340px;text-align:left;gap:10px}
   .gvh-benefits li{font-size:.76rem}
