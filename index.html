@@ -986,7 +986,7 @@ body.dark #darkToggle .icon-sun { display: block; }
 .login-screen.show{opacity:1;pointer-events:auto}
 body.not-logged .sidebar,body.not-logged .sidebar-overlay,body.not-logged .topbar{display:none!important}
 body.not-logged .main-wrapper{margin-left:0!important}
-.login-hero{flex:1;background:var(--purple-900);display:flex;flex-direction:column;justify-content:center;padding:0 72px;position:relative;overflow:hidden;color:white}
+.login-hero{flex:1;min-width:0;background:var(--purple-900);display:flex;flex-direction:column;justify-content:center;padding:0 72px;position:relative;overflow-y:auto;overflow-x:hidden;color:white}
 .login-hero::before{content:'';position:absolute;top:-30%;right:-20%;width:600px;height:600px;border-radius:50%;background:rgba(127,76,165,0.15);filter:blur(80px)}
 .login-hero::after{content:'';position:absolute;bottom:-20%;left:-10%;width:500px;height:500px;border-radius:50%;background:rgba(181,126,220,0.1);filter:blur(80px)}
 body.dark .login-hero{background:#0f0a18}
@@ -998,7 +998,7 @@ body.dark .login-hero{background:#0f0a18}
 .login-hero__stats{display:flex;gap:44px;position:absolute;bottom:52px;left:72px;z-index:1}
 .login-hero__stat-val{font-family:var(--font-display);font-size:1.4rem;font-weight:800;color:white}
 .login-hero__stat-lbl{font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.4);margin-top:2px}
-.login-form-side{width:50%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 52px;overflow-y:auto;background:#fff}
+.login-form-side{width:50%;min-width:0;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 52px;overflow-y:auto;background:#fff}
 .login-form-inner{width:100%;max-width:380px}
 body.dark .login-form-side{background:var(--dk-surface)}
 .login-tabs{display:inline-flex;border:1.5px solid var(--gray-200);border-radius:50px;padding:3px;margin-bottom:28px}
@@ -1043,7 +1043,8 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
 /* ═══ MODIFICADO: componentes de venta (Fase Ads) ═══ */
 .login-hero h1{font-size:clamp(1.7rem,2.6vw,2.3rem);margin-bottom:14px}
 .login-hero__stats{position:static;margin-top:30px}
-.login-hero{justify-content:center;padding:110px 72px 50px}
+.login-hero{justify-content:flex-start;padding:42px 72px 50px}
+.login-hero__logo{position:static;margin-bottom:30px}
 .gvh-flix{
   display:none;margin:20px 0 8px;max-width:100%;position:relative;z-index:1;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
@@ -1102,7 +1103,10 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
 body.dark .gvh-free{color:var(--dk-text-2)}
 body.dark .gvh-free b{color:#c9a3f5}
 @media(max-width:900px){
-  .login-hero{display:flex !important;padding:26px 20px 24px;min-height:0;align-items:center;text-align:center;overflow:hidden}
+  .login-screen{flex-direction:column;overflow-y:auto}
+  .login-hero{flex:none;width:100%;justify-content:flex-start}
+  .login-form-side{width:100%;flex:none;overflow:visible}
+  .login-hero{display:flex !important;padding:26px 18px 24px;min-height:0;align-items:center;text-align:center;overflow:hidden}
   .login-hero__logo{position:static;justify-content:center;margin-bottom:14px}
   .login-hero h1{font-size:1.35rem;margin-bottom:8px;max-width:100%}
   .login-hero p{font-size:.84rem}
