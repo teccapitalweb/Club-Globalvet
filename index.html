@@ -1050,6 +1050,7 @@ body.dark .login-or::before,body.dark .login-or::after{background:var(--dk-borde
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);
   overflow:hidden;
+  min-height:148px; /* MODIFICADO: evita colapso a height:0 en PC (track width:max-content + overflow:hidden no aportaba altura) */
 }
 .gvh-flix.show{display:block}
 .gvh-flix__track{display:flex;gap:13px;width:max-content;animation:gvhFlixSlide 55s linear infinite}
@@ -1108,7 +1109,7 @@ body.dark .gvh-free b{color:#c9a3f5}
   .login-hero h1{font-size:1.35rem;margin-bottom:12px;max-width:100%;line-height:1.25}
   .login-hero p{font-size:.84rem;line-height:1.55}
   .login-hero__stats{display:none}
-  .gvh-flix{margin:14px 0 6px}
+  .gvh-flix{margin:14px 0 6px;min-height:108px} /* MODIFICADO: min-height = altura natural en móvil, sin cambio visual */
   .gvh-flix__card{width:108px;height:108px}
   .gvh-hook{font-size:1.1rem;margin:18px 0 14px}
   .gvh-benefits{margin:0 auto 22px;max-width:340px;text-align:left;gap:10px}
