@@ -25,17 +25,17 @@
 
 <style>
   :root{
-    --verde:#1e3a2f;
-    --verde-osc:#0f2419;
-    --verde-negro:#071510;
-    --naranja:#c9a04a;
-    --naranja-osc:#a08037;
-    --amarillo:#4ade80;
+    --verde:#059669;
+    --verde-osc:#047857;
+    --verde-negro:#022c22;
+    --naranja:#fde68a;
+    --naranja-osc:#d97706;
+    --amarillo:#6ee7b7;
     --blanco:#ffffff;
-    --crema:#f0faf5;
-    --ink:#071510;
-    --ink-soft:#1e3a2f;
-    --line:rgba(7,21,16,.1);
+    --crema:#ecfdf5;
+    --ink:#022c22;
+    --ink-soft:#059669;
+    --line:rgba(2,44,34,.1);
   }
   *{box-sizing:border-box;margin:0;}
   html{scroll-behavior:smooth;}
@@ -55,22 +55,22 @@
   }
   .btn-fire{
     background:linear-gradient(180deg,var(--naranja),var(--naranja-osc));
-    color:#fff;
-    box-shadow:0 6px 0 #0a2015, 0 16px 30px -8px rgba(30,58,47,.5);
+    color:#022c22;
+    box-shadow:0 6px 0 #014a35, 0 16px 30px -8px rgba(5,150,105,.5);
   }
-  .btn-fire:active{transform:translateY(4px);box-shadow:0 2px 0 #0a2015;}
+  .btn-fire:active{transform:translateY(4px);box-shadow:0 2px 0 #014a35;}
   .btn-fire:hover{transform:translateY(-2px);}
   .pulse{animation:pulse 2.2s infinite;}
   @keyframes pulse{
-    0%,100%{box-shadow:0 6px 0 #0a2015, 0 16px 30px -8px rgba(30,58,47,.5);}
-    50%{box-shadow:0 6px 0 #0a2015, 0 16px 44px -4px rgba(30,58,47,.85);}
+    0%,100%{box-shadow:0 6px 0 #014a35, 0 16px 30px -8px rgba(5,150,105,.5);}
+    50%{box-shadow:0 6px 0 #014a35, 0 16px 44px -4px rgba(5,150,105,.85);}
   }
 
   /* ============ HERO ============ */
   .hero{
     background:
-      radial-gradient(90% 90% at 100% 0%, rgba(74,222,128,.22), transparent 55%),
-      linear-gradient(170deg, #1e3a2f 0%, var(--verde-osc) 45%, var(--verde-negro) 100%);
+      radial-gradient(90% 90% at 100% 0%, rgba(110,231,183,.25), transparent 55%),
+      linear-gradient(170deg, #059669 0%, var(--verde-osc) 45%, var(--verde-negro) 100%);
     color:#fff;text-align:center;
     padding:38px 0 46px;position:relative;overflow:hidden;
   }
@@ -80,7 +80,7 @@
     padding:7px 16px;border-radius:100px;font-size:.8rem;font-weight:700;
     letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px;
   }
-  .live-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:blink 1.4s infinite;}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#6ee7b7;animation:blink 1.4s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
   .hero h1{
     font-size:clamp(2rem,7.5vw,3.6rem);font-weight:900;text-transform:uppercase;
@@ -240,13 +240,13 @@
   /* ============ BLOQUE DE COMPRA ============ */
   .buy{padding:26px 0 60px;}
   .buy-card{
-    background:linear-gradient(160deg,#1e3a2f,var(--verde-negro));
+    background:linear-gradient(160deg,#059669,var(--verde-negro));
     border-radius:26px;padding:40px 24px;text-align:center;color:#fff;
     position:relative;overflow:hidden;
   }
   .buy-card::before{
     content:"";position:absolute;inset:0;
-    background:radial-gradient(70% 60% at 85% 10%, rgba(74,222,128,.28), transparent 60%);
+    background:radial-gradient(70% 60% at 85% 10%, rgba(110,231,183,.28), transparent 60%);
   }
   .buy-card > *{position:relative;}
   .buy-tag{
@@ -355,7 +355,7 @@
         <div class="hero-img" style="position:relative;background:rgba(255,255,255,.05);border-radius:16px;overflow:hidden;">
       <img src="assets/hero-medicina-no-convencionales.jpg" alt="Medicina Básica en Animales No Convencionales"
            style="width:100%;display:block;aspect-ratio:16/9;object-fit:cover;"
-           onerror="this.style.display='none';this.parentElement.style.padding='60px 20px';this.parentElement.innerHTML='<div style=&quot;color:#e9d5ff;font-family:Archivo;text-align:center;&quot;><div style=&quot;font-size:3rem;font-weight:900;&quot;>🐾</div><div style=&quot;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-top:8px;&quot;>Imagen del curso pendiente</div></div>';">
+           onerror="this.style.display='none';this.parentElement.style.padding='60px 20px';this.parentElement.innerHTML='<div style=&quot;color:#a7f3d0;font-family:Archivo;text-align:center;&quot;><div style=&quot;font-size:3rem;font-weight:900;&quot;>🦜</div><div style=&quot;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-top:8px;&quot;>Imagen del curso pendiente</div></div>';">
     </div>
 
     <p class="count-label">Iniciamos el 20 de julio · faltan</p>
@@ -555,7 +555,7 @@
       <a href="https://wa.me/5212381500864" target="_blank" rel="noopener">WhatsApp 238 150 0864</a>
       <a href="https://club.globalvetmexico.com/" target="_blank" rel="noopener">club.globalvetmexico.com</a>
     </div>
-    <p class="legal">Este sitio no está afiliado ni respaldado por Meta™ / Facebook™. El certificado digital se emite conforme a los lineamientos de GlobalVet México / IPCI al finalizar el curso. Cupo sujeto a disponibilidad. El cargo puede aparecer en tu estado de cuenta como <b>PENDIENTE CONFIRMAR</b>. © 2026 GlobalVet México.</p>
+    <p class="legal">Este sitio no está afiliado ni respaldado por Meta™ / Facebook™. El certificado digital se emite conforme a los lineamientos de GlobalVet México / IPCI al finalizar el curso. Cupo sujeto a disponibilidad. El cargo puede aparecer en tu estado de cuenta como <b>GLOBALVET EXOTICOS</b>. © 2026 GlobalVet México.</p>
   </div>
 </footer>
 
@@ -684,7 +684,7 @@
     });
   }
 
-  // ===== Countdown al 20 de julio 2026 =====
+  // ===== Countdown al 27 de julio 2026 =====
   var target = new Date('2026-07-20T00:00:00-06:00').getTime();
   function pad(n){return n<10?'0'+n:n;}
   function tick(){
