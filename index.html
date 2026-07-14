@@ -3528,7 +3528,6 @@ function loadNotifPrefsCache(){
     return _notifPrefsCache;
   }).catch(function(){return null;});
 }
-var NEWSDATA_API_KEY='pub_0e241a225e664d0c8e13129875265f78';
 var NEWSDATA_CACHE_KEY='newsdata_cache_v6';
 var NEWSDATA_CACHE_HOURS=6;
 
@@ -3551,9 +3550,9 @@ function fetchAutoNews(){
     // MODIFICADO: query corta. NewsData free plan limita q a 100 caracteres,
     // si te pasas falla en silencio y devuelve vacío. Esta cabe (57 chars).
     var query=encodeURIComponent('veterinaria OR mascotas OR animales OR zoonosis OR ganado');
-    var urlBase='https://newsdata.io/api/1/news?apikey='+NEWSDATA_API_KEY+'&q='+query+'&language=es&category=health,science';
+    var urlBase=WEBHOOK_URL+'/noticias?q='+query;
     var PLACEHOLDER='https://placehold.co/600x400/4b1c71/ffffff?text=GlobalVet';
-    console.log('[NEWS] Fetching NewsData.io...');
+    console.log('[NEWS] Fetching noticias via backend...');
     function fetchPage(url){
       return fetch(url).then(function(r){return r.json();}).catch(function(){return null;});
     }
