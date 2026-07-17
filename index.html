@@ -1707,7 +1707,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="form-group"><label class="form-label">Correo electrónico</label><input class="form-input" type="email" placeholder="tu@correo.com" readonly style="background:var(--gray-50);cursor:not-allowed"></div>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" placeholder="+52 ..."></div>
-        <div class="form-group"><label class="form-label">Ciudad</label><input class="form-input" type="text" placeholder="Tu ciudad, MX"></div>
+        <div class="form-group"><label class="form-label">Código Postal</label><input class="form-input" id="pCP" type="text" inputmode="numeric" maxlength="5" placeholder="Ej. 72760" oninput="buscarCP(this)"><div id="cpResultado" style="font-size:.78rem;color:var(--gray-500);margin-top:4px;min-height:1.1em;"></div></div>
       </div>
       <div class="form-group"><label class="form-label">Biografía</label><textarea class="form-input form-textarea" placeholder="Cuéntanos un poco sobre ti..."></textarea></div>
       <button class="btn-save" onclick="saveProfile()">Guardar cambios</button>
@@ -2695,11 +2695,44 @@ function updateGreeting(){
 }
 updateGreeting();
 
+// ============ CÓDIGO POSTAL → CIUDAD (autocompletado) ============
+var _cpTimeout = null;
+function buscarCP(input){
+  var cp = input.value.replace(/\D/g,'');
+  input.value = cp; // solo dígitos
+  var resultado = document.getElementById('cpResultado');
+  input.dataset.ciudad = '';
+  if (_cpTimeout) clearTimeout(_cpTimeout);
+  if (cp.length !== 5) {
+    resultado.textContent = '';
+    resultado.style.color = 'var(--gray-500)';
+    return;
+  }
+  resultado.textContent = 'Buscando...';
+  resultado.style.color = 'var(--gray-500)';
+  _cpTimeout = setTimeout(function(){
+    fetch('https://api.zippopotam.us/mx/' + cp)
+      .then(function(r){ if(!r.ok) throw new Error('no encontrado'); return r.json(); })
+      .then(function(d){
+        var lugar = d.places && d.places[0];
+        if (!lugar) throw new Error('no encontrado');
+        var ciudad = lugar['place name'] + ', ' + lugar['state'];
+        input.dataset.ciudad = ciudad;
+        resultado.textContent = '📍 ' + ciudad;
+        resultado.style.color = 'var(--gray-600)';
+      })
+      .catch(function(){
+        resultado.textContent = '⚠️ Código postal no encontrado';
+        resultado.style.color = '#dc2626';
+      });
+  }, 500);
+}
+
 // ============ FIRESTORE: LOAD DATA IN CLUB ============
 function saveProfile(){
   var user=firebase.auth().currentUser;if(!user)return;
   var inputs=document.querySelectorAll('[data-page="perfil"] .form-input');
-  var data={nombre:inputs[0]?inputs[0].value:'',apellido:inputs[1]?inputs[1].value:'',correo:inputs[2]?inputs[2].value:'',telefono:inputs[3]?inputs[3].value:'',ciudad:inputs[4]?inputs[4].value:'',biografia:inputs[5]?inputs[5].value:''};
+  var data={nombre:inputs[0]?inputs[0].value:'',apellido:inputs[1]?inputs[1].value:'',correo:inputs[2]?inputs[2].value:'',telefono:inputs[3]?inputs[3].value:'',codigoPostal:inputs[4]?inputs[4].value:'',ciudad:inputs[4]?(inputs[4].dataset.ciudad||''):'',biografia:inputs[5]?inputs[5].value:''};
   db.collection('miembros').doc(user.uid).set(data,{merge:true}).then(function(){
     alert('Perfil actualizado');
     var fullName=(data.nombre+' '+data.apellido).trim();
@@ -2720,7 +2753,12 @@ function loadProfile(){
     if(inputs[1])inputs[1].value=d.apellido||'';
     if(inputs[2])inputs[2].value=d.correo||user.email||'';
     if(inputs[3])inputs[3].value=d.telefono||'';
-    if(inputs[4])inputs[4].value=d.ciudad||'';
+    if(inputs[4]){
+      inputs[4].value=d.codigoPostal||'';
+      inputs[4].dataset.ciudad=d.ciudad||'';
+      var resultado=document.getElementById('cpResultado');
+      if(resultado&&d.ciudad)resultado.textContent='📍 '+d.ciudad;
+    }
     if(inputs[5])inputs[5].value=d.biografia||'';
   });
 }
