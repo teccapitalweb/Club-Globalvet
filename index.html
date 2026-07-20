@@ -651,6 +651,16 @@ body.dark .course-h-card__badge-overlay{background:rgba(0,0,0,0.6);color:white}
 .score-card__label { font-size: 0.82rem; font-weight: 600; color: var(--gray-800); margin-bottom: 4px; }
 .score-card__desc { font-size: 0.74rem; color: var(--gray-400); line-height: 1.5; }
 .score-legend { display: flex; gap: 20px; margin-bottom: 24px; flex-wrap: wrap; }
+.calc-panel { max-width: 640px; }
+.calc-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 28px; }
+.calc-card__nota { font-size: 0.8rem; color: var(--gray-400); background: var(--purple-50); border-radius: 10px; padding: 12px 14px; margin-bottom: 18px; line-height: 1.5; }
+.calc-resultado { margin-top: 20px; padding: 18px; border-radius: 12px; background: var(--purple-50); border: 1px solid var(--purple-200); }
+.calc-resultado__linea { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; }
+.calc-resultado__linea strong { color: var(--purple-700); }
+.calc-resultado__total { font-size: 1.3rem; font-weight: 700; color: var(--purple-700); margin-top: 6px; }
+body.dark .calc-card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
+body.dark .calc-card__nota { background: rgba(255,255,255,.06); color: var(--dk-text-3,#8a8aa3); }
+body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
 .score-legend__item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--gray-500); }
 .score-legend__dot { width: 12px; height: 12px; border-radius: 3px; }
 
@@ -1481,6 +1491,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <li><a class="sidebar__link" data-page="vacunacion"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg> Tabla Vacunación</a></li>
       <li><a class="sidebar__link" data-page="score"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg> Score Corporal</a></li>
       <li><a class="sidebar__link" data-page="urgencias"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg> Guía Urgencias</a></li>
+      <li><a class="sidebar__link" data-page="calculadoras"><svg class="icon" viewBox="0 0 24 24"><path d="M9 7h6M9 11h6M9 15h3M4 3h16v18H4z"/></svg> Calculadoras Clínicas</a></li>
     </ul>
   </div>
   <div class="sidebar__section"><div class="sidebar__section-title">Beneficios</div>
@@ -2149,6 +2160,89 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     </div></div>
   </div>
 
+  <!-- ==================== CALCULADORAS CLÍNICAS ==================== -->
+  <div class="page-content" data-page="calculadoras">
+    <div class="page-header"><h1 class="page-header__title">Calculadoras Clínicas</h1><p class="page-header__desc">Herramientas de apoyo para todo tipo de especies. Los resultados son de referencia — siempre confirma con tu criterio clínico.</p></div>
+    <div class="filter-tabs" id="calcTabs">
+      <button class="filter-tab active" onclick="showCalc('dosis',this)">💊 Dosis de Medicamentos</button>
+      <button class="filter-tab" onclick="showCalc('fluidos',this)">💧 Fluidoterapia</button>
+      <button class="filter-tab" onclick="showCalc('gestacion',this)">🐣 Gestación</button>
+    </div>
+
+    <!-- DOSIS DE MEDICAMENTOS -->
+    <div id="calc-dosis" class="calc-panel">
+      <div class="calc-card">
+        <p class="calc-card__nota">Esta calculadora solo hace la conversión matemática (peso × dosis, y mg → ml). La dosis en mg/kg la defines tú según el medicamento, la especie y tu criterio clínico o la ficha técnica del producto — no la sugerimos nosotros.</p>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Especie</label>
+            <select class="form-input form-select" id="dosisEspecie">
+              <option>Canino</option><option>Felino</option><option>Equino</option><option>Bovino</option>
+              <option>Porcino</option><option>Ovino/Caprino</option><option>Ave</option><option>Conejo</option>
+              <option>Exótico / otro</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Peso del paciente (kg)</label><input class="form-input" type="number" step="0.01" id="dosisPeso" placeholder="Ej: 12.5"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Nombre del medicamento</label><input class="form-input" type="text" id="dosisMedicamento" placeholder="Ej: Meloxicam"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Dosis prescrita (mg por kg)</label><input class="form-input" type="number" step="0.001" id="dosisMgKg" placeholder="Ej: 0.2"></div>
+          <div class="form-group"><label class="form-label">Concentración del medicamento (mg por ml)</label><input class="form-input" type="number" step="0.01" id="dosisConcentracion" placeholder="Ej: 5"></div>
+        </div>
+        <button class="btn-primary" onclick="calcularDosis()">Calcular</button>
+        <div id="dosisResultado" class="calc-resultado" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- FLUIDOTERAPIA -->
+    <div id="calc-fluidos" class="calc-panel" style="display:none">
+      <div class="calc-card">
+        <p class="calc-card__nota">Usa la fórmula estándar de reposición + mantenimiento. Ajusta la tasa de mantenimiento según la especie y el caso clínico — el valor sugerido (60 ml/kg/día) es solo un punto de partida general para pequeñas especies.</p>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Especie</label>
+            <select class="form-input form-select" id="fluidosEspecie">
+              <option>Canino</option><option>Felino</option><option>Equino</option><option>Bovino</option>
+              <option>Porcino</option><option>Ovino/Caprino</option><option>Ave</option><option>Conejo</option>
+              <option>Exótico / otro</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Peso del paciente (kg)</label><input class="form-input" type="number" step="0.01" id="fluidosPeso" placeholder="Ej: 12.5"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Deshidratación estimada (%)</label><input class="form-input" type="number" step="1" id="fluidosDeshidratacion" placeholder="Ej: 8" value="0"></div>
+          <div class="form-group"><label class="form-label">Horas para corregir el déficit</label><input class="form-input" type="number" step="1" id="fluidosHoras" placeholder="Ej: 24" value="24"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Tasa de mantenimiento (ml/kg/día)</label><input class="form-input" type="number" step="1" id="fluidosMantenimiento" value="60"></div>
+        <button class="btn-primary" onclick="calcularFluidos()">Calcular</button>
+        <div id="fluidosResultado" class="calc-resultado" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- GESTACIÓN -->
+    <div id="calc-gestacion" class="calc-panel" style="display:none">
+      <div class="calc-card">
+        <p class="calc-card__nota">Duración promedio de gestación por especie. Es un estimado — puede variar algunos días según la raza y el individuo.</p>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Especie</label>
+            <select class="form-input form-select" id="gestacionEspecie">
+              <option value="63">Canino (≈63 días)</option>
+              <option value="65">Felino (≈65 días)</option>
+              <option value="340">Equino (≈340 días)</option>
+              <option value="283">Bovino (≈283 días)</option>
+              <option value="114">Porcino (≈114 días)</option>
+              <option value="150">Ovino (≈150 días)</option>
+              <option value="150">Caprino (≈150 días)</option>
+              <option value="31">Conejo (≈31 días)</option>
+              <option value="365">Elefante — referencia (≈365 días)</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Fecha de monta / cruza</label><input class="form-input" type="date" id="gestacionFecha"></div>
+        </div>
+        <button class="btn-primary" onclick="calcularGestacion()">Calcular</button>
+        <div id="gestacionResultado" class="calc-resultado" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== GUÍA URGENCIAS ==================== -->
   <div class="page-content" data-page="urgencias">
     <div class="page-header"><h1 class="page-header__title">Guía de Urgencias</h1><p class="page-header__desc">Protocolos paso a paso para emergencias veterinarias comunes.</p></div>
@@ -2667,7 +2761,7 @@ function applyExploradorOverlay(page){
   if(!pageEl)return;
   pageEl.classList.add('explorador-blocked');
   // Crear overlay con CTA centrado
-  var titulo=({biblioteca:'la Biblioteca de cursos',webinar:'los Webinars',pdf:'el Material PDF',noticias:'las Noticias',foro:'el Foro',ficha:'la Ficha de Paciente',vacunacion:'la Tabla de Vacunación',score:'el Score Corporal',urgencias:'la Guía de Urgencias',descuento:'el Descuento 20%',canal:'el Canal',notificaciones:'las Notificaciones',logros:'los Logros'})[page]||'esta sección';
+  var titulo=({biblioteca:'la Biblioteca de cursos',webinar:'los Webinars',pdf:'el Material PDF',noticias:'las Noticias',foro:'el Foro',ficha:'la Ficha de Paciente',vacunacion:'la Tabla de Vacunación',score:'el Score Corporal',urgencias:'la Guía de Urgencias',calculadoras:'las Calculadoras Clínicas',descuento:'el Descuento 20%',canal:'el Canal',notificaciones:'las Notificaciones',logros:'los Logros'})[page]||'esta sección';
   var ov=document.createElement('div');
   ov.id='exploradorOverlay';
   ov.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:140px;z-index:50;pointer-events:none';
@@ -2688,6 +2782,85 @@ function applyExploradorOverlay(page){
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
 function showVac(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('vac-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 function showScore(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('score-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+
+// ============ CALCULADORAS CLÍNICAS (dinámicas, todas las especies) ============
+function showCalc(type,btn){
+  ['dosis','fluidos','gestacion'].forEach(function(k){var el=document.getElementById('calc-'+k);if(el)el.style.display=k===type?'block':'none';});
+  btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+}
+
+function calcularDosis(){
+  var especie=document.getElementById('dosisEspecie').value;
+  var medicamento=document.getElementById('dosisMedicamento').value||'el medicamento';
+  var peso=parseFloat(document.getElementById('dosisPeso').value);
+  var mgKg=parseFloat(document.getElementById('dosisMgKg').value);
+  var concentracion=parseFloat(document.getElementById('dosisConcentracion').value);
+  var resEl=document.getElementById('dosisResultado');
+  if(!peso||!mgKg||peso<=0||mgKg<=0){
+    resEl.style.display='block';
+    resEl.innerHTML='<span style="color:#dc2626">Completa al menos el peso y la dosis en mg/kg.</span>';
+    return;
+  }
+  var dosisTotalMg=peso*mgKg;
+  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especie+'</strong></div>';
+  html+='<div class="calc-resultado__linea"><span>Dosis total de '+medicamento+'</span><strong>'+dosisTotalMg.toFixed(3)+' mg</strong></div>';
+  if(concentracion&&concentracion>0){
+    var volumenMl=dosisTotalMg/concentracion;
+    html+='<div class="calc-resultado__total">'+volumenMl.toFixed(2)+' ml a administrar</div>';
+  }else{
+    html+='<div style="font-size:.8rem;color:var(--gray-400);margin-top:6px">Agrega la concentración del medicamento para calcular también el volumen en ml.</div>';
+  }
+  resEl.style.display='block';
+  resEl.innerHTML=html;
+}
+
+function calcularFluidos(){
+  var especie=document.getElementById('fluidosEspecie').value;
+  var peso=parseFloat(document.getElementById('fluidosPeso').value);
+  var deshidratacion=parseFloat(document.getElementById('fluidosDeshidratacion').value)||0;
+  var horas=parseFloat(document.getElementById('fluidosHoras').value)||24;
+  var mantenimientoKgDia=parseFloat(document.getElementById('fluidosMantenimiento').value)||60;
+  var resEl=document.getElementById('fluidosResultado');
+  if(!peso||peso<=0){
+    resEl.style.display='block';
+    resEl.innerHTML='<span style="color:#dc2626">Completa el peso del paciente.</span>';
+    return;
+  }
+  // Déficit de reposición (ml) = peso(kg) x %deshidratación x 10
+  var deficitMl=peso*deshidratacion*10;
+  var mantenimientoMlDia=peso*mantenimientoKgDia;
+  var mantenimientoMlHora=mantenimientoMlDia/24;
+  var reposicionMlHora=deficitMl/horas;
+  var totalMlHora=reposicionMlHora+mantenimientoMlHora;
+  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especie+'</strong></div>';
+  html+='<div class="calc-resultado__linea"><span>Déficit total a reponer</span><strong>'+deficitMl.toFixed(0)+' ml</strong></div>';
+  html+='<div class="calc-resultado__linea"><span>Mantenimiento diario</span><strong>'+mantenimientoMlDia.toFixed(0)+' ml/día</strong></div>';
+  html+='<div class="calc-resultado__total">'+totalMlHora.toFixed(1)+' ml/hora (reposición + mantenimiento)</div>';
+  resEl.style.display='block';
+  resEl.innerHTML=html;
+}
+
+function calcularGestacion(){
+  var sel=document.getElementById('gestacionEspecie');
+  var dias=parseInt(sel.value);
+  var especieLabel=sel.options[sel.selectedIndex].text;
+  var fechaInput=document.getElementById('gestacionFecha').value;
+  var resEl=document.getElementById('gestacionResultado');
+  if(!fechaInput){
+    resEl.style.display='block';
+    resEl.innerHTML='<span style="color:#dc2626">Selecciona la fecha de monta/cruza.</span>';
+    return;
+  }
+  var fechaMonta=new Date(fechaInput+'T00:00:00');
+  var fechaParto=new Date(fechaMonta.getTime()+dias*24*60*60*1000);
+  var opciones={day:'numeric',month:'long',year:'numeric'};
+  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especieLabel+'</strong></div>';
+  html+='<div class="calc-resultado__linea"><span>Fecha de monta/cruza</span><strong>'+fechaMonta.toLocaleDateString('es-MX',opciones)+'</strong></div>';
+  html+='<div class="calc-resultado__total">Parto probable: '+fechaParto.toLocaleDateString('es-MX',opciones)+'</div>';
+  resEl.style.display='block';
+  resEl.innerHTML=html;
+}
 document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();nav(l.dataset.page)}));
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
 // Countdown dinamico - se setea al cargar el webinar destacado
