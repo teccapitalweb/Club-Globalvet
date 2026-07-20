@@ -871,7 +871,7 @@ body.dark .side-card__arrow { color: var(--dk-subtle); }
 body.dark .course-h-card__badge { background: rgba(127,76,165,0.2); color: var(--purple-400); }
 body.dark .course-h-card__bar-track, body.dark .lib-card__progress-bar,
 body.dark .course-item__progress-bar { background: var(--dk-border); }
-body.dark .lib-card__img { background: linear-gradient(145deg, #2a2040, #1e1e30) !important; }
+body.dark .lib-card__img:not([style]) { background: linear-gradient(145deg, #2a2040, #1e1e30) !important; }
 body.dark .lib-card__badge { background: rgba(255,255,255,0.1); color: var(--dk-text); }
 body.dark .news-carousel__img, body.dark .news-full-item__img { opacity: 0.85; }
 body.dark .news-carousel__body, body.dark .news-card__body { background: var(--dk-card); }
@@ -2886,6 +2886,52 @@ function renderFilterTabs(nombres){
   });
 }
 
+// ============ PORTADAS AUTOMÁTICAS PARA CURSOS SIN IMAGEN ============
+// Cuando un curso no tiene 'imagen' subida, en vez de dejarlo en blanco se
+// genera sola una portada con gradiente + ícono según su categoría/nombre.
+// Es determinístico: el mismo curso siempre se ve igual, sin subir nada.
+var _PORTADA_GRADIENTES=[
+  'linear-gradient(135deg,#3b2b86,#5f45c8)',
+  'linear-gradient(135deg,#5f45c8,#7b5cff)',
+  'linear-gradient(135deg,#2a1f66,#4a37a3)',
+  'linear-gradient(135deg,#6b4fd6,#9a7dff)',
+  'linear-gradient(135deg,#241c5c,#3b2b86)',
+  'linear-gradient(135deg,#4a37a3,#7b5cff)'
+];
+var _PORTADA_ICONOS=[
+  {kw:['bioquimic','laborator','analisis','análisis'],icon:'🧪'},
+  {kw:['cirug','quirurg','quirúrg'],icon:'⚕️'},
+  {kw:['fisioterap','rehabilita'],icon:'🐾'},
+  {kw:['estres','estrés','bienestar','conducta'],icon:'🧠'},
+  {kw:['nutri','aliment'],icon:'🍖'},
+  {kw:['cardio','corazon','corazón'],icon:'❤️'},
+  {kw:['dermat','piel'],icon:'🩹'},
+  {kw:['emergenc','urgenc'],icon:'🚑'},
+  {kw:['exotic','exótic','aves','ave '],icon:'🦜'},
+  {kw:['equin','caball'],icon:'🐴'},
+  {kw:['bovin','ganad','vaca'],icon:'🐄'},
+  {kw:['medicina','clinic','clínic'],icon:'🩺'}
+];
+function _hashStr(s){
+  var h=0;
+  for(var i=0;i<s.length;i++){h=((h<<5)-h)+s.charCodeAt(i);h|=0;}
+  return Math.abs(h);
+}
+function autoPortada(curso){
+  var texto=((curso.categoria||'')+' '+(curso.nombre||'')).toLowerCase();
+  var icono='📚';
+  for(var i=0;i<_PORTADA_ICONOS.length;i++){
+    var match=_PORTADA_ICONOS[i].kw.some(function(k){return texto.indexOf(k)>-1;});
+    if(match){icono=_PORTADA_ICONOS[i].icon;break;}
+  }
+  var h=_hashStr(curso._id||curso.nombre||'x');
+  var grad=_PORTADA_GRADIENTES[h%_PORTADA_GRADIENTES.length];
+  return {
+    style:'background:'+grad,
+    html:'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.7rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,.18))">'+icono+'</div>'
+  };
+}
+
 function loadClubCursos(){
   var user=firebase.auth().currentUser;
   // MODIFICADO: progreso ya no se lee con .get() global (rompía con reglas Firestore).
@@ -2924,6 +2970,7 @@ function loadClubCursos(){
       cont.innerHTML='';
       cursosFiltrados.forEach(function(c){
         var img=driveImg(c.imagen);
+        var auto=autoPortada(c);
         var pct=getPct(c);
         var totalClases=(c.clases&&c.clases.length)||0;
         // DRIP: revisar bloqueo
@@ -2938,7 +2985,7 @@ function loadClubCursos(){
           lockMetaHtml='<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:0.8rem;color:var(--gray-400)"><span>'+(c.categoria||'').toLowerCase()+'</span><span class="lock-meta"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>En '+diasTxt+'</span></div>';
           clickHandler='onclick="showLockedCourseModal(\''+c._id+'\','+drip.diasFaltan+',\''+drip.fechaDesbloqueo.toISOString()+'\')"';
         }
-        cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative"><div class="lib-card__img" style="position:relative;'+(img?'background:url('+img+') center/cover':'')+'">'+lockOverlay+'<div style="padding:24px;color:white;font-weight:600;font-size:0.9rem">'+(img?'':c.nombre)+'</div></div><div class="lib-card__body">'+(drip.locked?'':'<span class="lib-card__badge">'+(c.categoria||'')+'</span>')+'<h3 class="lib-card__title">'+(c.nombre||'')+'</h3>'+(drip.locked?'':'<p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>')+lockMetaHtml+'</div></div>';
+        cont.innerHTML+='<div class="lib-card'+lockedClass+'" '+clickHandler+' style="cursor:pointer;position:relative"><div class="lib-card__img" style="position:relative;'+auto.style+'">'+auto.html+(img?'<img src="'+img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">':'')+lockOverlay+'</div><div class="lib-card__body">'+(drip.locked?'':'<span class="lib-card__badge">'+(c.categoria||'')+'</span>')+'<h3 class="lib-card__title">'+(c.nombre||'')+'</h3>'+(drip.locked?'':'<p class="lib-card__meta">'+(c.instructor||'')+' · '+totalClases+' clases</p><div class="lib-card__progress"><div class="lib-card__progress-bar"><div class="lib-card__progress-fill" style="width:'+pct+'%"></div></div><span>'+pct+'%</span></div>')+lockMetaHtml+'</div></div>';
       });
       if(cursosFiltrados.length===0){
         var msg=_clubCategoriaFiltro?'No hay cursos en "'+_clubCategoriaFiltro+'" todavía.':'Estamos preparando el catálogo de cursos. Pronto encontrarás aquí contenido educativo de alta calidad.';
@@ -2955,12 +3002,13 @@ function loadClubCursos(){
       var paraMostrar=enProgreso.length>0?enProgreso:disponibles.slice(0,5);
       paraMostrar.forEach(function(c){
         var img=driveImg(c.imagen);
+        var auto2=autoPortada(c);
         var pct=getPct(c);
         var totalClases=(c.clases&&c.clases.length)||0;
         var prog=progMap[c._id];
         var done=(prog&&prog.completadas&&prog.completadas.length)||0;
         var modText=totalClases>0?'Mód. '+Math.min(done+1,totalClases)+'/'+totalClases:'';
-        scroll.innerHTML+='<div class="course-h-card" onclick="openCurso(\''+c._id+'\')" style="cursor:pointer"><div class="course-h-card__img" style="'+(img?'background-image:url('+img+')':'')+'"><div class="course-h-card__badge-overlay">'+(c.nivel||'')+'</div></div><div class="course-h-card__body"><h3 class="course-h-card__title">'+(c.nombre||'')+'</h3><div class="course-h-card__meta-bottom"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg> '+(c.categoria||'')+'</div><div class="course-h-card__progress-bar"><div class="course-h-card__progress-fill" style="width:'+pct+'%"></div></div>'+(modText?'<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem"><span style="color:var(--purple-600);font-weight:600">'+pct+'%</span><span style="color:var(--gray-400)">'+modText+'</span></div>':'')+'</div></div>';
+        scroll.innerHTML+='<div class="course-h-card" onclick="openCurso(\''+c._id+'\')" style="cursor:pointer"><div class="course-h-card__img" style="'+auto2.style+'">'+auto2.html+(img?'<img src="'+img+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">':'')+'<div class="course-h-card__badge-overlay">'+(c.nivel||'')+'</div></div><div class="course-h-card__body"><h3 class="course-h-card__title">'+(c.nombre||'')+'</h3><div class="course-h-card__meta-bottom"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253"/></svg> '+(c.categoria||'')+'</div><div class="course-h-card__progress-bar"><div class="course-h-card__progress-fill" style="width:'+pct+'%"></div></div>'+(modText?'<div style="display:flex;justify-content:space-between;margin-top:6px;font-size:0.7rem"><span style="color:var(--purple-600);font-weight:600">'+pct+'%</span><span style="color:var(--gray-400)">'+modText+'</span></div>':'')+'</div></div>';
       });
       if(paraMostrar.length===0){
         scroll.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">No hay cursos disponibles aún.</div>';
