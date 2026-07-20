@@ -3253,21 +3253,30 @@ function loadClubPdfs(){
   var user=firebase.auth().currentUser;
   db.collection('cursos').get().then(function(cursosSnap){
     var cursosPorId={};
-    cursosSnap.forEach(function(d){cursosPorId[d.id]=d.data();});
+    var ordenCurso={}; // posición natural de cada curso (mismo orden que ya usa Biblioteca)
+    var idx=0;
+    cursosSnap.forEach(function(d){cursosPorId[d.id]=d.data();ordenCurso[d.id]=idx++;});
     return db.collection('pdfs').get().then(function(s){
       var cont=document.getElementById('pdfGrid');if(!cont)return;
       cont.innerHTML='';
       var n=0;
-      // Ordenar por nombre del curso al que pertenece cada PDF, para que
-      // se vean agrupados en vez de en el orden suelto que da Firestore.
-      // Los que no tienen curso ligado quedan al final.
+      // Mismo criterio de orden que ya usa Biblioteca de cursos:
+      // desbloqueados primero (en su orden natural), bloqueados después
+      // (los que faltan menos días, primero). Así "Material PDF" coincide
+      // visualmente con el orden que ya ves en Biblioteca.
       var docs=[];
       s.forEach(function(d){docs.push(d);});
       docs.sort(function(a,b){
         var ca=a.data(),cb=b.data();
-        var nombreA=(ca.cursoId&&cursosPorId[ca.cursoId]&&cursosPorId[ca.cursoId].nombre)||'zzz';
-        var nombreB=(cb.cursoId&&cursosPorId[cb.cursoId]&&cursosPorId[cb.cursoId].nombre)||'zzz';
-        return nombreA.localeCompare(nombreB);
+        var cursoA=ca.cursoId?cursosPorId[ca.cursoId]:null;
+        var cursoB=cb.cursoId?cursosPorId[cb.cursoId]:null;
+        var dripA=cursoA?getDripStatus(cursoA,user):{locked:false,diasFaltan:0};
+        var dripB=cursoB?getDripStatus(cursoB,user):{locked:false,diasFaltan:0};
+        if(dripA.locked!==dripB.locked)return dripA.locked?1:-1;
+        if(dripA.locked)return dripA.diasFaltan-dripB.diasFaltan;
+        var ordenA=ca.cursoId&&ordenCurso[ca.cursoId]!==undefined?ordenCurso[ca.cursoId]:99999;
+        var ordenB=cb.cursoId&&ordenCurso[cb.cursoId]!==undefined?ordenCurso[cb.cursoId]:99999;
+        return ordenA-ordenB;
       });
       docs.forEach(function(d){
         var c=d.data();
