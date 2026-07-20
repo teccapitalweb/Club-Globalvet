@@ -3239,17 +3239,33 @@ function updateRacha(){
 }
 
 function loadClubPdfs(){
-  db.collection('pdfs').get().then(function(s){
-    var cont=document.getElementById('pdfGrid');if(!cont)return;
-    cont.innerHTML='';
-    var n=0;
-    s.forEach(function(d){var c=d.data();if(c.estado==='Borrador'||c.estado==='Oculto')return;
-      n++;
-      var img=driveImg(c.imagen);
-      cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
-    if(n===0){
-      cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando material descargable para ti. Pronto encontrarás guías, protocolos y documentos aquí.</p></div>';
-    }
+  var user=firebase.auth().currentUser;
+  // Primero traemos los cursos (solo para saber su dripDias) para poder
+  // decidir si un PDF ligado a un curso ya se desbloqueó o no. Si un PDF
+  // no tiene cursoId (los de siempre, sin cambios), se muestra igual que
+  // siempre, sin ningún candado nuevo.
+  db.collection('cursos').get().then(function(cursosSnap){
+    var cursosPorId={};
+    cursosSnap.forEach(function(d){cursosPorId[d.id]=d.data();});
+    return db.collection('pdfs').get().then(function(s){
+      var cont=document.getElementById('pdfGrid');if(!cont)return;
+      cont.innerHTML='';
+      var n=0;
+      s.forEach(function(d){
+        var c=d.data();
+        if(c.estado==='Borrador'||c.estado==='Oculto')return;
+        // Si está ligado a un curso, respetar el mismo desbloqueo progresivo del curso
+        if(c.cursoId&&cursosPorId[c.cursoId]){
+          var drip=getDripStatus(cursosPorId[c.cursoId],user);
+          if(drip.locked)return; // todavía no se desbloquea, no se muestra aún
+        }
+        n++;
+        var img=driveImg(c.imagen);
+        cont.innerHTML+='<div class="pdf-card">'+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0">':'<div class="pdf-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>')+'<div class="pdf-card__info"><h4 class="pdf-card__title">'+c.titulo+'</h4><p class="pdf-card__meta">'+c.categoria+'</p></div><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a></div>'});
+      if(n===0){
+        cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando material descargable para ti. Pronto encontrarás guías, protocolos y documentos aquí.</p></div>';
+      }
+    });
   }).catch(function(e){console.log('Error pdfs:',e)});
 }
 // ============ SUSCRIPCION / STRIPE ============
