@@ -658,6 +658,10 @@ body.dark .course-h-card__badge-overlay{background:rgba(0,0,0,0.6);color:white}
 .calc-resultado__linea { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; }
 .calc-resultado__linea strong { color: var(--purple-700); }
 .calc-resultado__total { font-size: 1.3rem; font-weight: 700; color: var(--purple-700); margin-top: 6px; }
+.btn-clear { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 50px; background: transparent; color: var(--gray-500); font-size: 0.85rem; font-weight: 600; border: 1px solid var(--gray-200); cursor: pointer; font-family: var(--font-body); transition: all var(--transition); }
+.btn-clear:hover { background: var(--gray-50); border-color: var(--gray-300); }
+body.dark .btn-clear { color: var(--dk-text-3,#8a8aa3); border-color: rgba(255,255,255,.14); }
+body.dark .btn-clear:hover { background: rgba(255,255,255,.06); }
 body.dark .calc-card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
 body.dark .calc-card__nota { background: rgba(255,255,255,.06); color: var(--dk-text-3,#8a8aa3); }
 body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
@@ -2188,7 +2192,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
           <div class="form-group"><label class="form-label">Dosis prescrita (mg por kg)</label><input class="form-input" type="number" step="0.001" id="dosisMgKg" placeholder="Ej: 0.2"></div>
           <div class="form-group"><label class="form-label">Concentración del medicamento (mg por ml)</label><input class="form-input" type="number" step="0.01" id="dosisConcentracion" placeholder="Ej: 5"></div>
         </div>
-        <button class="btn-primary" onclick="calcularDosis()">Calcular</button>
+        <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularDosis()">Calcular</button><button class="btn-clear" onclick="borrarDosis()">Borrar</button></div>
         <div id="dosisResultado" class="calc-resultado" style="display:none"></div>
       </div>
     </div>
@@ -2212,7 +2216,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
           <div class="form-group"><label class="form-label">Horas para corregir el déficit</label><input class="form-input" type="number" step="1" id="fluidosHoras" placeholder="Ej: 24" value="24"></div>
         </div>
         <div class="form-group"><label class="form-label">Tasa de mantenimiento (ml/kg/día)</label><input class="form-input" type="number" step="1" id="fluidosMantenimiento" value="60"></div>
-        <button class="btn-primary" onclick="calcularFluidos()">Calcular</button>
+        <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularFluidos()">Calcular</button><button class="btn-clear" onclick="borrarFluidos()">Borrar</button></div>
         <div id="fluidosResultado" class="calc-resultado" style="display:none"></div>
       </div>
     </div>
@@ -2237,7 +2241,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
           </div>
           <div class="form-group"><label class="form-label">Fecha de monta / cruza</label><input class="form-input" type="date" id="gestacionFecha"></div>
         </div>
-        <button class="btn-primary" onclick="calcularGestacion()">Calcular</button>
+        <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularGestacion()">Calcular</button><button class="btn-clear" onclick="borrarGestacion()">Borrar</button></div>
         <div id="gestacionResultado" class="calc-resultado" style="display:none"></div>
       </div>
     </div>
@@ -2860,6 +2864,28 @@ function calcularGestacion(){
   html+='<div class="calc-resultado__total">Parto probable: '+fechaParto.toLocaleDateString('es-MX',opciones)+'</div>';
   resEl.style.display='block';
   resEl.innerHTML=html;
+}
+
+function borrarDosis(){
+  document.getElementById('dosisEspecie').selectedIndex=0;
+  document.getElementById('dosisMedicamento').value='';
+  document.getElementById('dosisPeso').value='';
+  document.getElementById('dosisMgKg').value='';
+  document.getElementById('dosisConcentracion').value='';
+  var r=document.getElementById('dosisResultado');r.style.display='none';r.innerHTML='';
+}
+function borrarFluidos(){
+  document.getElementById('fluidosEspecie').selectedIndex=0;
+  document.getElementById('fluidosPeso').value='';
+  document.getElementById('fluidosDeshidratacion').value='0';
+  document.getElementById('fluidosHoras').value='24';
+  document.getElementById('fluidosMantenimiento').value='60';
+  var r=document.getElementById('fluidosResultado');r.style.display='none';r.innerHTML='';
+}
+function borrarGestacion(){
+  document.getElementById('gestacionEspecie').selectedIndex=0;
+  document.getElementById('gestacionFecha').value='';
+  var r=document.getElementById('gestacionResultado');r.style.display='none';r.innerHTML='';
 }
 document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();nav(l.dataset.page)}));
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
