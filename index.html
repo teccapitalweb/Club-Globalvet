@@ -303,24 +303,29 @@ body.dark .card-lock-overlay p{ color: #ddd; }
 .btn-sm--done { background: var(--purple-100); color: var(--purple-900); border-color: var(--purple-200); cursor: default; }
 
 /* ============ MATERIAL PDF ============ */
-.pdf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.pdf-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 24px; display: flex; align-items: flex-start; gap: 14px; transition: all var(--transition); cursor: pointer; position: relative; overflow: hidden; }
-.pdf-card:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); }
-.pdf-card__icon { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; font-size: 1.4rem; color: #fff; }
-.pdf-card__info { flex: 1; }
-.pdf-card__title { font-size: 0.85rem; font-weight: 600; color: var(--gray-800); margin-bottom: 4px; line-height: 1.35; }
-.pdf-card__meta { font-size: 0.7rem; color: var(--gray-400); }
-.pdf-card__badge { display: inline-block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 50px; margin-bottom: 6px; }
-.pdf-card__dl { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--gray-200); display: grid; place-items: center; color: var(--gray-400); flex-shrink: 0; transition: all var(--transition); cursor: pointer; background: var(--white); }
-.pdf-card__dl:hover { border-color: var(--purple-200); color: var(--purple-600); }
-/* Bloqueado (sigue el mismo desbloqueo progresivo del curso al que pertenece) */
-.pdf-card.locked { cursor: not-allowed; }
-.pdf-card.locked:hover { border-color: var(--gray-100); box-shadow: none; }
-.pdf-card.locked .pdf-card__icon, .pdf-card.locked .pdf-card__dl { filter: grayscale(0.7) brightness(0.95); }
-.pdf-card.locked .pdf-card__title { color: var(--gray-400); }
-.pdf-card__lock-badge { position: absolute; top: 12px; right: 12px; display: inline-flex; align-items: center; gap: 4px; font-size: 0.68rem; font-weight: 600; color: var(--purple-700); background: var(--purple-50); padding: 3px 9px; border-radius: 50px; }
-.pdf-card__lock-badge svg { width: 11px; height: 11px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-body.dark .pdf-card__lock-badge { background: rgba(255,255,255,0.08); color: var(--purple-300); }
+.pdf-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+.pdf-card { background: var(--white); border: 1px solid var(--gray-100); border-radius: 22px; padding: 0; display: flex; flex-direction: column; cursor: default; transition: transform .3s cubic-bezier(.2,.8,.25,1), border-color .25s, box-shadow .35s; position: relative; overflow: hidden; }
+.pdf-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--pdf-color,#7b5cff) 50%, transparent); box-shadow: 0 22px 50px color-mix(in srgb, var(--pdf-color,#7b5cff) 18%, rgba(0,0,0,.12)); }
+.pdf-card__top { background: linear-gradient(135deg, var(--pdf-color,#7b5cff), color-mix(in srgb, var(--pdf-color,#7b5cff) 60%, #000)); padding: 20px 22px; display: flex; align-items: center; justify-content: space-between; color: #fff; position: relative; overflow: hidden; min-height: 90px; }
+.pdf-card__top::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(255,255,255,.09) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,.09) 1px, transparent 1px); background-size: 24px 24px; -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 75%); mask-image: radial-gradient(ellipse at center, #000 0%, transparent 75%); }
+.pdf-card__icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(255,255,255,.18); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; z-index: 1; font-size: 1.5rem; box-shadow: inset 0 1px 0 rgba(255,255,255,.18); }
+.pdf-card__badge-tipo { position: relative; z-index: 1; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 5px 11px; border-radius: 100px; background: rgba(0,0,0,.35); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.18); color: #fff; }
+.pdf-card__body { padding: 18px 22px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.pdf-card__title { font-size: 15px; font-weight: 700; letter-spacing: -.2px; line-height: 1.35; color: var(--gray-800); }
+.pdf-card__meta { font-size: 11px; color: var(--gray-400); font-weight: 600; display: flex; gap: 12px; flex-wrap: wrap; }
+.pdf-card__meta span { display: inline-flex; align-items: center; gap: 5px; }
+.pdf-card__meta svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.pdf-card__tags { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--gray-100); }
+.pdf-card__tag { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 100px; }
+.pdf-card__tag--disponible { color: #0f1626; background: #34D399; }
+.pdf-card__tag--soon { color: var(--purple-700); background: var(--purple-50); }
+.pdf-card__dl { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 8px 14px; border-radius: 100px; border: none; cursor: pointer; background: linear-gradient(135deg, var(--purple-600), var(--purple-400)); color: #fff; transition: all var(--transition); }
+.pdf-card__dl:hover { filter: brightness(1.08); }
+.pdf-card__dl svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.pdf-card__dl[disabled] { opacity: .55; cursor: not-allowed; background: var(--gray-200); color: var(--gray-500); }
+body.dark .pdf-card__tag--soon { background: rgba(255,255,255,.08); color: var(--purple-300); }
+body.dark .pdf-card__meta { color: var(--dk-text-3, #8a8aa3); }
+body.dark .pdf-card__tags { border-color: rgba(255,255,255,.08); }
 
 /* ============ NOTICIAS (full page) ============ */
 .news-full-list { display: flex; flex-direction: column; gap: 16px; }
@@ -3260,18 +3265,22 @@ function loadClubPdfs(){
         if(c.estado==='Borrador'||c.estado==='Oculto')return;
         n++;
         var locked=false,diasFaltan=0;
+        var cursoNombre='';
         if(c.cursoId&&cursosPorId[c.cursoId]){
           var drip=getDripStatus(cursosPorId[c.cursoId],user);
           locked=drip.locked;diasFaltan=drip.diasFaltan;
+          cursoNombre=cursosPorId[c.cursoId].nombre||'';
         }
-        var iconInfo=_pdfIconPorTipo(c.categoria);
-        var img=driveImg(c.imagen);
-        var lockedClass=locked?' locked':'';
-        var lockBadge=locked?'<div class="pdf-card__lock-badge"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>En '+(diasFaltan===1?'1 día':diasFaltan+' días')+'</div>':'';
-        var accionHtml=locked
-          ? '<div class="pdf-card__dl" style="cursor:not-allowed"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>'
-          : '<a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg class="icon" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg></a>';
-        cont.innerHTML+='<div class="pdf-card'+lockedClass+'">'+lockBadge+(img?'<img src="'+img+'" style="width:48px;height:48px;border-radius:12px;object-fit:cover;flex-shrink:0'+(locked?';filter:grayscale(0.7) brightness(0.95)':'')+'">':'<div class="pdf-card__icon" style="background:'+iconInfo.bg+'">'+iconInfo.icon+'</div>')+'<div class="pdf-card__info"><span class="pdf-card__badge" style="background:'+iconInfo.badgeBg+';color:'+iconInfo.badgeColor+'">'+(c.categoria||'')+'</span><h4 class="pdf-card__title">'+c.titulo+'</h4></div>'+accionHtml+'</div>';
+        var info=_pdfIconPorTipo(c.categoria);
+        var cursoCorto=cursoNombre.length>28?cursoNombre.slice(0,28)+'…':cursoNombre;
+        var tagsHtml=locked
+          ? '<span class="pdf-card__tag pdf-card__tag--soon">'+(diasFaltan===1?'Mañana':'En '+diasFaltan+' días')+'</span><button class="pdf-card__dl" disabled><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>Próximamente</button>'
+          : '<span class="pdf-card__tag pdf-card__tag--disponible">Disponible</span><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Abrir</a>';
+        var metaHtml=cursoNombre?'<span title="'+cursoNombre.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>'+cursoCorto+'</span>':'';
+        cont.innerHTML+='<article class="pdf-card" style="--pdf-color:'+info.color+'">'
+          +'<div class="pdf-card__top"><div class="pdf-card__icon">'+info.icon+'</div><span class="pdf-card__badge-tipo">'+(c.categoria||'')+'</span></div>'
+          +'<div class="pdf-card__body"><div class="pdf-card__title">'+c.titulo+'</div><div class="pdf-card__meta">'+metaHtml+'</div><div class="pdf-card__tags">'+tagsHtml+'</div></div>'
+          +'</article>';
       });
       if(n===0){
         cont.innerHTML='<div style="grid-column:1/-1;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Estamos preparando material descargable para ti. Pronto encontrarás guías, protocolos y documentos aquí.</p></div>';
@@ -3282,11 +3291,11 @@ function loadClubPdfs(){
 // Color + ícono según el TIPO de documento (Guía/Manual/Protocolo/Tabla/Ficha técnica)
 function _pdfIconPorTipo(tipo){
   var t=(tipo||'').toLowerCase();
-  if(t==='manual')return{icon:'📗',bg:'linear-gradient(135deg,#3b2b86,#5f45c8)',badgeBg:'#eef0fb',badgeColor:'#3b2b86'};
-  if(t==='protocolo')return{icon:'📋',bg:'linear-gradient(135deg,#2a1f66,#4a37a3)',badgeBg:'#eef0fb',badgeColor:'#2a1f66'};
-  if(t==='tabla')return{icon:'📊',bg:'linear-gradient(135deg,#5f45c8,#7b5cff)',badgeBg:'#f1ecff',badgeColor:'#5f45c8'};
-  if(t==='ficha técnica'||t==='ficha tecnica')return{icon:'📄',bg:'linear-gradient(135deg,#6b4fd6,#9a7dff)',badgeBg:'#f1ecff',badgeColor:'#6b4fd6'};
-  return{icon:'📘',bg:'linear-gradient(135deg,#4a37a3,#7b5cff)',badgeBg:'#eef0fb',badgeColor:'#4a37a3'}; // Guía / default
+  if(t==='manual')return{icon:'📗',color:'#5f45c8'};
+  if(t==='protocolo')return{icon:'📋',color:'#2a1f66'};
+  if(t==='tabla')return{icon:'📊',color:'#7b5cff'};
+  if(t==='ficha técnica'||t==='ficha tecnica')return{icon:'📄',color:'#9a7dff'};
+  return{icon:'📘',color:'#4a37a3'}; // Guía / default
 }
 // ============ SUSCRIPCION / STRIPE ============
 
