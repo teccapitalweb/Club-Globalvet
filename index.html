@@ -3269,6 +3269,7 @@ function loadClubPdfs(){
           locked=drip.locked;diasFaltan=drip.diasFaltan;
           cursoNombre=cursosPorId[c.cursoId].nombre||'';
         }
+        var cursoImg=(c.cursoId&&cursosPorId[c.cursoId])?driveImg(cursosPorId[c.cursoId].imagen):'';
         var auto=autoPortada({_id:d.id,nombre:c.titulo,categoria:c.categoria});
         var cursoCorto=cursoNombre.length>28?cursoNombre.slice(0,28)+'…':cursoNombre;
         var tagsHtml=locked
@@ -3276,7 +3277,7 @@ function loadClubPdfs(){
           : '<span class="pdf-card__tag pdf-card__tag--disponible">Disponible</span><a href="'+(c.archivo||'#')+'" target="_blank" class="pdf-card__dl" onclick="return descargarPdf(event,this)"><svg viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>Abrir</a>';
         var metaHtml=cursoNombre?'<span title="'+cursoNombre.replace(/"/g,'&quot;')+'"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>'+cursoCorto+'</span>':'';
         cont.innerHTML+='<article class="pdf-card">'
-          +'<div class="pdf-card__top" style="'+auto.style+'"><span class="pdf-card__badge-tipo">'+(c.categoria||'')+'</span>'+auto.html+'</div>'
+          +'<div class="pdf-card__top" style="'+auto.style+'"><span class="pdf-card__badge-tipo">'+(c.categoria||'')+'</span>'+auto.html+(cursoImg?'<img src="'+cursoImg+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'">':'')+'</div>'
           +'<div class="pdf-card__body"><div class="pdf-card__title">'+c.titulo+'</div><div class="pdf-card__meta">'+metaHtml+'</div><div class="pdf-card__tags">'+tagsHtml+'</div></div>'
           +'</article>';
       });
