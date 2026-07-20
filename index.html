@@ -3258,7 +3258,18 @@ function loadClubPdfs(){
       var cont=document.getElementById('pdfGrid');if(!cont)return;
       cont.innerHTML='';
       var n=0;
-      s.forEach(function(d){
+      // Ordenar por nombre del curso al que pertenece cada PDF, para que
+      // se vean agrupados en vez de en el orden suelto que da Firestore.
+      // Los que no tienen curso ligado quedan al final.
+      var docs=[];
+      s.forEach(function(d){docs.push(d);});
+      docs.sort(function(a,b){
+        var ca=a.data(),cb=b.data();
+        var nombreA=(ca.cursoId&&cursosPorId[ca.cursoId]&&cursosPorId[ca.cursoId].nombre)||'zzz';
+        var nombreB=(cb.cursoId&&cursosPorId[cb.cursoId]&&cursosPorId[cb.cursoId].nombre)||'zzz';
+        return nombreA.localeCompare(nombreB);
+      });
+      docs.forEach(function(d){
         var c=d.data();
         if(c.estado==='Borrador'||c.estado==='Oculto')return;
         n++;
