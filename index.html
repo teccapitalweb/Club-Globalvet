@@ -2363,7 +2363,14 @@ function calcSubStatus(data){
   var sub=data&&data.suscripcion?data.suscripcion:null;
   // Caso 1: tiene suscripcion en Stripe
   if(sub&&sub.estado){
-    if(sub.estado==='activa')return{status:'activa',sub:sub};
+    if(sub.estado==='activa'){
+      // Si es un regalo puro (sin Stripe) y ya pasó su fecha, no sigue activo
+      // aunque el campo 'estado' todavía diga 'activa'
+      if(!sub.stripeSubscriptionId && sub.regaloFin && new Date(sub.regaloFin) < new Date()){
+        return{status:'cancelada',sub:sub};
+      }
+      return{status:'activa',sub:sub};
+    }
     if(sub.estado==='pago_fallido')return{status:'pago_fallido',sub:sub};
     if(sub.estado==='cancelada')return{status:'cancelada',sub:sub};
     if(sub.estado==='incompleta')return{status:'pago_fallido',sub:sub};
@@ -2400,6 +2407,13 @@ function refreshSubStatus(){
     return r;
   });
 }
+
+// Revisa el estado cada 30s mientras la persona esté con la página abierta,
+// para que un regalo (minutos/horas/días) se le corte solo al vencer, sin
+// que tenga que recargar ni salir y volver a entrar.
+setInterval(function(){
+  if(firebase.auth().currentUser)refreshSubStatus();
+}, 30000);
 
 </script>
 <script>
