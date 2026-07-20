@@ -2391,7 +2391,12 @@ function calcSubStatus(data){
 function refreshSubStatus(){
   var user=firebase.auth().currentUser;
   if(!user){_subStatus='loading';return Promise.resolve(null);}
-  return db.collection('miembros').doc(user.uid).get().then(function(doc){
+  // Primero verificamos contra Stripe en vivo (autocorrige Firestore si el
+  // aviso de renovación/cancelación nunca llegó). Si el miembro no tiene
+  // suscripción real de Stripe, el webhook no hace nada y seguimos normal.
+  return fetch(WEBHOOK_URL+'/subscription-status?uid='+user.uid).catch(function(){}).then(function(){
+    return db.collection('miembros').doc(user.uid).get();
+  }).then(function(doc){
     var data=doc.exists?doc.data():{};
     var r=calcSubStatus(data);
     _subStatus=r.status;
