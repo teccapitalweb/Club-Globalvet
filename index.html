@@ -665,6 +665,24 @@ body.dark .btn-clear:hover { background: rgba(255,255,255,.06); }
 body.dark .calc-card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
 body.dark .calc-card__nota { background: rgba(255,255,255,.06); color: var(--dk-text-3,#8a8aa3); }
 body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
+.cal-timeline { position: relative; padding-left: 28px; }
+.cal-timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-100); }
+.cal-item { position: relative; padding: 14px 16px 14px 0; }
+.cal-item::before { content: ''; position: absolute; left: -28px; top: 18px; width: 12px; height: 12px; border-radius: 50%; background: var(--gray-300); border: 2px solid var(--white); }
+.cal-item.futuro::before { background: var(--purple-600); }
+.cal-item__card { background: var(--white); border: 1px solid var(--gray-100); border-radius: 12px; padding: 14px 16px; }
+.cal-item.futuro .cal-item__card { border-color: var(--purple-200); background: var(--purple-50); }
+.cal-item__fecha { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--gray-400); }
+.cal-item.futuro .cal-item__fecha { color: var(--purple-700); }
+.cal-item__titulo { font-size: 0.9rem; font-weight: 600; color: var(--gray-800); margin-top: 3px; }
+.cal-item__tipo { display: inline-block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 9px; border-radius: 50px; margin-top: 6px; }
+.cal-item__tipo--vacuna { background: #dbeafe; color: #1d4ed8; }
+.cal-item__tipo--desparasitante { background: #dcfce7; color: #15803d; }
+body.dark .cal-timeline::before { background: rgba(255,255,255,.12); }
+body.dark .cal-item::before { border-color: var(--dk-bg,#13111c); }
+body.dark .cal-item__card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
+body.dark .cal-item.futuro .cal-item__card { background: rgba(123,92,255,.1); border-color: rgba(123,92,255,.3); }
+body.dark .cal-item__titulo { color: #fff; }
 .score-legend__item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: var(--gray-500); }
 .score-legend__dot { width: 12px; height: 12px; border-radius: 3px; }
 
@@ -1982,6 +2000,14 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   <!-- ==================== TABLA VACUNACIÓN ==================== -->
   <div class="page-content" data-page="vacunacion">
     <div class="page-header"><h1 class="page-header__title">Tabla de Vacunación</h1><p class="page-header__desc">Esquemas de vacunación actualizados por especie.</p></div>
+
+    <div class="filter-tabs" id="vacVistaTabs" style="margin-bottom:20px">
+      <button class="filter-tab active" onclick="showVacVista('esquema',this)">📋 Esquema general</button>
+      <button class="filter-tab" onclick="showVacVista('calendario',this)">📅 Generar mi calendario</button>
+    </div>
+
+    <!-- VISTA: ESQUEMA GENERAL (lo de siempre) -->
+    <div id="vacVista-esquema">
     <div class="filter-tabs" id="vacTabs">
       <button class="filter-tab active" onclick="showVac('canino',this)">Caninos</button>
       <button class="filter-tab" onclick="showVac('felino',this)">Felinos</button>
@@ -2057,6 +2083,30 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div style="margin-top:16px;font-size:0.76rem;color:var(--gray-400);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
       <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--purple-600)"></span> Esencial — recomendada para todos</span>
       <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--gray-300)"></span> No esencial — según riesgo y estilo de vida</span>
+    </div>
+    </div>
+    <!-- /vacVista-esquema -->
+
+    <!-- VISTA: GENERAR MI CALENDARIO (nuevo) -->
+    <div id="vacVista-calendario" style="display:none">
+      <div class="calc-panel">
+        <div class="calc-card">
+          <p class="calc-card__nota">Esquemas generales de referencia. Ajusta según el protocolo de tu clínica, la marca de vacuna/antiparasitario y la condición particular del paciente.</p>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Especie</label>
+              <select class="form-input form-select" id="calFechaEspecie">
+                <option value="canino">Canino</option><option value="felino">Felino</option>
+                <option value="equino">Equino</option><option value="bovino">Bovino</option>
+                <option value="porcino">Porcino</option><option value="ovicap">Ovino/Caprino</option>
+                <option value="aves">Ave</option><option value="conejo">Conejo</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Fecha de nacimiento</label><input class="form-input" type="date" id="calFechaNacimiento"></div>
+          </div>
+          <div style="display:flex;gap:10px"><button class="btn-save" onclick="generarCalendario()">Generar calendario</button><button class="btn-clear" onclick="borrarCalendario()">Borrar</button></div>
+        </div>
+        <div id="calendarioResultado" style="margin-top:20px;display:none"></div>
+      </div>
     </div>
   </div>
 
@@ -2785,6 +2835,12 @@ function applyExploradorOverlay(page){
 }
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('active')}
 function showVac(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('vac-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function showVacVista(vista,btn){
+  document.getElementById('vacVista-esquema').style.display=vista==='esquema'?'block':'none';
+  document.getElementById('vacVista-calendario').style.display=vista==='calendario'?'block':'none';
+  btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+}
 function showScore(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('score-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
 
 // ============ CALCULADORAS CLÍNICAS (dinámicas, todas las especies) ============
@@ -2886,6 +2942,119 @@ function borrarGestacion(){
   document.getElementById('gestacionEspecie').selectedIndex=0;
   document.getElementById('gestacionFecha').value='';
   var r=document.getElementById('gestacionResultado');r.style.display='none';r.innerHTML='';
+}
+
+// ============ CALENDARIO DE DESPARASITACIÓN Y VACUNACIÓN ============
+// Esquemas generales de referencia (no sustituyen el protocolo de cada clínica
+// ni las indicaciones del fabricante de cada producto). diasDesdeNacimiento
+// marca cuándo cae cada evento a partir de la fecha de nacimiento.
+var ESQUEMAS_CALENDARIO={
+  canino:[
+    {dias:15,tipo:'desparasitante',titulo:'1ª desparasitación interna'},
+    {dias:30,tipo:'desparasitante',titulo:'2ª desparasitación interna'},
+    {dias:45,tipo:'desparasitante',titulo:'3ª desparasitación interna'},
+    {dias:49,tipo:'vacuna',titulo:'1ª dosis vacuna múltiple (DHPP)'},
+    {dias:60,tipo:'desparasitante',titulo:'4ª desparasitación interna'},
+    {dias:77,tipo:'vacuna',titulo:'2ª dosis vacuna múltiple (DHPP)'},
+    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (mensual hasta los 6 meses)'},
+    {dias:98,tipo:'vacuna',titulo:'3ª dosis vacuna múltiple + Rabia'},
+    {dias:120,tipo:'desparasitante',titulo:'Desparasitación mensual'},
+    {dias:150,tipo:'desparasitante',titulo:'Desparasitación mensual'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación mensual (última del esquema cachorro)'},
+    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual vacuna múltiple + Rabia'},
+    {dias:365,tipo:'desparasitante',titulo:'Desparasitación (a partir de aquí, cada 3 meses de por vida)'}
+  ],
+  felino:[
+    {dias:15,tipo:'desparasitante',titulo:'1ª desparasitación interna'},
+    {dias:30,tipo:'desparasitante',titulo:'2ª desparasitación interna'},
+    {dias:45,tipo:'desparasitante',titulo:'3ª desparasitación interna'},
+    {dias:56,tipo:'vacuna',titulo:'1ª dosis triple felina'},
+    {dias:60,tipo:'desparasitante',titulo:'4ª desparasitación interna'},
+    {dias:84,tipo:'vacuna',titulo:'2ª dosis triple felina'},
+    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (mensual hasta los 6 meses)'},
+    {dias:112,tipo:'vacuna',titulo:'3ª dosis triple felina + Rabia'},
+    {dias:120,tipo:'desparasitante',titulo:'Desparasitación mensual'},
+    {dias:150,tipo:'desparasitante',titulo:'Desparasitación mensual'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación mensual (última del esquema cachorro)'},
+    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual triple felina + Rabia'},
+    {dias:365,tipo:'desparasitante',titulo:'Desparasitación (a partir de aquí, cada 3 meses de por vida)'}
+  ],
+  equino:[
+    {dias:60,tipo:'desparasitante',titulo:'1ª desparasitación'},
+    {dias:120,tipo:'vacuna',titulo:'1ª dosis Influenza/Tétanos'},
+    {dias:150,tipo:'vacuna',titulo:'2ª dosis Influenza/Tétanos (refuerzo)'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'},
+    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual Influenza/Tétanos/Encefalomielitis'}
+  ],
+  bovino:[
+    {dias:60,tipo:'desparasitante',titulo:'Desparasitación al destete'},
+    {dias:75,tipo:'vacuna',titulo:'1ª dosis Clostridiales'},
+    {dias:105,tipo:'vacuna',titulo:'2ª dosis Clostridiales (refuerzo)'},
+    {dias:150,tipo:'desparasitante',titulo:'Desparasitación (cada 3-4 meses)'},
+    {dias:240,tipo:'vacuna',titulo:'Vacunación Brucelosis (hembras, 3-8 meses)'},
+    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual del esquema'}
+  ],
+  porcino:[
+    {dias:21,tipo:'vacuna',titulo:'1ª dosis Circovirus/Mycoplasma'},
+    {dias:42,tipo:'vacuna',titulo:'2ª dosis Circovirus/Mycoplasma (refuerzo)'},
+    {dias:70,tipo:'desparasitante',titulo:'1ª desparasitación'},
+    {dias:119,tipo:'desparasitante',titulo:'2ª desparasitación'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'}
+  ],
+  ovicap:[
+    {dias:60,tipo:'desparasitante',titulo:'1ª desparasitación'},
+    {dias:75,tipo:'vacuna',titulo:'1ª dosis Clostridiales'},
+    {dias:105,tipo:'vacuna',titulo:'2ª dosis Clostridiales (refuerzo)'},
+    {dias:150,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'},
+    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual del esquema'}
+  ],
+  aves:[
+    {dias:1,tipo:'vacuna',titulo:'Vacunación Marek (día 1, si aplica)'},
+    {dias:14,tipo:'vacuna',titulo:'Vacunación Newcastle/Bronquitis (según programa de granja)'},
+    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'}
+  ],
+  conejo:[
+    {dias:56,tipo:'vacuna',titulo:'1ª dosis Mixomatosis / Enf. Hemorrágica'},
+    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'},
+    {dias:180,tipo:'vacuna',titulo:'Refuerzo semestral Mixomatosis / Enf. Hemorrágica'},
+    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'}
+  ]
+};
+
+function generarCalendario(){
+  var especie=document.getElementById('calFechaEspecie').value;
+  var fechaInput=document.getElementById('calFechaNacimiento').value;
+  var resEl=document.getElementById('calendarioResultado');
+  if(!fechaInput){
+    resEl.style.display='block';
+    resEl.innerHTML='<span style="color:#dc2626">Selecciona la fecha de nacimiento del paciente.</span>';
+    return;
+  }
+  var nacimiento=new Date(fechaInput+'T00:00:00');
+  var hoy=new Date();
+  var esquema=ESQUEMAS_CALENDARIO[especie]||[];
+  var opciones={day:'numeric',month:'short',year:'numeric'};
+  var html='<div class="cal-timeline">';
+  esquema.forEach(function(ev){
+    var fecha=new Date(nacimiento.getTime()+ev.dias*24*60*60*1000);
+    var futuro=fecha>=hoy;
+    var tipoLabel=ev.tipo==='vacuna'?'Vacuna':'Desparasitante';
+    var tipoClase=ev.tipo==='vacuna'?'cal-item__tipo--vacuna':'cal-item__tipo--desparasitante';
+    html+='<div class="cal-item'+(futuro?' futuro':'')+'"><div class="cal-item__card">'
+      +'<div class="cal-item__fecha">'+fecha.toLocaleDateString('es-MX',opciones)+(futuro?' · Próximo':' · Ya pasó')+'</div>'
+      +'<div class="cal-item__titulo">'+ev.titulo+'</div>'
+      +'<span class="cal-item__tipo '+tipoClase+'">'+tipoLabel+'</span>'
+      +'</div></div>';
+  });
+  html+='</div>';
+  resEl.style.display='block';
+  resEl.innerHTML=html;
+}
+function borrarCalendario(){
+  document.getElementById('calFechaEspecie').selectedIndex=0;
+  document.getElementById('calFechaNacimiento').value='';
+  var r=document.getElementById('calendarioResultado');r.style.display='none';r.innerHTML='';
 }
 document.querySelectorAll('.sidebar__link[data-page]').forEach(l=>l.addEventListener('click',e=>{e.preventDefault();nav(l.dataset.page)}));
 document.querySelectorAll('.filter-tab').forEach(t=>t.addEventListener('click',()=>{t.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
