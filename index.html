@@ -2667,32 +2667,44 @@ function descargarFicha(e){
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
   btn.textContent='Generando...';btn.disabled=true;
-  
+
   function generarPDF(){
     try{
       var doc=new window.jspdf.jsPDF('p','mm','a4');
-      var M=15,cw=180,y=M;
-      doc.setFont('helvetica','bold');doc.setFontSize(17);doc.setTextColor(75,28,113);
-      doc.text('GlobalVet Mexico',M,y+6);
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(150,150,150);
-      doc.text('Ficha Clinica del Paciente',M,y+12);
-      y+=16;doc.setDrawColor(75,28,113);doc.setLineWidth(0.6);doc.line(M,y,M+cw,y);y+=10;
-      function ck(n){if(y+n>280){doc.addPage();y=M;}}
-      function sec(t){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0,0,0);doc.text(t,M,y);y+=2;doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(M,y,M+cw,y);y+=7;}
-      function fld(l,v,x,w){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(120,120,120);doc.text(l.toUpperCase(),x,y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(0,0,0);doc.text(String(v||''),x,y+5);doc.setDrawColor(220,220,220);doc.setLineWidth(0.2);doc.line(x,y+7,x+w,y+7);}
-      function row(l,v){fld(l,v,M,cw);y+=14;}
-      function pair(a,b,c,d){var hw=cw/2-4;fld(a,b,M,hw);fld(c,d,M+cw/2+4,hw);y+=14;}
+      var M=15,cw=180,y=36;
+      doc.setFillColor(75,28,113);doc.rect(0,0,210,26,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
+      doc.text('GlobalVet Mexico',M,15);
+      doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(224,214,240);
+      doc.text('Ficha Clinica del Paciente',M,21);
+
+      function ck(n){if(y+n>276){doc.addPage();y=20;}}
+      function sec(t){ck(11);doc.setFillColor(123,92,255);doc.rect(M,y-4,3,6.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=7.5;}
+      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(13,lines.length*4.3+6);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+4.7);return h;}
+      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(13,lines.length*4.3+6);ck(h+3);fld(l,v,M,cw);y+=h+3.5;}
+      function pair(a,b,c,d){var hw=cw/2-3;ck(15);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+3.5;}
+      function footer(){
+        var total=doc.internal.getNumberOfPages();
+        for(var p=1;p<=total;p++){
+          doc.setPage(p);
+          doc.setDrawColor(225,225,225);doc.setLineWidth(0.2);doc.line(M,283,M+cw,283);
+          doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(160,160,160);
+          doc.text('Generado por GlobalVet Mexico · '+new Date().toLocaleDateString('es-MX'),M,288);
+          doc.text('Pagina '+p+' de '+total,M+cw,288,{align:'right'});
+        }
+      }
       var v=[];document.querySelectorAll('[data-page="ficha"] .form-input,[data-page="ficha"] .form-textarea').forEach(function(i){v.push(i.value||'');});
       sec('Datos del paciente');
       pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Sexo',v[3]);
       pair('Edad',v[4],'Peso (kg)',v[5]);pair('Color / Senas',v[6],'Microchip / ID',v[7]);
-      y+=4;sec('Datos del propietario');
+      y+=1.5;sec('Datos del propietario');
       pair('Nombre del propietario',v[8],'Telefono',v[9]);row('Direccion',v[10]);
-      y+=4;sec('Evaluacion clinica');
+      y+=1.5;sec('Evaluacion clinica');
       row('Motivo de consulta',v[11]);pair('Temperatura (C)',v[12],'Frecuencia cardiaca',v[13]);
       pair('Frecuencia respiratoria',v[14],'Score corporal',v[15]);
       row('Hallazgos al examen fisico',v[16]);row('Diagnostico presuntivo',v[17]);
       row('Tratamiento indicado',v[18]);row('Observaciones',v[19]);
+      footer();
       doc.save('Ficha_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
@@ -2700,7 +2712,7 @@ function descargarFicha(e){
       window.print();
     }
   }
-  
+
   if(window.jspdf){
     generarPDF();
   }else{
