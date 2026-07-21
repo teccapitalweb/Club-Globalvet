@@ -2733,11 +2733,11 @@ function descargarReceta(e){
       doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(224,214,240);
       doc.text('Receta Medica Veterinaria',M,21);
 
-      function ck(n){if(y+n>268){doc.addPage();y=20;}}
-      function sec(t){ck(14);doc.setFillColor(123,92,255);doc.rect(M,y-4.5,3,7,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=9;}
-      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(15,lines.length*5+8);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+5);return h;}
-      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(15,lines.length*5+8);ck(h+4);fld(l,v,M,cw);y+=h+5;}
-      function pair(a,b,c,d){var hw=cw/2-3;ck(19);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+5;}
+      function ck(n){if(y+n>276){doc.addPage();y=20;}}
+      function sec(t){ck(11);doc.setFillColor(123,92,255);doc.rect(M,y-4,3,6.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=7.5;}
+      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(13,lines.length*4.3+6);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+4.7);return h;}
+      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(13,lines.length*4.3+6);ck(h+3);fld(l,v,M,cw);y+=h+3.5;}
+      function pair(a,b,c,d){var hw=cw/2-3;ck(15);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+3.5;}
       function footer(){
         var total=doc.internal.getNumberOfPages();
         for(var p=1;p<=total;p++){
@@ -2751,11 +2751,11 @@ function descargarReceta(e){
       var v=[];document.querySelectorAll('[data-page="receta"] .form-input,[data-page="receta"] .form-textarea').forEach(function(i){v.push(i.value||'');});
       sec('Datos del paciente');
       pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Peso (kg)',v[3]);
-      y+=3;sec('Datos del propietario');
+      y+=1.5;sec('Datos del propietario');
       pair('Nombre del propietario',v[4],'Telefono',v[5]);
-      y+=3;sec('Prescripcion');
+      y+=1.5;sec('Prescripcion');
       row('Diagnostico',v[6]);row('Medicamentos prescritos',v[7]);row('Indicaciones adicionales',v[8]);row('Proxima cita / seguimiento',v[9]);
-      y+=3;sec('Medico responsable');
+      y+=1.5;sec('Medico responsable');
       pair('Medico veterinario',v[10],'Cedula profesional',v[11]);
       footer();
       doc.save('Receta_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
@@ -2798,11 +2798,11 @@ function descargarConsentimiento(e){
       doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(224,214,240);
       doc.text('Consentimiento Informado',M,21);
 
-      function ck(n){if(y+n>268){doc.addPage();y=20;}}
-      function sec(t){ck(14);doc.setFillColor(123,92,255);doc.rect(M,y-4.5,3,7,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=9;}
-      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(15,lines.length*5+8);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+5);return h;}
-      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(15,lines.length*5+8);ck(h+4);fld(l,v,M,cw);y+=h+5;}
-      function pair(a,b,c,d){var hw=cw/2-3;ck(19);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+5;}
+      function ck(n){if(y+n>276){doc.addPage();y=20;}}
+      function sec(t){ck(11);doc.setFillColor(123,92,255);doc.rect(M,y-4,3,6.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=7.5;}
+      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(13,lines.length*4.3+6);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+4.7);return h;}
+      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(13,lines.length*4.3+6);ck(h+3);fld(l,v,M,cw);y+=h+3.5;}
+      function pair(a,b,c,d){var hw=cw/2-3;ck(15);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+3.5;}
       function footer(){
         var total=doc.internal.getNumberOfPages();
         for(var p=1;p<=total;p++){
@@ -2816,26 +2816,26 @@ function descargarConsentimiento(e){
       var v=[];document.querySelectorAll('[data-page="consentimiento"] .form-input,[data-page="consentimiento"] .form-textarea').forEach(function(i){v.push(i.value||'');});
       sec('Datos del paciente');
       pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Edad',v[3]);
-      y+=3;sec('Datos del propietario');
+      y+=1.5;sec('Datos del propietario');
       pair('Nombre del propietario',v[4],'Telefono',v[5]);
-      y+=3;sec('Procedimiento');
+      y+=1.5;sec('Procedimiento');
       row('Procedimiento o cirugia',v[6]);row('Riesgos y complicaciones explicados',v[7]);row('Cuidados post-procedimiento',v[8]);
 
       // Caja de declaracion, destacada
       var declaracion='Declaro que se me ha explicado, en lenguaje claro y comprensible, la naturaleza del procedimiento descrito, sus riesgos, beneficios y alternativas. He tenido oportunidad de resolver mis dudas y autorizo de manera libre e informada su realizacion.';
       var declLines=doc.splitTextToSize(declaracion,cw-14);
-      var boxH=declLines.length*5+12;
-      ck(boxH+6);
+      var boxH=declLines.length*4.3+9;
+      ck(boxH+4);
       doc.setFillColor(243,240,251);doc.setDrawColor(123,92,255);doc.setLineWidth(0.4);
       doc.roundedRect(M,y-4,cw,boxH,2,2,'FD');
       doc.setFont('helvetica','italic');doc.setFontSize(9);doc.setTextColor(60,40,90);
-      doc.text(declLines,M+7,y+3);
-      y+=boxH+10;
+      doc.text(declLines,M+7,y+2.5);
+      y+=boxH+7;
 
-      ck(30);
+      ck(20);
       fld('Fecha',v[9]||new Date().toLocaleDateString('es-MX'),M,60);
-      y+=20;
-      ck(25);
+      y+=17;
+      ck(20);
       doc.setDrawColor(0,0,0);doc.setLineWidth(0.3);
       doc.line(M,y,M+85,y);
       doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,100,100);
