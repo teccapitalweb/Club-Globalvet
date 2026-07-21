@@ -2725,26 +2725,39 @@ function descargarReceta(e){
   function generarPDF(){
     try{
       var doc=new window.jspdf.jsPDF('p','mm','a4');
-      var M=15,cw=180,y=M;
-      doc.setFont('helvetica','bold');doc.setFontSize(17);doc.setTextColor(75,28,113);
-      doc.text('GlobalVet Mexico',M,y+6);
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(150,150,150);
-      doc.text('Receta Medica Veterinaria',M,y+12);
-      y+=16;doc.setDrawColor(75,28,113);doc.setLineWidth(0.6);doc.line(M,y,M+cw,y);y+=10;
-      function ck(n){if(y+n>280){doc.addPage();y=M;}}
-      function sec(t){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0,0,0);doc.text(t,M,y);y+=2;doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(M,y,M+cw,y);y+=7;}
-      function fld(l,v,x,w){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(120,120,120);doc.text(l.toUpperCase(),x,y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(0,0,0);var lines=doc.splitTextToSize(String(v||''),w);doc.text(lines,x,y+5);doc.setDrawColor(220,220,220);doc.setLineWidth(0.2);doc.line(x,y+7,x+w,y+7);}
-      function row(l,v){var lines=doc.splitTextToSize(String(v||''),cw);var extra=Math.max(0,(lines.length-1)*5);ck(14+extra);fld(l,v,M,cw);y+=14+extra;}
-      function pair(a,b,c,d){var hw=cw/2-4;ck(14);fld(a,b,M,hw);fld(c,d,M+cw/2+4,hw);y+=14;}
+      var M=15,cw=180,y=36;
+      // Encabezado con fondo de color
+      doc.setFillColor(75,28,113);doc.rect(0,0,210,26,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
+      doc.text('GlobalVet Mexico',M,15);
+      doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(224,214,240);
+      doc.text('Receta Medica Veterinaria',M,21);
+
+      function ck(n){if(y+n>268){doc.addPage();y=20;}}
+      function sec(t){ck(14);doc.setFillColor(123,92,255);doc.rect(M,y-4.5,3,7,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=9;}
+      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(15,lines.length*5+8);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+5);return h;}
+      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(15,lines.length*5+8);ck(h+4);fld(l,v,M,cw);y+=h+5;}
+      function pair(a,b,c,d){var hw=cw/2-3;ck(19);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+5;}
+      function footer(){
+        var total=doc.internal.getNumberOfPages();
+        for(var p=1;p<=total;p++){
+          doc.setPage(p);
+          doc.setDrawColor(225,225,225);doc.setLineWidth(0.2);doc.line(M,283,M+cw,283);
+          doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(160,160,160);
+          doc.text('Generado por GlobalVet Mexico · '+new Date().toLocaleDateString('es-MX'),M,288);
+          doc.text('Pagina '+p+' de '+total,M+cw,288,{align:'right'});
+        }
+      }
       var v=[];document.querySelectorAll('[data-page="receta"] .form-input,[data-page="receta"] .form-textarea').forEach(function(i){v.push(i.value||'');});
       sec('Datos del paciente');
       pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Peso (kg)',v[3]);
-      y+=4;sec('Datos del propietario');
+      y+=3;sec('Datos del propietario');
       pair('Nombre del propietario',v[4],'Telefono',v[5]);
-      y+=4;sec('Prescripcion');
+      y+=3;sec('Prescripcion');
       row('Diagnostico',v[6]);row('Medicamentos prescritos',v[7]);row('Indicaciones adicionales',v[8]);row('Proxima cita / seguimiento',v[9]);
-      y+=4;sec('Medico responsable');
+      y+=3;sec('Medico responsable');
       pair('Medico veterinario',v[10],'Cedula profesional',v[11]);
+      footer();
       doc.save('Receta_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
@@ -2778,36 +2791,57 @@ function descargarConsentimiento(e){
   function generarPDF(){
     try{
       var doc=new window.jspdf.jsPDF('p','mm','a4');
-      var M=15,cw=180,y=M;
-      doc.setFont('helvetica','bold');doc.setFontSize(17);doc.setTextColor(75,28,113);
-      doc.text('GlobalVet Mexico',M,y+6);
-      doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(150,150,150);
-      doc.text('Consentimiento Informado',M,y+12);
-      y+=16;doc.setDrawColor(75,28,113);doc.setLineWidth(0.6);doc.line(M,y,M+cw,y);y+=10;
-      function ck(n){if(y+n>280){doc.addPage();y=M;}}
-      function sec(t){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(0,0,0);doc.text(t,M,y);y+=2;doc.setDrawColor(200,200,200);doc.setLineWidth(0.3);doc.line(M,y,M+cw,y);y+=7;}
-      function fld(l,v,x,w){ck(14);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(120,120,120);doc.text(l.toUpperCase(),x,y);doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(0,0,0);var lines=doc.splitTextToSize(String(v||''),w);doc.text(lines,x,y+5);doc.setDrawColor(220,220,220);doc.setLineWidth(0.2);doc.line(x,y+7,x+w,y+7);}
-      function row(l,v){var lines=doc.splitTextToSize(String(v||''),cw);var extra=Math.max(0,(lines.length-1)*5);ck(14+extra);fld(l,v,M,cw);y+=14+extra;}
-      function pair(a,b,c,d){var hw=cw/2-4;ck(14);fld(a,b,M,hw);fld(c,d,M+cw/2+4,hw);y+=14;}
+      var M=15,cw=180,y=36;
+      doc.setFillColor(75,28,113);doc.rect(0,0,210,26,'F');
+      doc.setFont('helvetica','bold');doc.setFontSize(18);doc.setTextColor(255,255,255);
+      doc.text('GlobalVet Mexico',M,15);
+      doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(224,214,240);
+      doc.text('Consentimiento Informado',M,21);
+
+      function ck(n){if(y+n>268){doc.addPage();y=20;}}
+      function sec(t){ck(14);doc.setFillColor(123,92,255);doc.rect(M,y-4.5,3,7,'F');doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(30,20,50);doc.text(t,M+6,y);y+=9;}
+      function fld(l,v,x,w){var lines=doc.splitTextToSize(String(v||'—'),w-6);var h=Math.max(15,lines.length*5+8);doc.setFillColor(248,247,252);doc.roundedRect(x,y-4,w,h,1.5,1.5,'F');doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(140,130,160);doc.text(l.toUpperCase(),x+3,y);doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(20,20,20);doc.text(lines,x+3,y+5);return h;}
+      function row(l,v){var lines=doc.splitTextToSize(String(v||'—'),cw-6);var h=Math.max(15,lines.length*5+8);ck(h+4);fld(l,v,M,cw);y+=h+5;}
+      function pair(a,b,c,d){var hw=cw/2-3;ck(19);var h1=fld(a,b,M,hw);var h2=fld(c,d,M+cw/2+3,hw);y+=Math.max(h1,h2)+5;}
+      function footer(){
+        var total=doc.internal.getNumberOfPages();
+        for(var p=1;p<=total;p++){
+          doc.setPage(p);
+          doc.setDrawColor(225,225,225);doc.setLineWidth(0.2);doc.line(M,283,M+cw,283);
+          doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(160,160,160);
+          doc.text('Generado por GlobalVet Mexico · '+new Date().toLocaleDateString('es-MX'),M,288);
+          doc.text('Pagina '+p+' de '+total,M+cw,288,{align:'right'});
+        }
+      }
       var v=[];document.querySelectorAll('[data-page="consentimiento"] .form-input,[data-page="consentimiento"] .form-textarea').forEach(function(i){v.push(i.value||'');});
       sec('Datos del paciente');
       pair('Nombre del paciente',v[0],'Especie',v[1]);pair('Raza',v[2],'Edad',v[3]);
-      y+=4;sec('Datos del propietario');
+      y+=3;sec('Datos del propietario');
       pair('Nombre del propietario',v[4],'Telefono',v[5]);
-      y+=4;sec('Procedimiento');
+      y+=3;sec('Procedimiento');
       row('Procedimiento o cirugia',v[6]);row('Riesgos y complicaciones explicados',v[7]);row('Cuidados post-procedimiento',v[8]);
-      y+=6;ck(30);
-      doc.setFont('helvetica','italic');doc.setFontSize(9);doc.setTextColor(60,60,60);
+
+      // Caja de declaracion, destacada
       var declaracion='Declaro que se me ha explicado, en lenguaje claro y comprensible, la naturaleza del procedimiento descrito, sus riesgos, beneficios y alternativas. He tenido oportunidad de resolver mis dudas y autorizo de manera libre e informada su realizacion.';
-      var declLines=doc.splitTextToSize(declaracion,cw);
-      doc.text(declLines,M,y);y+=declLines.length*5+10;
+      var declLines=doc.splitTextToSize(declaracion,cw-14);
+      var boxH=declLines.length*5+12;
+      ck(boxH+6);
+      doc.setFillColor(243,240,251);doc.setDrawColor(123,92,255);doc.setLineWidth(0.4);
+      doc.roundedRect(M,y-4,cw,boxH,2,2,'FD');
+      doc.setFont('helvetica','italic');doc.setFontSize(9);doc.setTextColor(60,40,90);
+      doc.text(declLines,M+7,y+3);
+      y+=boxH+10;
+
       ck(30);
-      pair('Fecha',v[9],'',''); // fecha viene del input date, v[9]
-      y+=10;
+      fld('Fecha',v[9]||new Date().toLocaleDateString('es-MX'),M,60);
+      y+=20;
+      ck(25);
       doc.setDrawColor(0,0,0);doc.setLineWidth(0.3);
-      doc.line(M,y,M+80,y);
+      doc.line(M,y,M+85,y);
       doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,100,100);
       doc.text('Firma del propietario',M,y+5);
+
+      footer();
       doc.save('Consentimiento_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
