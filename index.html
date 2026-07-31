@@ -117,11 +117,8 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .page-content.active .lib-grid,
 .page-content.active .webinar-list,
 .page-content.active .pdf-grid,
-.page-content.active .news-full-list,
 .page-content.active .channel-benefits { animation: fadeChild 0.45s 0.18s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .courses-h-scroll,
-.page-content.active .news-carousel-wrap { animation: fadeChild 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
-.page-content.active .right-col { animation: fadeChild 0.5s 0.15s cubic-bezier(0.16,1,0.3,1) both; }
+.page-content.active .courses-h-scroll { animation: fadeChild 0.45s 0.24s cubic-bezier(0.16,1,0.3,1) both; }
 @keyframes fadeChild { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Sidebar link active transition */
@@ -138,7 +135,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .section-header__link { font-size: 0.78rem; color: var(--purple-600); text-decoration: none; font-weight: 500; }
 
 /* ============ INICIO ============ */
-.home-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; min-width: 0; }
+.home-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 32px; min-width: 0; }
 .home-layout > * { min-width: 0; }
 .greeting { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 28px 32px; border-radius: var(--radius); background: linear-gradient(135deg, var(--white) 0%, var(--purple-50) 100%); border: 1px solid rgba(181,126,220,0.1); }
 .greeting__text h1 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--gray-900); letter-spacing: -0.03em; line-height: 1.3; margin-bottom: 4px; }
@@ -189,21 +186,6 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 
 .courses-h-scroll { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: none; margin-bottom: 32px; }
 .courses-h-scroll::-webkit-scrollbar { display: none; }
-
-.news-carousel { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; padding-bottom: 8px; scrollbar-width: none; }
-.news-carousel::-webkit-scrollbar { display: none; }
-.news-carousel__card { flex: 0 0 310px; scroll-snap-align: start; background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; transition: all var(--transition); }
-.news-carousel__card:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); transform: translateY(-2px); }
-.news-carousel__img { width: 100%; height: 160px; object-fit: cover; display: block; background: var(--gray-100); }
-.news-carousel__body { padding: 18px; }
-.news-carousel__source { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple-600); font-weight: 600; margin-bottom: 5px; }
-.news-carousel__title { font-family: var(--font-display); font-size: 0.85rem; font-weight: 600; color: var(--gray-800); line-height: 1.4; margin-bottom: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.news-carousel__excerpt { font-size: 0.74rem; color: var(--gray-400); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px; }
-.news-carousel__date { font-size: 0.65rem; color: var(--gray-400); }
-.news-carousel-wrap { position: relative; overflow: hidden; }
-.news-carousel__arrows { display: flex; gap: 8px; position: absolute; top: -44px; right: 0; }
-.news-carousel__arrow-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--gray-200); background: var(--white); display: grid; place-items: center; cursor: pointer; color: var(--gray-400); transition: all var(--transition); }
-.news-carousel__arrow-btn:hover { border-color: var(--purple-200); color: var(--purple-600); }
 
 /* RIGHT COL */
 .right-col { display: flex; flex-direction: column; gap: 14px; }
@@ -325,17 +307,6 @@ body.dark .card-lock-overlay p{ color: #ddd; }
 body.dark .pdf-card__tag--soon { background: rgba(255,255,255,.08); color: var(--purple-300); }
 body.dark .pdf-card__meta { color: var(--dk-text-3, #8a8aa3); }
 body.dark .pdf-card__tags { border-color: rgba(255,255,255,.08); }
-
-/* ============ NOTICIAS (full page) ============ */
-.news-full-list { display: flex; flex-direction: column; gap: 16px; }
-.news-full-item { display: flex; gap: 20px; background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); overflow: hidden; transition: all var(--transition); cursor: pointer; }
-.news-full-item:hover { border-color: var(--purple-200); box-shadow: var(--shadow-md); }
-.news-full-item__img { width: 220px; height: 160px; object-fit: cover; flex-shrink: 0; background: var(--gray-100); }
-.news-full-item__body { padding: 22px 22px 22px 0; display: flex; flex-direction: column; justify-content: center; }
-.news-full-item__source { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple-600); font-weight: 600; margin-bottom: 6px; }
-.news-full-item__title { font-family: var(--font-display); font-size: 1rem; font-weight: 600; color: var(--gray-800); line-height: 1.4; margin-bottom: 8px; }
-.news-full-item__excerpt { font-size: 0.8rem; color: var(--gray-400); line-height: 1.6; margin-bottom: 10px; }
-.news-full-item__date { font-size: 0.68rem; color: var(--gray-400); }
 
 /* ============ DESCUENTO ============ */
 .coupon-wrapper { display: flex; justify-content: center; padding-top: 20px; }
@@ -805,14 +776,6 @@ body.dark .cal-item__titulo { color: #fff; }
   .webinar-item__actions { width: 100%; display: flex; gap: 8px; }
   .webinar-item__actions .btn-sm { flex: 1; text-align: center; padding: 10px 14px; }
 
-  /* NEWS */
-  .news-full-item { flex-direction: column; }
-  .news-full-item__img { width: 100%; height: 160px; }
-  .news-full-item__body { padding: 16px; }
-  .news-full-item__title { font-size: 0.9rem; }
-  .news-carousel__card { flex: 0 0 250px; }
-  .news-carousel__arrows { top: -38px; }
-
   /* SIDEBAR RIGHT */
   .right-col { grid-template-columns: 1fr; gap: 10px; }
   .side-card { padding: 16px; }
@@ -835,9 +798,9 @@ body.dark .cal-item__titulo { color: #fff; }
   .coupon-pct { font-size: 3rem; }
 }
 /* ============ DARK MODE ============ */
-body, .sidebar, .topbar, .s-card, .stat-card, .side-card, .course-h-card, .news-carousel__card,
-.lib-card, .webinar-item, .pdf-card, .news-full-item, .resume-card, .activity-card,
-.course-item, .news-list-item, .notif-empty, .channel-card, .channel-benefits,
+body, .sidebar, .topbar, .s-card, .stat-card, .side-card, .course-h-card,
+.lib-card, .webinar-item, .pdf-card, .resume-card, .activity-card,
+.course-item, .notif-empty, .channel-card, .channel-benefits,
 .coupon-card, .stats-strip, .stats-strip__item, .score-card, .urg-card, .webinar-countdown,
 .topbar__btn, .form-input, .filter-tab, .btn-outline, .streak-badge, .side-card__icon,
 .stats-strip__icon, .course-h-card__icon, .pdf-card__icon, .pdf-card__dl,
@@ -902,12 +865,12 @@ body.dark .stats-strip__icon { border-color: var(--dk-border); color: var(--dk-m
 body.dark .stats-strip__val { color: var(--dk-text); }
 body.dark .stats-strip__lbl { color: var(--dk-muted); }
 
-body.dark .course-h-card, body.dark .lib-card, body.dark .news-carousel__card,
-body.dark .news-full-item, body.dark .webinar-item, body.dark .pdf-card,
+body.dark .course-h-card, body.dark .lib-card,
+body.dark .webinar-item, body.dark .pdf-card,
 body.dark .side-card, body.dark .activity-card, body.dark .score-card,
-body.dark .urg-card, body.dark .news-list-item, body.dark .course-item { background: var(--dk-card); border-color: var(--dk-border); }
-body.dark .course-h-card:hover, body.dark .lib-card:hover, body.dark .news-carousel__card:hover,
-body.dark .news-full-item:hover, body.dark .webinar-item:hover, body.dark .pdf-card:hover,
+body.dark .urg-card, body.dark .course-item { background: var(--dk-card); border-color: var(--dk-border); }
+body.dark .course-h-card:hover, body.dark .lib-card:hover,
+body.dark .webinar-item:hover, body.dark .pdf-card:hover,
 body.dark .side-card:hover, body.dark .score-card:hover, body.dark .urg-card:hover,
 body.dark .course-item:hover { border-color: var(--purple-600); box-shadow: 0 4px 16px rgba(127,76,165,0.12); }
 
@@ -915,14 +878,12 @@ body.dark .course-h-card__icon, body.dark .side-card__icon, body.dark .stats-str
 body.dark .pdf-card__icon, body.dark .pdf-card__dl, body.dark .channel-benefit__icon,
 body.dark .urg-card__icon, body.dark .course-item__thumb { border-color: var(--dk-border); color: var(--dk-muted); }
 body.dark .course-h-card__title, body.dark .side-card__title, body.dark .course-item__title,
-body.dark .news-carousel__title, body.dark .news-full-item__title, body.dark .news-feat__title,
 body.dark .webinar-item__title, body.dark .pdf-card__title, body.dark .lib-card__title,
-body.dark .score-card__label, body.dark .urg-card__title, body.dark .news-list-item__title,
+body.dark .score-card__label, body.dark .urg-card__title,
 body.dark .activity-card__title, body.dark .toggle-row__text h4, body.dark .config-row__text h4,
 body.dark .channel-benefit__text h4 { color: var(--dk-text); }
 body.dark .course-h-card__meta, body.dark .side-card__desc, body.dark .course-item__meta,
-body.dark .news-carousel__date, body.dark .news-carousel__excerpt, body.dark .news-full-item__excerpt,
-body.dark .news-full-item__date, body.dark .webinar-item__meta, body.dark .pdf-card__meta,
+body.dark .webinar-item__meta, body.dark .pdf-card__meta,
 body.dark .lib-card__meta, body.dark .score-card__desc, body.dark .urg-card__subtitle,
 body.dark .activity-item__text, body.dark .activity-item__time, body.dark .toggle-row__text p,
 body.dark .config-row__text p, body.dark .channel-benefit__text p { color: var(--dk-muted); }
@@ -935,9 +896,6 @@ body.dark .course-h-card__bar-track, body.dark .lib-card__progress-bar,
 body.dark .course-item__progress-bar { background: var(--dk-border); }
 body.dark .lib-card__img:not([style]) { background: linear-gradient(145deg, #2a2040, #1e1e30) !important; }
 body.dark .lib-card__badge { background: rgba(255,255,255,0.1); color: var(--dk-text); }
-body.dark .news-carousel__img, body.dark .news-full-item__img { opacity: 0.85; }
-body.dark .news-carousel__body, body.dark .news-card__body { background: var(--dk-card); }
-
 body.dark .webinar-item__date { background: rgba(127,76,165,0.12); border-color: rgba(127,76,165,0.3); }
 body.dark .webinar-item__date-day { color: var(--purple-400); }
 body.dark .webinar-item__date-month { color: var(--purple-400); }
@@ -1018,9 +976,6 @@ body.dark .vac-table tr:hover td { background: rgba(127,76,165,0.08); }
 
 body.dark .radio-opt { border-color: var(--dk-border); color: var(--dk-muted); }
 body.dark .radio-opt.selected { border-color: var(--purple-600); background: rgba(127,76,165,0.15); color: var(--purple-400); }
-
-body.dark .news-carousel__source, body.dark .news-full-item__source,
-body.dark .news-list-item__source { color: var(--purple-400); }
 
 /* ============ LEGAL PAGES ============ */
 .legal-back { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--gray-500); cursor: pointer; margin-bottom: 24px; transition: color var(--transition); background: none; border: none; font-family: var(--font-body); padding: 0; }
@@ -1286,7 +1241,7 @@ body.dark .foro-tema__title,body.dark .foro-detail__title{color:var(--dk-text)}
 body.dark .foro-tema__preview,body.dark .foro-detail__content,body.dark .foro-respuesta__text{color:var(--dk-muted)}
 @media(max-width:768px){.foro-bar{flex-direction:column;align-items:stretch}.foro-tema-item{flex-wrap:wrap}.foro-tema__count{order:99;margin-top:8px}}
 
-/* ============ DASHBOARD V2: Accesos rapidos horizontales + Noticias vertical ============ */
+/* ============ DASHBOARD V2: Accesos rápidos horizontales ============ */
 .quick-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;margin-bottom:24px}
 .quick-card{display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:all var(--transition)}
 .quick-card:hover{border-color:var(--purple-200);transform:translateY(-2px);box-shadow:0 8px 20px rgba(127,76,165,0.1)}
@@ -1301,25 +1256,6 @@ body.dark .quick-card__title{color:var(--dk-text)}
 body.dark .quick-card__desc{color:var(--dk-muted)}
 body.dark .quick-card__icon{background:rgba(127,76,165,0.15)}
 @media(max-width:768px){.quick-row{grid-template-columns:1fr}}
-
-/* Noticias verticales (sidebar derecho) - carrusel auto-scroll infinito */
-.news-vertical{position:relative;overflow:hidden;height:600px;mask-image:linear-gradient(180deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%)}
-.news-vertical__track{display:flex;flex-direction:column;gap:14px;animation:news-scroll 45s linear infinite;will-change:transform}
-.news-vertical:hover .news-vertical__track{animation-play-state:paused}
-@keyframes news-scroll{
-  0%{transform:translateY(0)}
-  100%{transform:translateY(-50%)}
-}
-.news-vertical-item{background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all var(--transition);flex-shrink:0}
-.news-vertical-item:hover{border-color:var(--purple-200);transform:translateY(-1px);box-shadow:0 6px 16px rgba(0,0,0,0.06)}
-.news-vertical-item__img{width:100%;height:120px;background-size:cover;background-position:center;background-color:var(--purple-50)}
-.news-vertical-item__body{padding:14px}
-.news-vertical-item__source{font-size:0.66rem;font-weight:700;color:var(--purple-700);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;display:block}
-.news-vertical-item__title{font-family:var(--font-display);font-size:0.88rem;font-weight:700;color:var(--gray-900);line-height:1.35;margin-bottom:6px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
-.news-vertical-item__date{font-size:0.7rem;color:var(--gray-400)}
-body.dark .news-vertical-item{background:var(--dk-card);border-color:var(--dk-border)}
-body.dark .news-vertical-item__title{color:var(--dk-text)}
-body.dark .news-vertical-item__date{color:var(--dk-muted)}
 
 /* ============ LOGROS ============ */
 .logros-summary{display:flex;align-items:center;justify-content:space-between;gap:24px;background:linear-gradient(135deg,var(--purple-900),var(--purple-700));border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;color:white;flex-wrap:wrap}
@@ -1522,7 +1458,6 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <li><a class="sidebar__link" data-page="biblioteca"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg> Biblioteca</a></li>
       <li><a class="sidebar__link" data-page="webinar"><svg class="icon" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Webinar</a></li>
       <li><a class="sidebar__link" data-page="pdf"><svg class="icon" viewBox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg> Material PDF</a></li>
-      <li><a class="sidebar__link" data-page="noticias"><svg class="icon" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"/></svg> Noticias</a></li>
       <li><a class="sidebar__link" data-page="foro"><svg class="icon" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg> Foro</a></li>
     </ul>
   </div>
@@ -1591,12 +1526,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
         <div class="quick-card" onclick="nav('foro')"><div class="quick-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></div><div class="quick-card__content"><div class="quick-card__title">Foro</div><div class="quick-card__desc">Comparte casos y aprende con otros.</div></div><span class="quick-card__arrow">›</span></div>
       </div>
     </div>
-    <div class="right-col">
-      <div class="section-header" style="margin-bottom:14px"><h2 class="section-header__title" style="font-size:1rem">Noticias</h2><a href="#" class="section-header__link" onclick="nav('noticias')">Ver todas →</a></div>
-      <div class="news-vertical" id="newsVertical">
-        <div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando noticias...</div>
-      </div>
-    </div></div>
+    </div>
   </div>
 
   <!-- ==================== BIBLIOTECA ==================== -->
@@ -1621,14 +1551,6 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="page-header"><h1 class="page-header__title">Material PDF</h1><p class="page-header__desc">Guías, protocolos y documentos descargables.</p></div>
     <div class="pdf-grid" id="pdfGrid">
       <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando material...</div>
-    </div>
-  </div>
-
-  <!-- ==================== NOTICIAS ==================== -->
-  <div class="page-content" data-page="noticias">
-    <div class="page-header"><h1 class="page-header__title">Noticias & actualizaciones</h1><p class="page-header__desc">Lo último del mundo de la medicina veterinaria.</p></div>
-    <div class="news-full-list">
-      <div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:48px;text-align:center;color:var(--gray-400);font-size:0.88rem">Cargando noticias...</div>
     </div>
   </div>
 
@@ -3149,9 +3071,8 @@ firebase.auth().onAuthStateChanged(function(user){
 function toggleDark(){document.body.classList.toggle('dark');localStorage.setItem('gv-dark',document.body.classList.contains('dark')?'1':'0')}
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
-function scrollC(d){document.getElementById('newsCarousel').scrollBy({left:d*280,behavior:'smooth'})}
 // Secciones libres (no se bloquean ni con overlay) — el resto se bloquea visualmente con blur+CTA
-var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','noticias','logros','score','notificaciones']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
+var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','logros','score','notificaciones']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
 
 function nav(page){
   document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));
@@ -3213,7 +3134,7 @@ function applyExploradorOverlay(page){
   if(!pageEl)return;
   pageEl.classList.add('explorador-blocked');
   // Crear overlay con CTA centrado
-  var titulo=({biblioteca:'la Biblioteca de cursos',webinar:'los Webinars',pdf:'el Material PDF',noticias:'las Noticias',foro:'el Foro',ficha:'la Ficha de Paciente',receta:'las Recetas',consentimiento:'el Consentimiento Informado',vacunacion:'la Tabla de Vacunación',score:'el Score Corporal',urgencias:'la Guía de Urgencias',calculadoras:'las Calculadoras Clínicas',descuento:'el Descuento 20%',canal:'el Canal',notificaciones:'las Notificaciones',logros:'los Logros'})[page]||'esta sección';
+  var titulo=({biblioteca:'la Biblioteca de cursos',webinar:'los Webinars',pdf:'el Material PDF',foro:'el Foro',ficha:'la Ficha de Paciente',receta:'las Recetas',consentimiento:'el Consentimiento Informado',vacunacion:'la Tabla de Vacunación',score:'el Score Corporal',urgencias:'la Guía de Urgencias',calculadoras:'las Calculadoras Clínicas',descuento:'el Descuento 20%',canal:'el Canal',notificaciones:'las Notificaciones',logros:'los Logros'})[page]||'esta sección';
   var ov=document.createElement('div');
   ov.id='exploradorOverlay';
   ov.style.cssText='position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:flex-start;justify-content:center;padding-top:140px;z-index:50;pointer-events:none';
@@ -4504,178 +4425,6 @@ function loadNotifPrefsCache(){
     return _notifPrefsCache;
   }).catch(function(){return null;});
 }
-var NEWSDATA_CACHE_KEY='newsdata_cache_v6';
-var NEWSDATA_CACHE_HOURS=6;
-
-// Trae noticias automaticas con cache de 6h
-function fetchAutoNews(){
-  return new Promise(function(resolve){
-    // Verificar cache
-    try{
-      var cacheRaw=localStorage.getItem(NEWSDATA_CACHE_KEY);
-      if(cacheRaw){
-        var cache=JSON.parse(cacheRaw);
-        var ageHours=(Date.now()-cache.timestamp)/(1000*60*60);
-        if(ageHours<NEWSDATA_CACHE_HOURS&&cache.noticias&&cache.noticias.length>0){
-          console.log('[NEWS] Usando cache ('+ageHours.toFixed(1)+'h)');
-          resolve(cache.noticias);
-          return;
-        }
-      }
-    }catch(e){}
-    // MODIFICADO: query corta. NewsData free plan limita q a 100 caracteres,
-    // si te pasas falla en silencio y devuelve vacío. Esta cabe (57 chars).
-    var query=encodeURIComponent('veterinaria OR mascotas OR animales OR zoonosis OR ganado');
-    var urlBase=WEBHOOK_URL+'/noticias?q='+query;
-    var PLACEHOLDER='https://placehold.co/600x400/4b1c71/ffffff?text=GlobalVet';
-    console.log('[NEWS] Fetching noticias via backend...');
-    function fetchPage(url){
-      return fetch(url).then(function(r){return r.json();}).catch(function(){return null;});
-    }
-    fetchPage(urlBase).then(function(data){
-      if(!data||!data.results||!Array.isArray(data.results)){
-        console.warn('[NEWS] Sin resultados pagina 1:',data);
-        resolve([]);
-        return;
-      }
-      var combinado=data.results.slice();
-      // Si hay nextPage, traer una segunda tanda para tener más variedad
-      var p2=data.nextPage?fetchPage(urlBase+'&page='+data.nextPage):Promise.resolve(null);
-      p2.then(function(data2){
-        if(data2&&data2.results&&Array.isArray(data2.results)){
-          combinado=combinado.concat(data2.results);
-        }
-        // Mapear + filtro temático veterinario + deduplicar por título normalizado
-        // Lista BLANCA: palabras que son del tema (si aparecen, pasa)
-        var VET_WHITE=['veterinari','veterinario','veterinaria','vet ','mascot','animal','perro','perra','gato','gata','canin','felin','equin','caballo','yegua','potro','ganad','vacun','bovino','bovina','porcin','cerdo','cerda','ave ','aves','pollo','gallina','ovin','caprin','cabra','oveja','cordero','zoonos','rabia','fauna','silvestr','reptil','exótico','exotico','tortuga','iguana','serpient','loro','perico','conejo','hámster','hamster','roedor','peces','acuícola','acuicultur','apícol','abeja','colmena','etolog','adiestr','jaur','manada','rebaño','rebano','razas','raza canina','raza felina','clínica veterinaria','clinica veterinaria','medicina veterinaria','zootecn','reproducción animal','reproduccion animal','nutrición animal','nutricion animal','dermatolog','imagenolog','urgencias veterinarias','cirugía veterinaria','cirugia veterinaria'];
-        // Lista NEGRA: si aparecen Y no hay palabra blanca, se descarta
-        var VET_BLACK=['humano','humana','humanos','humanas','en personas','en pacientes','en niños','en adultos','obesidad humana','ultraprocesado','café ','cafe ','arqueolog','restos humanos','restos óseos','restos oseos','hallazgo arqueológico','hallazgo arqueologico','momia','pirámide','piramide','política','politica','elecciones','presidente','futbol','fútbol','liga mx','champions','nfl','nba','olímpic','olimpic','musulm','iglesia','vaticano','papa francisco','sismo','terremoto','huracán','huracan','volcán','volcan','sars-cov','covid-19','covid','vacuna humana','vacuna pfizer','vacuna moderna','vacuna astrazeneca','viruela del mono','dengue humano'];
-        function pasaTemaVet(n){
-          var txt=((n.titulo||'')+' '+(n.contenido||'')).toLowerCase();
-          var enBlanca=VET_WHITE.some(function(w){return txt.indexOf(w)!==-1;});
-          if(enBlanca)return true; // si menciona algo veterinario, pasa
-          var enNegra=VET_BLACK.some(function(w){return txt.indexOf(w)!==-1;});
-          return !enNegra; // si no es claramente off-topic, también pasa (moderado)
-        }
-        var vistos={};
-        var noticias=combinado.map(function(n){
-          return {
-            _id:'news_'+(n.article_id||Math.random().toString(36).slice(2)),
-            titulo:n.title||'',
-            contenido:n.description||n.content||'',
-            fuente:n.source_id||n.source_name||'NewsData',
-            imagen:n.image_url||PLACEHOLDER,
-            link:n.link||'',
-            creado:n.pubDate||new Date().toISOString(),
-            _auto:true
-          };
-        }).filter(pasaTemaVet).filter(function(n){
-          var key=(n.titulo||'').toLowerCase().replace(/\s+/g,' ').trim();
-          if(!key||vistos[key])return false;
-          vistos[key]=true;
-          return true;
-        }).slice(0,30);
-      // Guardar en cache
-      try{localStorage.setItem(NEWSDATA_CACHE_KEY,JSON.stringify({timestamp:Date.now(),noticias:noticias}));}catch(e){}
-      console.log('[NEWS] '+noticias.length+' noticias obtenidas y cacheadas');
-      resolve(noticias);
-      }); // cierre p2.then
-    }).catch(function(e){
-      console.warn('[NEWS] Error fetch:',e);
-      // Si falla, intentar usar cache aunque sea viejo
-      try{
-        var cacheRaw=localStorage.getItem(NEWSDATA_CACHE_KEY);
-        if(cacheRaw){var cache=JSON.parse(cacheRaw);if(cache.noticias)resolve(cache.noticias);else resolve([]);}
-        else resolve([]);
-      }catch(e2){resolve([]);}
-    });
-  });
-}
-
-function loadClubNoticias(){
-  // Cargar en paralelo: noticias manuales (Firestore) + automaticas (NewsData)
-  Promise.all([
-    db.collection('noticias').get().then(function(s){
-      var arr=[];
-      s.forEach(function(d){var c=d.data();if(c.estado==='Borrador'||c.estado==='Oculto'||c.estado==='Programada')return;c._id=d.id;c._manual=true;arr.push(c);});
-      return arr;
-    }).catch(function(){return [];}),
-    fetchAutoNews()
-  ]).then(function(results){
-    var manuales=results[0]||[];
-    var autos=results[1]||[];
-    // Combinar: primero las manuales (prioridad), luego automaticas
-    var todas=manuales.concat(autos);
-    // Ordenar por fecha descendente
-    todas.sort(function(a,b){
-      var fa=a.creado||'';var fb=b.creado||'';return fb.localeCompare(fa);
-    });
-    // Renderizar
-    renderNoticias(todas);
-  }).catch(function(e){console.warn('Error loadClubNoticias:',e);renderNoticias([]);});
-}
-
-function renderNoticias(arr){
-  var carousel=document.getElementById('newsCarousel');
-  var vertical=document.getElementById('newsVertical');
-  var full=document.querySelector('[data-page="noticias"] .news-full-list');
-  function noticiaCard(c,esCarousel){
-    var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
-    var clickAction=c.link?'window.open(\''+c.link+'\',\'_blank\')':'';
-    var imgStyle=c.imagen?'background:url('+c.imagen+') center/cover':'background:linear-gradient(135deg,var(--purple-50),var(--purple-100))';
-    if(esCarousel){
-      return '<div class="news-carousel__card" '+(clickAction?'onclick="'+clickAction+'" style="cursor:pointer"':'')+'><div class="news-carousel__img" style="'+imgStyle+'"></div><div class="news-carousel__body"><span class="news-carousel__source">'+escapeHtml(c.fuente||'')+'</span><h4 class="news-carousel__title">'+escapeHtml(c.titulo||'')+'</h4><p class="news-carousel__date">'+f+'</p></div></div>';
-    }else{
-      var preview=(c.contenido||'').substring(0,150);
-      return '<div class="news-full-item" '+(clickAction?'onclick="'+clickAction+'" style="cursor:pointer"':'')+'><div class="news-full-item__img" style="'+imgStyle+'"></div><div class="news-full-item__body"><span class="news-full-item__source">'+escapeHtml(c.fuente||'')+'</span><h3 class="news-full-item__title">'+escapeHtml(c.titulo||'')+'</h3><p class="news-full-item__excerpt">'+escapeHtml(preview)+(preview.length>=150?'...':'')+'</p><p class="news-full-item__date">'+f+'</p></div></div>';
-    }
-  }
-  function noticiaVertical(c){
-    var f=c.creado?new Date(c.creado).toLocaleDateString('es-MX'):'';
-    var clickAction=c.link?'window.open(\''+c.link+'\',\'_blank\')':'';
-    var imgStyle=c.imagen?'background-image:url('+c.imagen+')':'';
-    return '<div class="news-vertical-item" '+(clickAction?'onclick="'+clickAction+'"':'')+'><div class="news-vertical-item__img" style="'+imgStyle+'"></div><div class="news-vertical-item__body"><span class="news-vertical-item__source">'+escapeHtml(c.fuente||'')+'</span><h4 class="news-vertical-item__title">'+escapeHtml(c.titulo||'')+'</h4><div class="news-vertical-item__date">'+f+'</div></div></div>';
-  }
-  // Carousel (si todavia existe en algun lado)
-  if(carousel){
-    carousel.innerHTML='';
-    if(arr.length===0){
-      carousel.innerHTML='<div style="padding:30px 20px;color:#9c9c9c;font-size:0.85rem;text-align:center;width:100%">Aún no hay noticias publicadas.</div>';
-    }else{
-      arr.slice(0,6).forEach(function(c){carousel.innerHTML+=noticiaCard(c,true);});
-    }
-  }
-  // Vertical (dashboard nuevo) - carrusel auto-scroll infinito
-  if(vertical){
-    vertical.innerHTML='';
-    if(arr.length===0){
-      vertical.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius-sm);padding:30px 20px;text-align:center;color:#9c9c9c;font-size:0.85rem">Aún no hay noticias.</div>';
-    }else{
-      // Duplicamos las noticias para que el loop infinito sea perfecto (translateY -50% al doble)
-      var noticiasMostradas=arr.slice(0,8);
-      var track='<div class="news-vertical__track">';
-      noticiasMostradas.forEach(function(c){track+=noticiaVertical(c);});
-      // Duplicado
-      noticiasMostradas.forEach(function(c){track+=noticiaVertical(c);});
-      track+='</div>';
-      vertical.innerHTML=track;
-      // Si hay muy pocas noticias (1-2), desactivar animación
-      if(noticiasMostradas.length<=2){
-        var t=vertical.querySelector('.news-vertical__track');
-        if(t)t.style.animation='none';
-      }
-    }
-  }
-  // Pagina completa
-  if(full){
-    full.innerHTML='';
-    if(arr.length===0){
-      full.innerHTML='<div style="background:var(--white);border:1px solid var(--gray-100);border-radius:var(--radius);padding:60px;text-align:center"><svg class="icon" viewBox="0 0 24 24" style="width:48px;height:48px;color:var(--gray-300);margin-bottom:16px;stroke-width:1.5;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg><h3 style="font-family:var(--font-display);font-size:1.1rem;font-weight:600;color:var(--gray-800);margin-bottom:8px">Próximamente</h3><p style="font-size:0.85rem;color:var(--gray-400)">Pronto encontrarás aquí las últimas noticias del sector veterinario.</p></div>';
-    }else{
-      arr.forEach(function(c){full.innerHTML+=noticiaCard(c,false);});
-    }
-  }
-}
 function loadClubNotificaciones(){
   var user=firebase.auth().currentUser;
   db.collection('notificaciones').get().then(function(s){
@@ -5788,7 +5537,7 @@ function showLogroToast(logro){
   },3000);
 }
 
-firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){checkAdminStatus(user).then(function(){loadProfile();loadClubCategorias();loadClubCursos();loadClubWebinars();loadClubPdfs();loadClubNoticias();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
+firebase.auth().onAuthStateChanged(function(user){if(user&&!clubDataLoaded){clubDataLoaded=true;setTimeout(function(){checkAdminStatus(user).then(function(){loadProfile();loadClubCategorias();loadClubCursos();loadClubWebinars();loadClubPdfs();loadFeaturedWebinar();loadResumeCard();loadInicioStats();updateRacha();updateGreeting();loadForoTemas();loadLogros();loadSuscripcion();loadNotifPrefs();
   // Cargar prefs ANTES de notificaciones para que el filtro funcione
   loadNotifPrefsCache().then(function(){loadClubNotificaciones();});
   // Cargar estado de suscripcion para banner y bloqueos
