@@ -39,7 +39,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .print-logo { display: none; }
 @media print {
   body { background: white !important; }
-  .sidebar, .sidebar-overlay, .topbar, .ficha-actions, .page-header { display: none !important; }
+  .sidebar, .sidebar-overlay, .topbar, .mobile-bottom-nav, .ficha-actions, .page-header { display: none !important; }
   .main-wrapper { margin-left: 0 !important; }
   .page-content { padding: 10px 20px !important; }
   .page-content:not(.active) { display: none !important; }
@@ -145,6 +145,7 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
 .greeting__streak-days { font-weight: 700; color: var(--gray-900); font-size: 0.88rem; }
 
 .feature-row { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 18px; margin-bottom: 24px; min-width: 0; }
+.feature-row.webinar-only { grid-template-columns: 1fr; }
 .feature-row > * { min-width: 0; }
 .webinar-card { background: linear-gradient(145deg, var(--purple-900) 0%, #3a1560 100%); border-radius: var(--radius); padding: 28px; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all var(--transition); word-break: break-word; box-shadow: 0 4px 20px rgba(75,28,113,0.15); }
 .webinar-card:hover { box-shadow: 0 8px 28px rgba(75,28,113,0.25); transform: translateY(-2px); }
@@ -1300,6 +1301,128 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 .logro-toast__label{font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;opacity:0.85;color:#fbbf24;margin-bottom:2px}
 .logro-toast__name{font-family:var(--font-display);font-size:0.95rem;font-weight:700;line-height:1.2}
 @media(max-width:600px){.logro-toast{left:16px;right:16px;min-width:auto}}
+/* ============ MOBILE APP EXPERIENCE / PWA ============ */
+.topbar__mobile-brand{display:none;font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--purple-900)}
+.mobile-bottom-nav{display:none}
+.home-tools-preview,.benefits-priority-header{display:none}
+.hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hub-card{appearance:none;width:100%;min-height:150px;border:1px solid var(--gray-200);border-radius:16px;background:var(--white);padding:22px;text-align:left;cursor:pointer;font-family:var(--font-body);display:flex;flex-direction:column;gap:12px;transition:transform var(--transition),border-color var(--transition),box-shadow var(--transition)}
+.hub-card:hover{transform:translateY(-2px);border-color:var(--purple-200);box-shadow:var(--shadow-md)}
+.hub-card__icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;color:var(--purple-600);background:var(--purple-50);border:1px solid var(--purple-100)}
+.hub-card__icon svg{width:21px;height:21px}
+.hub-card__title{font-family:var(--font-display);font-size:.92rem;font-weight:700;color:var(--gray-900)}
+.hub-card__desc{font-size:.75rem;color:var(--gray-500);line-height:1.55}
+.hub-card__arrow{margin-top:auto;color:var(--purple-600);font-size:.75rem;font-weight:700}
+body.dark .hub-card{background:var(--dk-card);border-color:var(--dk-border)}
+body.dark .hub-card__title{color:var(--dk-text)}
+body.dark .hub-card__desc{color:var(--dk-muted)}
+body.dark .hub-card__icon{background:rgba(127,76,165,.15);border-color:rgba(181,126,220,.18)}
+
+@media(max-width:768px){
+  html{scroll-padding-top:calc(68px + env(safe-area-inset-top));scroll-padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+  body{min-height:100dvh;padding-bottom:calc(72px + env(safe-area-inset-bottom));overscroll-behavior-y:none}
+  body.not-logged{padding-bottom:0}
+  .main-wrapper{min-height:100dvh}
+  .topbar{height:calc(58px + env(safe-area-inset-top));padding:env(safe-area-inset-top) 14px 0 8px}
+  .topbar__left{gap:4px}
+  .topbar__mobile-brand{display:inline-block}
+  .topbar__hamburger{display:grid;place-items:center;width:44px;height:44px}
+  .topbar__btn{width:44px;height:44px}
+  .page-content{padding:20px 16px 28px}
+  .page-header{margin-bottom:20px}
+  .page-header__title{font-size:1.28rem;line-height:1.25}
+  .page-header__desc{font-size:.8rem;line-height:1.55;margin-top:5px}
+
+  .mobile-bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:44;display:grid;grid-template-columns:repeat(4,1fr);min-height:calc(66px + env(safe-area-inset-bottom));padding:6px 6px env(safe-area-inset-bottom);background:rgba(255,255,255,.96);border-top:1px solid var(--gray-200);box-shadow:0 -8px 28px rgba(45,17,72,.08);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+  .mobile-bottom-nav__item{appearance:none;border:0;background:transparent;color:var(--gray-400);min-width:0;min-height:54px;border-radius:12px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:var(--font-body);font-size:.62rem;font-weight:600;cursor:pointer;position:relative}
+  .mobile-bottom-nav__item svg{width:21px;height:21px}
+  .mobile-bottom-nav__item.active{color:var(--purple-900);background:var(--purple-50)}
+  .mobile-bottom-nav__item.active::before{content:'';position:absolute;top:2px;width:22px;height:3px;border-radius:4px;background:var(--purple-600)}
+  body.not-logged .mobile-bottom-nav{display:none!important}
+  body.dark .mobile-bottom-nav{background:rgba(26,26,36,.96);border-color:var(--dk-border)}
+  body.dark .mobile-bottom-nav__item{color:var(--dk-muted)}
+  body.dark .mobile-bottom-nav__item.active{color:#d8b4fe;background:rgba(127,76,165,.16)}
+  body.dark .topbar__mobile-brand{color:var(--dk-text)}
+
+  .sidebar{padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);width:min(86vw,320px)}
+  .sidebar__link{min-height:44px;padding:11px 12px}
+
+  .main-col{display:flex;flex-direction:column}
+  .greeting{order:1;padding:20px;margin-bottom:14px}
+  #inicioSubWidget{order:2}
+  .resume-priority{order:3;margin-bottom:18px}
+  .courses-priority-header{order:4}
+  #coursesHScroll{order:5;margin-left:-16px!important;margin-right:-16px!important;padding:0 16px 10px;scroll-padding-inline:16px;margin-bottom:18px!important}
+  .stats-strip{order:6}
+  .home-tools-preview{display:block;order:7;margin-bottom:24px}
+  .benefits-priority-header{display:flex;order:8}
+  .quick-row{order:9}
+  .feature-row{order:10;margin-top:26px}
+  .course-h-card{flex-grow:0;flex-shrink:0;flex-basis:min(84vw,320px);scroll-snap-align:start}
+  .stats-strip{grid-template-columns:repeat(3,1fr);margin-bottom:24px}
+  .stats-strip__item,.stats-strip__item:nth-child(odd),.stats-strip__item:nth-child(n+3){border-right:1px solid var(--gray-100);border-bottom:0;padding:14px 8px;gap:8px;flex-direction:column;text-align:center}
+  .stats-strip__item:last-child{border-right:0}
+  .stats-strip__icon{width:36px;height:36px}
+  .stats-strip__val{font-size:1.05rem}
+  .stats-strip__lbl{font-size:.61rem}
+  .home-tools-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .home-tool-card{appearance:none;border:1px solid var(--gray-200);background:var(--white);border-radius:14px;min-height:104px;padding:15px;text-align:left;font-family:var(--font-body);display:flex;flex-direction:column;gap:8px;cursor:pointer;color:var(--gray-800)}
+  .home-tool-card svg{width:20px;height:20px;color:var(--purple-600)}
+  .home-tool-card strong{font-family:var(--font-display);font-size:.76rem;line-height:1.3}
+  .home-tool-card span{font-size:.64rem;color:var(--gray-400);line-height:1.4}
+  .home-tools-all{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--purple-200);border-radius:12px;background:var(--purple-50);color:var(--purple-900);font-family:var(--font-body);font-weight:700;cursor:pointer}
+  body.dark .home-tool-card{background:var(--dk-card);border-color:var(--dk-border);color:var(--dk-text)}
+  body.dark .home-tools-all{background:rgba(127,76,165,.15);color:#d8b4fe;border-color:rgba(181,126,220,.25)}
+
+  .hub-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .hub-card{min-height:158px;padding:17px 15px;border-radius:14px;gap:10px}
+  .hub-card__icon{width:40px;height:40px}
+  .hub-card__title{font-size:.8rem;line-height:1.3}
+  .hub-card__desc{font-size:.67rem;line-height:1.45}
+  .hub-card__arrow{font-size:.68rem}
+
+  .login-screen{min-height:100dvh;background:#fff}
+  .login-hero{padding:calc(20px + env(safe-area-inset-top)) 18px 22px!important;min-height:auto!important}
+  .login-hero__logo{margin-bottom:12px!important}
+  .login-hero h1{font-size:1.25rem!important;margin-bottom:7px!important;max-width:340px!important}
+  .login-hero p{font-size:.76rem!important;line-height:1.45!important;max-width:340px!important}
+  .login-hero .gvh-flix,.login-hero .gvh-hook,.login-hero .gvh-benefits,.login-hero .gvh-price,.login-hero .gvh-refs-title,.login-hero .gvh-refs,.login-hero .gvh-trust,.login-hero .login-hero__stats{display:none!important}
+  .login-form-side{padding:26px 20px calc(30px + env(safe-area-inset-bottom))!important;max-width:460px!important;flex:1!important}
+  .login-form-inner{margin:0 auto!important;max-width:380px}
+  .login-tabs{display:flex;width:100%;margin-bottom:24px}
+  .login-tab{flex:1;min-height:42px;padding:7px 10px}
+  .login-box__title{font-size:1.45rem}
+  .login-box__desc{margin-bottom:22px}
+  .login-form-side .form-input{min-height:50px;font-size:16px;padding:13px 15px}
+  .login-box__btn,.login-box__google{min-height:50px}
+
+  .curso-header__btns{flex-wrap:wrap}
+  .curso-header__btn{min-height:44px}
+  .curso-clase{padding:14px}
+  .video-modal{padding:0;align-items:center}
+  .video-modal>div{max-width:100%!important}
+  .video-modal>div>div:first-child{border-radius:0!important;padding:12px 14px!important;gap:10px;flex-wrap:wrap}
+  #videoTitle{width:100%;font-size:.82rem!important}
+  #videoCompleteBtn{min-height:42px;flex:1;padding:9px 14px!important}
+  body:not(.not-logged) #pwaInstallBanner{bottom:calc(82px + env(safe-area-inset-bottom))!important}
+}
+
+@media(max-width:360px){
+  .topbar__actions{gap:2px}
+  .topbar__btn{width:40px;height:40px}
+  .topbar__mobile-brand{font-size:.82rem}
+  .page-content{padding-left:12px;padding-right:12px}
+  #coursesHScroll{margin-left:-12px!important;margin-right:-12px!important;padding-left:12px;padding-right:12px}
+  .course-h-card{flex-basis:88vw}
+  .mobile-bottom-nav__item{font-size:.56rem}
+  .hub-card{padding:15px 12px}
+}
+
+@media(display-mode:standalone){
+  .topbar{box-shadow:0 3px 16px rgba(45,17,72,.05)}
+  .login-screen{background:var(--purple-900)}
+}
+.pwa-standalone .topbar{box-shadow:0 3px 16px rgba(45,17,72,.05)}
 </style>
 </head>
 <body class="not-logged">
@@ -1463,6 +1586,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   </div>
   <div class="sidebar__section"><div class="sidebar__section-title">Herramientas</div>
     <ul class="sidebar__nav">
+      <li><a class="sidebar__link" data-page="herramientas"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg> Centro de herramientas</a></li>
       <li><a class="sidebar__link" data-page="ficha"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg> Ficha Paciente</a></li>
       <li><a class="sidebar__link" data-page="receta"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg> Recetas</a></li>
       <li><a class="sidebar__link" data-page="consentimiento"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg> Consentimiento</a></li>
@@ -1474,6 +1598,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
   </div>
   <div class="sidebar__section"><div class="sidebar__section-title">Beneficios</div>
     <ul class="sidebar__nav">
+      <li><a class="sidebar__link" data-page="beneficios"><svg class="icon" viewBox="0 0 24 24"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 7v14M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/></svg> Mis beneficios</a></li>
       <li><a class="sidebar__link" data-page="descuento"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg> Descuento 20%</a></li>
       <li><a class="sidebar__link" data-page="canal"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg> Canal</a></li>
       <li><a class="sidebar__link" data-page="notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg> Notificaciones <span class="notif-badge" id="sidebarNotifBadge">0</span></a></li>
@@ -1494,7 +1619,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 
 <div class="main-wrapper">
   <header class="topbar">
-    <div class="topbar__left"><button class="topbar__hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></button></div>
+    <div class="topbar__left"><button class="topbar__hamburger" onclick="toggleSidebar()" aria-label="Abrir menú"><span></span><span></span><span></span></button><span class="topbar__mobile-brand">GlobalVet</span></div>
     <div class="topbar__actions">
       <button class="topbar__btn" id="darkToggle" onclick="toggleDark()" title="Modo oscuro"><svg class="icon icon-moon" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg><svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></button>
       <button class="topbar__btn" onclick="nav('notificaciones')" title="Notificaciones"><svg class="icon" viewBox="0 0 24 24"><path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg><span class="notif-badge" id="topbarNotifBadge">0</span></button>
@@ -1510,15 +1635,26 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="home-layout"><div class="main-col">
       <div class="greeting"><div class="greeting__text"><h1 id="greetingTitle">&nbsp;</h1><p>Tienes acceso completo al catálogo. Retoma donde te quedaste.</p></div><div class="greeting__streak"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/><path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/></svg><span class="greeting__streak-days">0</span> días de racha</div></div>
       <div id="inicioSubWidget" style="display:none;margin-bottom:18px"></div>
-      <div class="feature-row">
+      <div class="resume-card resume-priority" id="resumeCard" style="display:none"><div class="resume-card__label">Retomar curso</div><div class="resume-card__course"><div class="resume-card__progress-ring"><svg width="52" height="52" viewBox="0 0 52 52"><circle class="ring-bg" cx="26" cy="26" r="22"/><circle class="ring-fill" cx="26" cy="26" r="22" id="resumeRingFill" stroke-dasharray="138.23" stroke-dashoffset="138.23"/></svg><div class="resume-card__progress-pct" id="resumePct">0%</div></div><div class="resume-card__info"><h3 id="resumeCourseName">&mdash;</h3><span id="resumeCourseMeta">&mdash;</span></div></div><button class="resume-card__btn" id="resumeContinueBtn"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Continuar</button></div>
+      <div class="feature-row webinar-only">
         <div class="webinar-card" id="featuredWebinarCard"><div class="webinar-card__tag">Próximo Webinar</div><div class="webinar-card__title" id="featuredWebinarTitle">Cargando...</div><div class="webinar-card__timer"><div class="cd-block"><div class="cd-val" id="cd-days">00</div><div class="cd-lbl">Días</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-hrs">00</div><div class="cd-lbl">Hrs</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-min">00</div><div class="cd-lbl">Min</div></div><span class="cd-sep">:</span><div class="cd-block"><div class="cd-val" id="cd-sec">00</div><div class="cd-lbl">Seg</div></div></div><div class="webinar-card__date" id="featuredWebinarDate"><svg class="icon" viewBox="0 0 24 24" style="width:13px;height:13px;stroke:var(--purple-200)"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> &mdash;</div></div>
-        <div class="resume-card" id="resumeCard" style="display:none"><div class="resume-card__label">Retomar curso</div><div class="resume-card__course"><div class="resume-card__progress-ring"><svg width="52" height="52" viewBox="0 0 52 52"><circle class="ring-bg" cx="26" cy="26" r="22"/><circle class="ring-fill" cx="26" cy="26" r="22" id="resumeRingFill" stroke-dasharray="138.23" stroke-dashoffset="138.23"/></svg><div class="resume-card__progress-pct" id="resumePct">0%</div></div><div class="resume-card__info"><h3 id="resumeCourseName">&mdash;</h3><span id="resumeCourseMeta">&mdash;</span></div></div><button class="resume-card__btn" id="resumeContinueBtn"><svg class="icon" viewBox="0 0 24 24" style="width:15px;height:15px"><polygon points="5 3 19 12 5 21 5 3" fill="currentColor" stroke="none"/></svg> Continuar</button></div>
       </div>
       <div class="stats-strip"><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div><div><div class="stats-strip__val" id="statEnProgreso">0</div><div class="stats-strip__lbl">En progreso</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="stats-strip__val" id="statCompletados">0</div><div class="stats-strip__lbl">Completados</div></div></div><div class="stats-strip__item"><div class="stats-strip__icon"><svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg></div><div><div class="stats-strip__val" id="statCertificados">0</div><div class="stats-strip__lbl">Certificados</div></div></div></div>
-      <div class="section-header" style="margin-bottom:18px"><h2 class="section-header__title">Continuar aprendiendo</h2><a href="#" class="section-header__link" onclick="nav('biblioteca')">Ver todos →</a></div>
+      <div class="section-header courses-priority-header" style="margin-bottom:18px"><h2 class="section-header__title">Continúa aprendiendo</h2><a href="#" class="section-header__link" onclick="event.preventDefault();nav('biblioteca')">Ver todos →</a></div>
       <div class="courses-h-scroll" id="coursesHScroll" style="margin-bottom:28px">
         <div style="padding:20px;color:#9c9c9c;font-size:0.85rem">Cargando cursos...</div>
       </div>
+      <section class="home-tools-preview" aria-labelledby="homeToolsTitle">
+        <div class="section-header"><h2 class="section-header__title" id="homeToolsTitle">Herramientas clínicas</h2><a href="#" class="section-header__link" onclick="event.preventDefault();nav('herramientas')">Ver todas →</a></div>
+        <div class="home-tools-grid">
+          <button class="home-tool-card" onclick="nav('calculadoras')"><svg class="icon" viewBox="0 0 24 24"><path d="M9 7h6M9 11h6M9 15h3M4 3h16v18H4z"/></svg><strong>Calculadoras</strong><span>Dosis, fluidos y conversiones.</span></button>
+          <button class="home-tool-card" onclick="nav('ficha')"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg><strong>Ficha de paciente</strong><span>Historial clínico listo para PDF.</span></button>
+          <button class="home-tool-card" onclick="nav('receta')"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg><strong>Recetas</strong><span>Prescripción profesional descargable.</span></button>
+          <button class="home-tool-card" onclick="nav('urgencias')"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.928 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg><strong>Guía de urgencias</strong><span>Protocolos rápidos para guardia.</span></button>
+        </div>
+        <button class="home-tools-all" onclick="nav('herramientas')">Abrir las 7 herramientas</button>
+      </section>
+      <div class="section-header benefits-priority-header"><h2 class="section-header__title">Beneficios del Club</h2><a href="#" class="section-header__link" onclick="event.preventDefault();nav('beneficios')">Ver todos →</a></div>
       <!-- Accesos rápidos horizontales: Descuento + Canal + Foro + Actividad reciente -->
       <div class="quick-row">
         <div class="quick-card" onclick="nav('descuento')"><div class="quick-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></div><div class="quick-card__content"><div class="quick-card__title">Descuento 20%</div><div class="quick-card__desc">Aplica tu cupón exclusivo de miembro.</div></div><span class="quick-card__arrow">›</span></div>
@@ -1535,6 +1671,31 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="filter-tabs" id="libFilterTabs"><button class="filter-tab active" data-cat="">Todos</button></div>
     <div class="lib-grid" id="libGrid">
       <div style="grid-column:1/-1;text-align:center;padding:40px 20px;color:#9c9c9c;font-size:0.9rem">Cargando catálogo...</div>
+    </div>
+  </div>
+
+  <!-- ==================== CENTRO DE HERRAMIENTAS ==================== -->
+  <div class="page-content" data-page="herramientas">
+    <div class="page-header"><h1 class="page-header__title">Herramientas clínicas</h1><p class="page-header__desc">Recursos prácticos para consulta, guardia y seguimiento de pacientes.</p></div>
+    <div class="hub-grid">
+      <button class="hub-card" onclick="nav('calculadoras')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 7h6M9 11h6M9 15h3M4 3h16v18H4z"/></svg></span><span class="hub-card__title">Calculadoras clínicas</span><span class="hub-card__desc">Dosis, fluidoterapia, superficie corporal y conversiones.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('ficha')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></span><span class="hub-card__title">Ficha de paciente</span><span class="hub-card__desc">Registra el historial clínico y genera un PDF profesional.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('receta')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg></span><span class="hub-card__title">Recetas</span><span class="hub-card__desc">Crea prescripciones claras con indicaciones y seguimiento.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('consentimiento')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg></span><span class="hub-card__title">Consentimiento</span><span class="hub-card__desc">Documenta procedimientos y autorización informada.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('vacunacion')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg></span><span class="hub-card__title">Tabla de vacunación</span><span class="hub-card__desc">Consulta esquemas preventivos de forma rápida.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('score')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg></span><span class="hub-card__title">Score corporal</span><span class="hub-card__desc">Evalúa condición corporal con referencias claras.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+      <button class="hub-card" onclick="nav('urgencias')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.928 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></span><span class="hub-card__title">Guía de urgencias</span><span class="hub-card__desc">Protocolos de consulta rápida para situaciones críticas.</span><span class="hub-card__arrow">Abrir herramienta →</span></button>
+    </div>
+  </div>
+
+  <!-- ==================== BENEFICIOS ==================== -->
+  <div class="page-content" data-page="beneficios">
+    <div class="page-header"><h1 class="page-header__title">Beneficios del Club</h1><p class="page-header__desc">Todo lo adicional que acompaña tu formación en GlobalVet.</p></div>
+    <div class="hub-grid">
+      <button class="hub-card" onclick="nav('descuento')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5a1.99 1.99 0 011.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg></span><span class="hub-card__title">Descuento del 20%</span><span class="hub-card__desc">Tu beneficio permanente para productos y servicios elegibles.</span><span class="hub-card__arrow">Ver mi beneficio →</span></button>
+      <button class="hub-card" onclick="nav('canal')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg></span><span class="hub-card__title">Canal privado</span><span class="hub-card__desc">Novedades y comunicación exclusiva para miembros.</span><span class="hub-card__arrow">Abrir canal →</span></button>
+      <button class="hub-card" onclick="nav('foro')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg></span><span class="hub-card__title">Foro de colegas</span><span class="hub-card__desc">Comparte casos, dudas y experiencias con la comunidad.</span><span class="hub-card__arrow">Ir al foro →</span></button>
+      <button class="hub-card" onclick="nav('suscripcion')"><span class="hub-card__icon"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></span><span class="hub-card__title">Mi suscripción</span><span class="hub-card__desc">Consulta tu plan y todos los beneficios incluidos.</span><span class="hub-card__arrow">Ver mi plan →</span></button>
     </div>
   </div>
 
@@ -1770,13 +1931,13 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 
     <div class="s-card" id="pwaSettingsCard">
       <div class="s-card__title">Instalar aplicación</div>
-      <div class="s-card__desc">Instala GlobalVet en tu dispositivo para acceso rápido y uso offline. Aparece como app nativa en tu pantalla de inicio.</div>
+      <div class="s-card__desc">Instala GlobalVet en tu dispositivo para entrar desde tu pantalla de inicio con una experiencia optimizada para móvil. La navegación básica queda disponible sin conexión; cursos y videos requieren internet.</div>
       <div id="pwaSettingsBox">
         <div id="pwaInstallableBox" style="display:none;background:linear-gradient(135deg,var(--purple-50),var(--purple-100));border:1px solid var(--purple-200);border-radius:var(--radius);padding:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
           <div style="font-size:42px;line-height:1">📱</div>
           <div style="flex:1;min-width:200px">
             <h4 style="font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--purple-900);margin:0 0 4px">Instala GlobalVet</h4>
-            <p style="margin:0;font-size:0.83rem;color:var(--gray-500);line-height:1.5">Acceso rápido desde tu home screen, funciona offline y se ve como una app nativa.</p>
+            <p style="margin:0;font-size:0.83rem;color:var(--gray-500);line-height:1.5">Acceso rápido, pantalla completa y navegación móvil. Los cursos y videos requieren conexión.</p>
           </div>
           <button id="pwaSettingsBtn" class="btn-save" style="white-space:nowrap">Instalar ahora</button>
         </div>
@@ -2533,6 +2694,13 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 
 </div>
 
+<nav class="mobile-bottom-nav" aria-label="Navegación móvil">
+  <button class="mobile-bottom-nav__item active" data-mobile-page="inicio" onclick="nav('inicio')"><svg class="icon" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg><span>Inicio</span></button>
+  <button class="mobile-bottom-nav__item" data-mobile-page="biblioteca" onclick="nav('biblioteca')"><svg class="icon" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg><span>Cursos</span></button>
+  <button class="mobile-bottom-nav__item" data-mobile-page="herramientas" onclick="nav('herramientas')"><svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span>Herramientas</span></button>
+  <button class="mobile-bottom-nav__item" data-mobile-page="beneficios" onclick="nav('beneficios')"><svg class="icon" viewBox="0 0 24 24"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 7v14M12 7H7.5a2.5 2.5 0 110-5C11 2 12 7 12 7zm0 0h4.5a2.5 2.5 0 100-5C13 2 12 7 12 7z"/></svg><span>Beneficios</span></button>
+</nav>
+
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
@@ -3052,6 +3220,13 @@ function loginGoogle(){
   });
 }
 // Firebase Auth state listener
+function getInitialPage(){
+  try{
+    var requested=new URLSearchParams(window.location.search).get('page')||'inicio';
+    if(requested==='webinars')requested='webinar';
+    return document.querySelector('.page-content[data-page="'+requested+'"]')?requested:'inicio';
+  }catch(e){return 'inicio';}
+}
 firebase.auth().onAuthStateChanged(function(user){
   if(user){
     document.getElementById('loginScreen').classList.remove('show');
@@ -3062,7 +3237,7 @@ firebase.auth().onAuthStateChanged(function(user){
     if(emailEl)emailEl.textContent=user.email||'';
     var avatarEl=document.querySelector('.sidebar__avatar-text');
     if(avatarEl&&user.displayName)avatarEl.textContent=user.displayName.split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
-    nav('inicio');
+    nav(getInitialPage());
   }else{
     document.getElementById('loginScreen').classList.add('show');
     document.body.classList.add('not-logged');
@@ -3072,12 +3247,30 @@ function toggleDark(){document.body.classList.toggle('dark');localStorage.setIte
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
 // Secciones libres (no se bloquean ni con overlay) — el resto se bloquea visualmente con blur+CTA
-var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','logros','score','notificaciones']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
+var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','logros','score','notificaciones','herramientas','beneficios']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
 
 function nav(page){
+  var pageEl=document.querySelector('.page-content[data-page="'+page+'"]');
+  if(!pageEl){page='inicio';pageEl=document.querySelector('.page-content[data-page="inicio"]');}
   document.querySelectorAll('.page-content').forEach(p=>p.classList.remove('active'));
-  document.querySelector('.page-content[data-page="'+page+'"]').classList.add('active');
+  pageEl.classList.add('active');
   document.querySelectorAll('.sidebar__link').forEach(l=>{l.classList.remove('active');if(l.dataset.page===page)l.classList.add('active')});
+  var toolPages=['herramientas','ficha','receta','consentimiento','vacunacion','score','urgencias','calculadoras'];
+  var benefitPages=['beneficios','descuento','canal','foro','suscripcion'];
+  var mobilePage=page;
+  if(page==='curso-detalle')mobilePage='biblioteca';
+  else if(toolPages.indexOf(page)!==-1)mobilePage='herramientas';
+  else if(benefitPages.indexOf(page)!==-1)mobilePage='beneficios';
+  document.querySelectorAll('.mobile-bottom-nav__item').forEach(function(item){
+    var active=item.dataset.mobilePage===mobilePage;
+    item.classList.toggle('active',active);
+    if(active)item.setAttribute('aria-current','page');else item.removeAttribute('aria-current');
+  });
+  var mobileBrand=document.querySelector('.topbar__mobile-brand');
+  if(mobileBrand){
+    var titles={inicio:'GlobalVet',biblioteca:'Cursos',webinar:'Webinars',pdf:'Material PDF',foro:'Foro',herramientas:'Herramientas',beneficios:'Beneficios',ficha:'Ficha clínica',receta:'Recetas',consentimiento:'Consentimiento',vacunacion:'Vacunación',score:'Score corporal',urgencias:'Urgencias',calculadoras:'Calculadoras',descuento:'Descuento',canal:'Canal',perfil:'Mi perfil',suscripcion:'Suscripción',configuracion:'Configuración','curso-detalle':'Curso'};
+    mobileBrand.textContent=titles[page]||'GlobalVet';
+  }
   window.scrollTo(0,0);
   closeSidebar();
   // Aplicar/quitar overlay de modo explorador
@@ -5622,7 +5815,7 @@ function showInstallBanner(){
   b.innerHTML='<div style="font-size:32px">📱</div>'+
     '<div style="flex:1;min-width:0">'+
       '<div style="font-weight:700;font-size:0.9rem;margin-bottom:2px">Instala GlobalVet</div>'+
-      '<div style="font-size:0.78rem;opacity:0.9">Acceso rápido como app, funciona offline</div>'+
+      '<div style="font-size:0.78rem;opacity:0.9">Acceso rápido y navegación optimizada para móvil</div>'+
     '</div>'+
     '<button id="pwaInstallBtn" style="background:#fff;color:#4b1c71;border:none;padding:8px 14px;border-radius:8px;font-weight:700;font-size:0.82rem;cursor:pointer">Instalar</button>'+
     '<button id="pwaInstallDismiss" style="background:transparent;color:#fff;border:none;font-size:1.4rem;cursor:pointer;padding:0 4px;opacity:0.7">×</button>';
@@ -5647,6 +5840,7 @@ function showInstallBanner(){
 window.addEventListener('appinstalled',function(){
   console.log('✅ PWA instalada');
   var b=document.getElementById('pwaInstallBanner');if(b)b.remove();
+  syncPwaMode();
   // Refrescar el card de Configuración
   renderPwaSettings();
 });
@@ -5658,6 +5852,15 @@ function isPwaInstalled(){
   // Otras: display-mode standalone
   if(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)return true;
   return false;
+}
+
+function syncPwaMode(){
+  document.documentElement.classList.toggle('pwa-standalone',isPwaInstalled());
+}
+syncPwaMode();
+if(window.matchMedia){
+  var pwaModeQuery=window.matchMedia('(display-mode: standalone)');
+  if(pwaModeQuery.addEventListener)pwaModeQuery.addEventListener('change',syncPwaMode);
 }
 
 function getInstallInstructions(){

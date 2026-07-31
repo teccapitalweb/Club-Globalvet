@@ -2,14 +2,18 @@
   "name": "GlobalVet México - Club",
   "short_name": "GlobalVet",
   "description": "Plataforma de educación continua para profesionales veterinarios",
-  "start_url": "./",
+  "id": "./",
+  "start_url": "./?source=pwa",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait-primary",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
   "background_color": "#4b1c71",
   "theme_color": "#4b1c71",
   "lang": "es-MX",
   "categories": ["education", "medical", "professional"],
+  "prefer_related_applications": false,
+  "launch_handler": {"client_mode": "navigate-existing"},
   "icons": [
     {
       "src": "icon-192.png",
@@ -29,15 +33,22 @@
       "name": "Biblioteca",
       "short_name": "Cursos",
       "description": "Ver todos los cursos",
-      "url": "./?page=biblioteca",
-      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+      "url": "./?page=biblioteca&source=shortcut",
+      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Webinars",
       "short_name": "Webinars",
       "description": "Próximos webinars",
-      "url": "./?page=webinars",
-      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+      "url": "./?page=webinar&source=shortcut",
+      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Herramientas clínicas",
+      "short_name": "Herramientas",
+      "description": "Abrir el centro de herramientas clínicas",
+      "url": "./?page=herramientas&source=shortcut",
+      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
     }
   ]
 }
