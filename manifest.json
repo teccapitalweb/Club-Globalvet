@@ -16,13 +16,13 @@
   "launch_handler": {"client_mode": "navigate-existing"},
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "globalvet-app-white-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "globalvet-app-white-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -34,21 +34,21 @@
       "short_name": "Cursos",
       "description": "Ver todos los cursos",
       "url": "./?page=biblioteca&source=shortcut",
-      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+      "icons": [{"src": "globalvet-app-white-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Webinars",
       "short_name": "Webinars",
       "description": "Próximos webinars",
       "url": "./?page=webinar&source=shortcut",
-      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+      "icons": [{"src": "globalvet-app-white-192.png", "sizes": "192x192"}]
     },
     {
       "name": "Herramientas clínicas",
       "short_name": "Herramientas",
       "description": "Abrir el centro de herramientas clínicas",
       "url": "./?page=herramientas&source=shortcut",
-      "icons": [{"src": "icon-192.png", "sizes": "192x192"}]
+      "icons": [{"src": "globalvet-app-white-192.png", "sizes": "192x192"}]
     }
   ]
 }

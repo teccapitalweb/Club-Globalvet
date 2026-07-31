@@ -1,15 +1,15 @@
 // GlobalVet México — Service Worker
 // Cache offline básico de la shell de la app
 
-const CACHE_NAME = 'globalvet-v28';
+const CACHE_NAME = 'globalvet-v29';
 const PRECACHE_URLS = [
   './',
   './index.html',
-  './manifest.json',
-  './favicon.png',
-  './apple-touch-icon.png',
-  './icon-192.png',
-  './icon-512.png',
+  './manifest.json?v=globalvet-white-2',
+  './globalvet-favicon-white.png',
+  './globalvet-apple-touch-white.png',
+  './globalvet-app-white-192.png',
+  './globalvet-app-white-512.png',
   'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
 ];
