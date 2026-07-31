@@ -18,14 +18,13 @@
     {"courseId":"NuwSqgIMN0ilX0bQwZ3w","course":"Salud y Manejo Clínico en Terneros","class":2,"driveFileId":"1BU5yWzjHXQrVqxstShv_si3CRyRGVVIA","bunnyVideoId":"1474e0e4-fbec-4014-8d8a-ac8c2fcacf6c"},
     {"courseId":"NuwSqgIMN0ilX0bQwZ3w","course":"Salud y Manejo Clínico en Terneros","class":3,"driveFileId":"1dO8N0ajLsVysBi6tfEIZ7oEQXcoIDhB4","bunnyVideoId":"3e15d4d0-5b27-4247-bde7-9bee43f5695b","note":"La grabación reúne las clases 3 y 4"},
     {"courseId":"NuwSqgIMN0ilX0bQwZ3w","course":"Salud y Manejo Clínico en Terneros","class":4,"driveFileId":"1sczXh3EiPJyV_2xnFrq-QbrZEJGZ7PMK","bunnyVideoId":"29b20db8-a637-4f15-8bce-544506f228ce","note":"Corresponde a la sesión 5"},
+    {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":1,"driveFileId":"1fDuHdMGXxq67nQruwUCcMWoJwY0xYKFF","bunnyVideoId":"6f909a8c-fe37-452d-83d5-3d1d329ed5c7"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":2,"driveFileId":"1hh6QD0ewQxopVBTsaczC3Ugd64p9roF_","bunnyVideoId":"cbaa388d-ce11-481e-a6ee-2962bd525bcc"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":3,"driveFileId":"1Npg78zaeVcaTI7df_LmZOMfDe4Lt5i5e","bunnyVideoId":"edfce230-c468-416a-886f-9c23a95b6fdc"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":4,"driveFileId":"1uSHGxAJX7yjBdcKvWpQTqppUS1a587fr","bunnyVideoId":"5df74220-27af-4dc1-868c-36b0d8fb4cf4"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":5,"driveFileId":"1sPIwSKexbjjDYk4Lo4pLGCQsp2Zy0Amx","bunnyVideoId":"9156ddb3-f318-4443-898f-0b1873b7d70e"}
   ],
-  "pendingMappings": [
-    {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":1,"driveFileId":"1fDuHdMGXxq67nQruwUCcMWoJwY0xYKFF","bunnyVideoId":"6f909a8c-fe37-452d-83d5-3d1d329ed5c7","status":"transcoding"}
-  ],
+  "pendingMappings": [],
   "ignoredBunnyVideos": [
     {"bunnyVideoId":"993ba357-bcd2-4cc0-8abe-db30765765e5","reason":"Carga vacía duplicada de Clínica en Pequeñas Especies, clases 1 y 2"},
     {"bunnyVideoId":"6a75d510-3be7-4389-bebd-cb04b1166fba","reason":"Carga vacía duplicada de Clínica en Pequeñas Especies, clase 4"}
