@@ -1,0 +1,4 @@
+# Credenciales locales de Bunny Stream
+migracion-bunny/.env*
+!migracion-bunny/.env*.example
+
