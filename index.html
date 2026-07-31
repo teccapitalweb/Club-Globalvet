@@ -695,6 +695,13 @@ body.dark .course-h-card__badge-overlay{background:rgba(0,0,0,0.6);color:white}
 .calc-alert--error { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; }
 .tool-source { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--gray-100); color: var(--gray-400); font-size: 0.72rem; line-height: 1.55; }
 .tool-source a { color: var(--purple-600); text-decoration: underline; text-underline-offset: 2px; }
+.tool-preview-banner { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: -8px 0 22px; padding: 15px 17px; border: 1px solid var(--purple-200); border-radius: 14px; background: linear-gradient(135deg,var(--purple-50),#fff); color: var(--gray-700); }
+.tool-preview-banner__copy { display: flex; align-items: flex-start; gap: 11px; min-width: 0; }
+.tool-preview-banner__icon { width: 34px; height: 34px; flex: 0 0 34px; display: grid; place-items: center; border-radius: 10px; color: var(--purple-700); background: rgba(123,92,255,.12); }
+.tool-preview-banner__icon svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tool-preview-banner strong { display: block; margin-bottom: 2px; color: var(--purple-800); font-size: .86rem; }
+.tool-preview-banner p { margin: 0; color: var(--gray-500); font-size: .78rem; line-height: 1.45; }
+.tool-preview-banner .btn-outline { flex: 0 0 auto; white-space: nowrap; }
 .field-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.1) !important; }
 .field-error-message { color: #b91c1c; font-size: .72rem; margin-top: 4px; }
 .score-card.selected { border-color: var(--purple-600); box-shadow: 0 0 0 3px rgba(123,92,255,.14); transform: translateY(-2px); }
@@ -709,6 +716,13 @@ body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgb
 body.dark .calc-alert--warn { color: #fde68a; background: rgba(133,77,14,.22); border-color: rgba(253,230,138,.25); }
 body.dark .calc-alert--error { color: #fecaca; background: rgba(153,27,27,.22); border-color: rgba(254,202,202,.2); }
 body.dark .tool-source { border-color: rgba(255,255,255,.08); }
+body.dark .tool-preview-banner { background: linear-gradient(135deg,rgba(123,92,255,.13),rgba(255,255,255,.035)); border-color: rgba(168,139,255,.24); }
+body.dark .tool-preview-banner strong { color: #d9ceff; }
+body.dark .tool-preview-banner p { color: var(--dk-text-3,#a0a0b8); }
+@media (max-width: 640px) {
+  .tool-preview-banner { align-items: stretch; flex-direction: column; gap: 12px; margin-top: -4px; padding: 14px; }
+  .tool-preview-banner .btn-outline { width: 100%; justify-content: center; }
+}
 .cal-timeline { position: relative; padding-left: 28px; }
 .cal-timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-100); }
 .cal-item { position: relative; padding: 14px 16px 14px 0; }
@@ -3000,7 +3014,14 @@ function safePdfFilename(prefix,name){
 }
 initHerramientasForms();
 
+function requireToolFinalAction(){
+  if(window._gvIsAdmin===true||tieneAcceso())return true;
+  openPaywall('herramienta-final');
+  return false;
+}
+
 function descargarFicha(e){
+  if(!requireToolFinalAction())return;
   if(!validarHerramienta('ficha'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
@@ -3070,6 +3091,7 @@ function descargarFicha(e){
   }
 }
 function descargarReceta(e){
+  if(!requireToolFinalAction())return;
   if(!validarHerramienta('receta'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
@@ -3143,6 +3165,7 @@ function descargarReceta(e){
 }
 
 function descargarConsentimiento(e){
+  if(!requireToolFinalAction())return;
   if(!validarHerramienta('consentimiento'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
@@ -3355,7 +3378,26 @@ function toggleDark(){document.body.classList.toggle('dark');localStorage.setIte
 if(localStorage.getItem('gv-dark')==='1')document.body.classList.add('dark');
 function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidebarOverlay').classList.toggle('active')}
 // Secciones libres (no se bloquean ni con overlay) — el resto se bloquea visualmente con blur+CTA
-var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','logros','score','notificaciones','herramientas','beneficios']; // MODIFICADO: navegación libre; las ACCIONES siguen gateadas
+var TOOL_PAGES=['ficha','receta','consentimiento','vacunacion','score','urgencias','calculadoras'];
+var TOOL_RESULT_PAGES=['ficha','receta','consentimiento','vacunacion','calculadoras'];
+var SECCIONES_LIBRES=['inicio','suscripcion','perfil','configuracion','config','terminos','privacidad','curso-detalle','biblioteca','webinar','foro','pdf','logros','score','notificaciones','herramientas','beneficios'].concat(TOOL_PAGES); // La exploración es libre; solo se bloquea el resultado final.
+
+function renderToolPreviewBanner(page){
+  document.querySelectorAll('.tool-preview-banner').forEach(function(el){el.remove();});
+  if(window._gvIsAdmin===true||tieneAcceso()||TOOL_RESULT_PAGES.indexOf(page)===-1)return;
+  var pageEl=document.querySelector('.page-content[data-page="'+page+'"]');
+  var header=pageEl&&pageEl.querySelector('.page-header');
+  if(!header)return;
+  var banner=document.createElement('div');
+  banner.className='tool-preview-banner';
+  banner.setAttribute('role','note');
+  banner.innerHTML='<div class="tool-preview-banner__copy">'
+    +'<span class="tool-preview-banner__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M5 19h14"/></svg></span>'
+    +'<div><strong>Explora la herramienta completa</strong><p>Llena los campos y revisa todas las opciones. El cálculo, calendario o PDF final se desbloquea con tu membresía.</p></div>'
+    +'</div><button class="btn-outline" type="button">Ver membresía</button>';
+  banner.querySelector('button').addEventListener('click',function(){nav('suscripcion');});
+  header.insertAdjacentElement('afterend',banner);
+}
 
 function nav(page){
   var pageEl=document.querySelector('.page-content[data-page="'+page+'"]');
@@ -3418,6 +3460,7 @@ function applyCardLocks(){
 
 // === MODO EXPLORADOR: blur + CTA encima del contenido ===
 function applyExploradorOverlay(page){
+  renderToolPreviewBanner(page);
   // Admins se saltan
   if(window._gvIsAdmin===true){applyCardLocks();return;}
   // Solo si NO tiene acceso y la sección NO es libre
@@ -3542,6 +3585,7 @@ function addCalendarDays(date,days){
 }
 
 function calcularDosis(){
+  if(!requireToolFinalAction())return;
   var especie=document.getElementById('dosisEspecie').value;
   var medicamento=document.getElementById('dosisMedicamento').value.trim()||'medicamento';
   var resEl=document.getElementById('dosisResultado');
@@ -3572,6 +3616,7 @@ function calcularDosis(){
 }
 
 function calcularFluidos(){
+  if(!requireToolFinalAction())return;
   var especie=document.getElementById('fluidosEspecie').value;
   var resEl=document.getElementById('fluidosResultado');
   try{
@@ -3599,6 +3644,7 @@ function calcularFluidos(){
 }
 
 function calcularGestacion(){
+  if(!requireToolFinalAction())return;
   var sel=document.getElementById('gestacionEspecie');
   var selected=sel.options[sel.selectedIndex];
   var dias=Number(selected.value);
@@ -3688,6 +3734,7 @@ var ESQUEMAS_CALENDARIO={
 };
 
 function generarCalendario(){
+  if(!requireToolFinalAction())return;
   var especie=document.getElementById('calFechaEspecie').value;
   var fechaInput=document.getElementById('calFechaNacimiento').value;
   var resEl=document.getElementById('calendarioResultado');
@@ -4671,6 +4718,9 @@ function openPaywall(motivo){
   }else if(motivo==='otro-curso'){
     if(titleEl)titleEl.textContent='Desbloquea todo el catálogo';
     if(descEl)descEl.textContent='La primera clase del curso destacado es gratis. Activa tu membresía para acceder a este curso y a toda la biblioteca.';
+  }else if(motivo==='herramienta-final'){
+    if(titleEl)titleEl.textContent='Desbloquea el resultado final';
+    if(descEl)descEl.textContent='Ya puedes explorar y completar la herramienta. Activa tu membresía para calcular, generar el calendario o descargar el PDF final.';
   }else if(_subStatus==='trial_expirado'){
     if(titleEl)titleEl.textContent='Suscríbete para acceder';
     if(descEl)descEl.textContent='Activa tu suscripción para ver todas las clases, usar las herramientas clínicas y participar en el foro.';
