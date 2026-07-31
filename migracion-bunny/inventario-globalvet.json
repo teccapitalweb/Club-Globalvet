@@ -7,10 +7,6 @@
     {"courseId":"I88BogsuOgLvqGpU2j21","course":"Necropsia Avícola: Aprende a Prevenir Pérdidas en tu Granja","class":2,"driveFileId":"14HIgnrBwvWe46w_yqO6plo_-6GE7zxSU","bunnyVideoId":"21a314f1-02fd-4333-a852-f1e8f3806ffd"},
     {"courseId":"I88BogsuOgLvqGpU2j21","course":"Necropsia Avícola: Aprende a Prevenir Pérdidas en tu Granja","class":3,"driveFileId":"1AGZhVWqZP3oeg8U1mTtYtHjeRNLgdcoR","bunnyVideoId":"8f37540b-7265-41a2-8825-d69ed502d58b"},
     {"courseId":"I88BogsuOgLvqGpU2j21","course":"Necropsia Avícola: Aprende a Prevenir Pérdidas en tu Granja","class":4,"driveFileId":"1fnDA8ftYQG69C0SKsVnyNajjxNxluKIy","bunnyVideoId":"85c88936-e744-4ac1-b2be-65b60e5b50cc"},
-    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":1,"driveFileId":"1_8Me4NeEisroXmqDjqGSxobWK034kBYD","bunnyVideoId":"54f31e55-fb4d-4aa3-a241-b65beac2c777"},
-    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":2,"driveFileId":"1u2bFvqAYMcdUda7r89eDvkcO4w0vzxBo","bunnyVideoId":"3f303cb7-2ffa-496e-b49f-27a2d7322b69"},
-    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":3,"driveFileId":"13_zqieb4pUVEsRKNen2UD4h_YRKkJ-ce","bunnyVideoId":"c37e1b64-2a51-4c95-a359-748f38bd0e8e"},
-    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":4,"driveFileId":"1x6hzxsI8hORHciX-LBJpsXLMe_C7ZWUo","bunnyVideoId":"912ec0ed-a471-45a5-8090-faf1dae81a8f"},
     {"courseId":"8Lw44bE5aZoAZvroPBNO","course":"Clínica en Pequeñas Especies","class":1,"driveFileId":"1vP3YKrxmRXkkV2lsB11N_KY0y2eNC7G1","bunnyVideoId":"472d74e3-c235-409f-bed7-ac45a0d84fcc","note":"La grabación reúne las clases 1 y 2 originales"},
     {"courseId":"8Lw44bE5aZoAZvroPBNO","course":"Clínica en Pequeñas Especies","class":2,"driveFileId":"1BNMWShdGRIThxE3xPyod0cOhRSex__QB","bunnyVideoId":"4159e56e-f3b0-45d9-b3a2-c663590c0242"},
     {"courseId":"8Lw44bE5aZoAZvroPBNO","course":"Clínica en Pequeñas Especies","class":3,"driveFileId":"10u6NppjYb5kd3mbLCanV_r82ngG4OvDY","bunnyVideoId":"92e34b06-55a7-4c41-935f-94a460461f26"},
@@ -23,6 +19,12 @@
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":3,"driveFileId":"1Npg78zaeVcaTI7df_LmZOMfDe4Lt5i5e","bunnyVideoId":"edfce230-c468-416a-886f-9c23a95b6fdc"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":4,"driveFileId":"1uSHGxAJX7yjBdcKvWpQTqppUS1a587fr","bunnyVideoId":"5df74220-27af-4dc1-868c-36b0d8fb4cf4"},
     {"courseId":"HAdH7WIsiybaEaEO9Tt3","course":"Intervención Conductual en Mascotas","class":5,"driveFileId":"1sPIwSKexbjjDYk4Lo4pLGCQsp2Zy0Amx","bunnyVideoId":"9156ddb3-f318-4443-898f-0b1873b7d70e"}
+  ],
+  "hiddenCourseMappings": [
+    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":1,"driveFileId":"1_8Me4NeEisroXmqDjqGSxobWK034kBYD","bunnyVideoId":"54f31e55-fb4d-4aa3-a241-b65beac2c777","reason":"Curso ocultado del catálogo el 2026-07-31"},
+    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":2,"driveFileId":"1u2bFvqAYMcdUda7r89eDvkcO4w0vzxBo","bunnyVideoId":"3f303cb7-2ffa-496e-b49f-27a2d7322b69","reason":"Curso ocultado del catálogo el 2026-07-31"},
+    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":3,"driveFileId":"13_zqieb4pUVEsRKNen2UD4h_YRKkJ-ce","bunnyVideoId":"c37e1b64-2a51-4c95-a359-748f38bd0e8e","reason":"Curso ocultado del catálogo el 2026-07-31"},
+    {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":4,"driveFileId":"1x6hzxsI8hORHciX-LBJpsXLMe_C7ZWUo","bunnyVideoId":"912ec0ed-a471-45a5-8090-faf1dae81a8f","reason":"Curso ocultado del catálogo el 2026-07-31"}
   ],
   "pendingMappings": [],
   "ignoredBunnyVideos": [
