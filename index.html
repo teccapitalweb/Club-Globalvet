@@ -2169,7 +2169,7 @@ body.dark .hub-card__icon{background:rgba(127,76,165,.15);border-color:rgba(181,
         </div>
       </div>
       <div style="position:relative;width:100%;padding-bottom:56.25%;background:#000;border-radius:0 0 12px 12px;overflow:hidden">
-        <iframe id="videoFrame" allow="autoplay" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"></iframe>
+        <iframe id="videoFrame" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none"></iframe>
       </div>
     </div>
   </div>
@@ -4988,7 +4988,45 @@ function dismissAllNotifs(){
 var clubDataLoaded=false;
 function driveImg(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w600':''}
 function driveLargeImg(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/thumbnail?id='+m[1]+'&sz=w1200':url}
-function driveEmbed(url){if(!url)return'';var m=url.match(/\/d\/([a-zA-Z0-9_-]+)/);return m?'https://drive.google.com/file/d/'+m[1]+'/preview':url}
+var BUNNY_STREAM_LIBRARY_ID='717931';
+var BUNNY_VIDEO_BY_DRIVE_ID={
+  // Necropsia Avícola
+  '1vblEraauCIVFibcrHq6BaFG1I7D2ObO1':'fdefdd54-7cc3-4294-9cb0-b0dec5c85836',
+  '14HIgnrBwvWe46w_yqO6plo_-6GE7zxSU':'21a314f1-02fd-4333-a852-f1e8f3806ffd',
+  '1AGZhVWqZP3oeg8U1mTtYtHjeRNLgdcoR':'8f37540b-7265-41a2-8825-d69ed502d58b',
+  '1fnDA8ftYQG69C0SKsVnyNajjxNxluKIy':'85c88936-e744-4ac1-b2be-65b60e5b50cc',
+  // Implementación de POES y HACCP
+  '1_8Me4NeEisroXmqDjqGSxobWK034kBYD':'54f31e55-fb4d-4aa3-a241-b65beac2c777',
+  '1u2bFvqAYMcdUda7r89eDvkcO4w0vzxBo':'3f303cb7-2ffa-496e-b49f-27a2d7322b69',
+  '13_zqieb4pUVEsRKNen2UD4h_YRKkJ-ce':'c37e1b64-2a51-4c95-a359-748f38bd0e8e',
+  '1x6hzxsI8hORHciX-LBJpsXLMe_C7ZWUo':'912ec0ed-a471-45a5-8090-faf1dae81a8f',
+  // Clínica en Pequeñas Especies (la primera grabación reúne las clases 1 y 2 originales)
+  '1vP3YKrxmRXkkV2lsB11N_KY0y2eNC7G1':'472d74e3-c235-409f-bed7-ac45a0d84fcc',
+  '1BNMWShdGRIThxE3xPyod0cOhRSex__QB':'4159e56e-f3b0-45d9-b3a2-c663590c0242',
+  '10u6NppjYb5kd3mbLCanV_r82ngG4OvDY':'92e34b06-55a7-4c41-935f-94a460461f26',
+  // Salud y Manejo Clínico en Terneros
+  '1mvclQ-ueXofngxEvcbHdwAGUGH-Xf-uq':'20acbd66-f762-4f46-b85c-856def0fea9d',
+  '1BU5yWzjHXQrVqxstShv_si3CRyRGVVIA':'1474e0e4-fbec-4014-8d8a-ac8c2fcacf6c',
+  '1dO8N0ajLsVysBi6tfEIZ7oEQXcoIDhB4':'3e15d4d0-5b27-4247-bde7-9bee43f5695b',
+  '1sczXh3EiPJyV_2xnFrq-QbrZEJGZ7PMK':'29b20db8-a637-4f15-8bce-544506f228ce',
+  // Intervención Conductual en Mascotas
+  '1hh6QD0ewQxopVBTsaczC3Ugd64p9roF_':'cbaa388d-ce11-481e-a6ee-2962bd525bcc',
+  '1Npg78zaeVcaTI7df_LmZOMfDe4Lt5i5e':'edfce230-c468-416a-886f-9c23a95b6fdc',
+  '1uSHGxAJX7yjBdcKvWpQTqppUS1a587fr':'5df74220-27af-4dc1-868c-36b0d8fb4cf4',
+  '1sPIwSKexbjjDYk4Lo4pLGCQsp2Zy0Amx':'9156ddb3-f318-4443-898f-0b1873b7d70e'
+};
+function bunnyEmbed(videoId){
+  return 'https://iframe.mediadelivery.net/embed/'+BUNNY_STREAM_LIBRARY_ID+'/'+videoId+'?autoplay=false&loop=false&muted=false&preload=true&responsive=true';
+}
+function driveEmbed(url){
+  if(!url)return'';
+  var bunny=url.match(/iframe\.mediadelivery\.net\/embed\/\d+\/([a-f0-9-]+)/i);
+  if(bunny)return bunnyEmbed(bunny[1]);
+  var drive=url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if(!drive)return url;
+  var bunnyVideo=BUNNY_VIDEO_BY_DRIVE_ID[drive[1]];
+  return bunnyVideo?bunnyEmbed(bunnyVideo):'https://drive.google.com/file/d/'+drive[1]+'/preview';
+}
 function toggleTemario(){
   var wrap=document.getElementById('cursoTemarioWrap');
   var img=document.getElementById('cursoTemarioImg');
