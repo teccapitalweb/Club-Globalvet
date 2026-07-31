@@ -1,18 +1,25 @@
 // GlobalVet México — Service Worker
 // Cache offline básico de la shell de la app
 
-const CACHE_NAME = 'globalvet-v20';
+const CACHE_NAME = 'globalvet-v21';
 const PRECACHE_URLS = [
-  './manifest.json'
+  './',
+  './index.html',
+  './manifest.json',
+  './favicon.png',
+  './icon-192.png',
+  './icon-512.png',
+  'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js',
+  'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'
 ];
 
-// Install: pre-cachear solo lo esencial (no el HTML para evitar cache vieja)
+// Install: precachear la shell y el generador PDF; HTML sigue usando network-first.
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
-      return cache.addAll(PRECACHE_URLS).catch(function(){
-        return Promise.resolve();
-      });
+      return Promise.all(PRECACHE_URLS.map(function(url){
+        return cache.add(url).catch(function(){ return null; });
+      }));
     })
   );
   self.skipWaiting();

@@ -20,6 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+.sr-only { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
 :root {
   --purple-900: #4b1c71; --purple-600: #7f4ca5; --purple-400: #b57edc;
   --purple-200: #dbb6ee; --purple-100: #f0e0fa; --purple-50: #faf5ff;
@@ -41,8 +42,8 @@ body { font-family: var(--font-body); color: var(--gray-900); background: var(--
   .sidebar, .sidebar-overlay, .topbar, .ficha-actions, .page-header { display: none !important; }
   .main-wrapper { margin-left: 0 !important; }
   .page-content { padding: 10px 20px !important; }
-  .page-content:not([data-page="ficha"]):not([data-page="receta"]):not([data-page="consentimiento"]) { display: none !important; }
-  .page-content[data-page="ficha"], .page-content[data-page="receta"], .page-content[data-page="consentimiento"] { display: block !important; opacity: 1 !important; }
+  .page-content:not(.active) { display: none !important; }
+  .page-content.active { display: block !important; opacity: 1 !important; }
   .print-logo { display: flex !important; align-items: center; gap: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid #4b1c71; }
   .print-logo img { width: 50px; height: 50px; border-radius: 8px; }
   .print-logo__text { font-family: 'Sora', sans-serif; }
@@ -628,7 +629,7 @@ body.dark .course-h-card__badge-overlay{background:rgba(0,0,0,0.6);color:white}
 /* ============ FICHA PACIENTE ============ */
 .ficha-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .ficha-full { grid-column: 1 / -1; }
-.ficha-actions { display: flex; gap: 12px; margin-top: 8px; }
+.ficha-actions { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
 
 /* ============ TABLA VACUNACIÓN ============ */
 .vac-table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--gray-100); }
@@ -658,6 +659,15 @@ body.dark .course-h-card__badge-overlay{background:rgba(0,0,0,0.6);color:white}
 .calc-resultado__linea { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.9rem; }
 .calc-resultado__linea strong { color: var(--purple-700); }
 .calc-resultado__total { font-size: 1.3rem; font-weight: 700; color: var(--purple-700); margin-top: 6px; }
+.calc-alert { margin-top: 12px; padding: 11px 13px; border-radius: 9px; font-size: 0.78rem; line-height: 1.5; }
+.calc-alert--warn { color: #854d0e; background: #fefce8; border: 1px solid #fde68a; }
+.calc-alert--error { color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; }
+.tool-source { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--gray-100); color: var(--gray-400); font-size: 0.72rem; line-height: 1.55; }
+.tool-source a { color: var(--purple-600); text-decoration: underline; text-underline-offset: 2px; }
+.field-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgba(220,38,38,.1) !important; }
+.field-error-message { color: #b91c1c; font-size: .72rem; margin-top: 4px; }
+.score-card.selected { border-color: var(--purple-600); box-shadow: 0 0 0 3px rgba(123,92,255,.14); transform: translateY(-2px); }
+.score-selection { display: none; margin: 0 0 18px; padding: 14px 16px; border-radius: 12px; background: var(--purple-50); border: 1px solid var(--purple-200); font-size: .84rem; color: var(--gray-700); }
 .btn-clear { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 50px; background: transparent; color: var(--gray-500); font-size: 0.85rem; font-weight: 600; border: 1px solid var(--gray-200); cursor: pointer; font-family: var(--font-body); transition: all var(--transition); }
 .btn-clear:hover { background: var(--gray-50); border-color: var(--gray-300); }
 body.dark .btn-clear { color: var(--dk-text-3,#8a8aa3); border-color: rgba(255,255,255,.14); }
@@ -665,6 +675,9 @@ body.dark .btn-clear:hover { background: rgba(255,255,255,.06); }
 body.dark .calc-card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
 body.dark .calc-card__nota { background: rgba(255,255,255,.06); color: var(--dk-text-3,#8a8aa3); }
 body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.12); }
+body.dark .calc-alert--warn { color: #fde68a; background: rgba(133,77,14,.22); border-color: rgba(253,230,138,.25); }
+body.dark .calc-alert--error { color: #fecaca; background: rgba(153,27,27,.22); border-color: rgba(254,202,202,.2); }
+body.dark .tool-source { border-color: rgba(255,255,255,.08); }
 .cal-timeline { position: relative; padding-left: 28px; }
 .cal-timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--gray-100); }
 .cal-item { position: relative; padding: 14px 16px 14px 0; }
@@ -678,6 +691,7 @@ body.dark .calc-resultado { background: rgba(255,255,255,.06); border-color: rgb
 .cal-item__tipo { display: inline-block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 2px 9px; border-radius: 50px; margin-top: 6px; }
 .cal-item__tipo--vacuna { background: #dbeafe; color: #1d4ed8; }
 .cal-item__tipo--desparasitante { background: #dcfce7; color: #15803d; }
+.cal-item__tipo--revision { background: #f3f4f6; color: #4b5563; }
 body.dark .cal-timeline::before { background: rgba(255,255,255,.12); }
 body.dark .cal-item::before { border-color: var(--dk-bg,#13111c); }
 body.dark .cal-item__card { background: var(--dk-surface,#1e1e30); border-color: rgba(255,255,255,.08); }
@@ -709,6 +723,11 @@ body.dark .cal-item__titulo { color: #fff; }
   .ficha-section { grid-template-columns: 1fr; }
   .score-grid { grid-template-columns: 1fr 1fr; }
   .vac-table th, .vac-table td { padding: 10px 14px; font-size: 0.78rem; }
+  .form-input { font-size: 16px; }
+  .filter-tab, .btn-save, .btn-clear, .btn-outline { min-height: 44px; }
+  .calc-card { padding: 20px 16px; }
+  .calc-resultado__linea { align-items: flex-start; gap: 12px; }
+  .calc-resultado__linea strong { text-align: right; }
 }
 @media (max-width: 480px) { .score-grid { grid-template-columns: 1fr; } }
 
@@ -1025,7 +1044,7 @@ body.dark #darkToggle .icon-moon { display: none; }
 body.dark #darkToggle .icon-sun { display: block; }
 #darkToggle .icon-sun { display: none; }
 /* ============ LOGIN SCREEN ============ */
-.login-screen{position:fixed;inset:0;z-index:9999;display:flex;opacity:0;pointer-events:none;transition:opacity 0.35s ease}
+.login-screen{position:fixed;inset:0;z-index:9999;display:flex;opacity:0;pointer-events:none;overflow-x:hidden;transition:opacity 0.35s ease}
 .login-screen.show{opacity:1;pointer-events:auto}
 body.not-logged .sidebar,body.not-logged .sidebar-overlay,body.not-logged .topbar{display:none!important}
 body.not-logged .main-wrapper{margin-left:0!important}
@@ -1961,12 +1980,12 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="s-card__title">Datos del paciente</div>
       <div class="s-card__desc">Completa la información clínica del paciente.</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del paciente</label><input class="form-input" type="text" placeholder="Ej: Max"></div>
-        <div class="form-group"><label class="form-label">Especie</label><select class="form-input form-select"><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
+        <div class="form-group"><label class="form-label">Nombre del paciente *</label><input class="form-input" type="text" maxlength="120" required placeholder="Ej: Max"></div>
+        <div class="form-group"><label class="form-label">Especie *</label><select class="form-input form-select" required><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
         <div class="form-group"><label class="form-label">Raza</label><input class="form-input" type="text" placeholder="Ej: Labrador Retriever"></div>
         <div class="form-group"><label class="form-label">Sexo</label><select class="form-input form-select"><option>Macho</option><option>Hembra</option><option>Macho castrado</option><option>Hembra esterilizada</option></select></div>
         <div class="form-group"><label class="form-label">Edad</label><input class="form-input" type="text" placeholder="Ej: 3 años"></div>
-        <div class="form-group"><label class="form-label">Peso (kg)</label><input class="form-input" type="number" placeholder="Ej: 25.5"></div>
+        <div class="form-group"><label class="form-label">Peso (kg) *</label><input class="form-input" type="number" inputmode="decimal" min="0.001" max="20000" step="0.001" required placeholder="Ej: 25.5"></div>
         <div class="form-group"><label class="form-label">Color / Señas</label><input class="form-input" type="text" placeholder="Ej: Dorado, cicatriz en pata izquierda"></div>
         <div class="form-group"><label class="form-label">Microchip / ID</label><input class="form-input" type="text" placeholder="Número de identificación"></div>
       </div>
@@ -1974,28 +1993,31 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="s-card">
       <div class="s-card__title">Datos del propietario</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del propietario</label><input class="form-input" type="text" placeholder="Nombre completo"></div>
-        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" placeholder="+52 ..."></div>
+        <div class="form-group"><label class="form-label">Nombre del propietario *</label><input class="form-input" type="text" maxlength="160" required placeholder="Nombre completo"></div>
+        <div class="form-group"><label class="form-label">Teléfono *</label><input class="form-input" type="tel" maxlength="30" required placeholder="+52 ..."></div>
         <div class="ficha-full form-group"><label class="form-label">Dirección</label><input class="form-input" type="text" placeholder="Calle, colonia, ciudad"></div>
       </div>
     </div>
     <div class="s-card">
       <div class="s-card__title">Evaluación clínica</div>
-      <div class="form-group"><label class="form-label">Motivo de consulta</label><textarea class="form-input form-textarea" placeholder="¿Por qué trae al paciente?"></textarea></div>
+      <div class="form-group"><label class="form-label">Motivo de consulta *</label><textarea class="form-input form-textarea" maxlength="2000" required placeholder="¿Por qué trae al paciente?"></textarea></div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Temperatura (°C)</label><input class="form-input" type="number" step="0.1" placeholder="38.5"></div>
-        <div class="form-group"><label class="form-label">Frecuencia cardíaca</label><input class="form-input" type="text" placeholder="lpm"></div>
-        <div class="form-group"><label class="form-label">Frecuencia respiratoria</label><input class="form-input" type="text" placeholder="rpm"></div>
+        <div class="form-group"><label class="form-label">Temperatura (°C)</label><input class="form-input" type="number" inputmode="decimal" min="20" max="50" step="0.1" placeholder="38.5"></div>
+        <div class="form-group"><label class="form-label">Frecuencia cardíaca (lpm)</label><input class="form-input" type="number" inputmode="numeric" min="0" max="1000" step="1" placeholder="Ej: 90"></div>
+        <div class="form-group"><label class="form-label">Frecuencia respiratoria (rpm)</label><input class="form-input" type="number" inputmode="numeric" min="0" max="500" step="1" placeholder="Ej: 24"></div>
         <div class="form-group"><label class="form-label">Score corporal (1-9)</label><select class="form-input form-select"><option>— Seleccionar —</option><option>1 - Emaciado</option><option>2 - Muy delgado</option><option>3 - Delgado</option><option>4 - Bajo peso</option><option>5 - Ideal</option><option>6 - Sobrepeso leve</option><option>7 - Sobrepeso</option><option>8 - Obeso</option><option>9 - Obeso mórbido</option></select></div>
       </div>
       <div class="form-group"><label class="form-label">Hallazgos al examen físico</label><textarea class="form-input form-textarea" placeholder="Describe los hallazgos relevantes..."></textarea></div>
-      <div class="form-group"><label class="form-label">Diagnóstico presuntivo</label><input class="form-input" type="text" placeholder="Diagnóstico"></div>
-      <div class="form-group"><label class="form-label">Tratamiento indicado</label><textarea class="form-input form-textarea" placeholder="Fármacos, dosis, vía, frecuencia, duración..."></textarea></div>
+      <div class="form-group"><label class="form-label">Diagnóstico presuntivo *</label><input class="form-input" type="text" maxlength="500" required placeholder="Diagnóstico"></div>
+      <div class="form-group"><label class="form-label">Tratamiento indicado *</label><textarea class="form-input form-textarea" maxlength="4000" required placeholder="Fármacos, dosis, vía, frecuencia, duración..."></textarea></div>
       <div class="form-group"><label class="form-label">Observaciones</label><textarea class="form-input form-textarea" placeholder="Notas adicionales..."></textarea></div>
       <div class="ficha-actions">
         <button class="btn-save" onclick="descargarFicha(event)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
-        <button class="btn-outline" onclick="document.querySelectorAll('[data-page=ficha] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
+        <button class="btn-outline" onclick="guardarBorradorHerramienta('ficha')">Guardar borrador local</button>
+        <button class="btn-outline" onclick="restaurarBorradorHerramienta('ficha')">Recuperar borrador</button>
+        <button class="btn-outline" onclick="limpiarHerramienta('ficha')">Limpiar campos</button>
       </div>
+      <div class="tool-source">Los campos con * son obligatorios. El borrador se guarda únicamente en este dispositivo; no lo uses en un equipo compartido.</div>
     </div>
   </div>
 
@@ -2009,33 +2031,36 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="s-card">
       <div class="s-card__title">Datos del paciente</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del paciente</label><input class="form-input" type="text" placeholder="Ej: Max"></div>
-        <div class="form-group"><label class="form-label">Especie</label><select class="form-input form-select"><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
+        <div class="form-group"><label class="form-label">Nombre del paciente *</label><input class="form-input" type="text" maxlength="120" required placeholder="Ej: Max"></div>
+        <div class="form-group"><label class="form-label">Especie *</label><select class="form-input form-select" required><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
         <div class="form-group"><label class="form-label">Raza</label><input class="form-input" type="text" placeholder="Ej: Labrador Retriever"></div>
-        <div class="form-group"><label class="form-label">Peso (kg)</label><input class="form-input" type="number" placeholder="Ej: 25.5"></div>
+        <div class="form-group"><label class="form-label">Peso (kg) *</label><input class="form-input" type="number" inputmode="decimal" min="0.001" max="20000" step="0.001" required placeholder="Ej: 25.5"></div>
       </div>
     </div>
     <div class="s-card">
       <div class="s-card__title">Datos del propietario</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del propietario</label><input class="form-input" type="text" placeholder="Nombre completo"></div>
+        <div class="form-group"><label class="form-label">Nombre del propietario *</label><input class="form-input" type="text" maxlength="160" required placeholder="Nombre completo"></div>
         <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" placeholder="+52 ..."></div>
       </div>
     </div>
     <div class="s-card">
       <div class="s-card__title">Prescripción</div>
-      <div class="form-group"><label class="form-label">Diagnóstico</label><input class="form-input" type="text" placeholder="Diagnóstico"></div>
-      <div class="form-group"><label class="form-label">Medicamentos prescritos</label><textarea class="form-input form-textarea" placeholder="Ej: Meloxicam 0.2mg/kg VO cada 24h por 5 días..." style="min-height:120px"></textarea></div>
+      <div class="form-group"><label class="form-label">Diagnóstico *</label><input class="form-input" type="text" maxlength="500" required placeholder="Diagnóstico"></div>
+      <div class="form-group"><label class="form-label">Medicamentos prescritos *</label><textarea class="form-input form-textarea" maxlength="4000" required placeholder="Incluye principio activo, presentación, dosis, vía, frecuencia y duración" style="min-height:120px"></textarea></div>
       <div class="form-group"><label class="form-label">Indicaciones adicionales</label><textarea class="form-input form-textarea" placeholder="Reposo, dieta, curaciones, etc."></textarea></div>
       <div class="form-group"><label class="form-label">Próxima cita / seguimiento</label><input class="form-input" type="text" placeholder="Ej: Control en 7 días"></div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Médico veterinario</label><input class="form-input" type="text" placeholder="Nombre del MVZ responsable"></div>
-        <div class="form-group"><label class="form-label">Cédula profesional</label><input class="form-input" type="text" placeholder="Número de cédula"></div>
+        <div class="form-group"><label class="form-label">Médico veterinario *</label><input class="form-input" type="text" maxlength="160" required placeholder="Nombre del MVZ responsable"></div>
+        <div class="form-group"><label class="form-label">Cédula profesional *</label><input class="form-input" type="text" maxlength="40" required placeholder="Número de cédula"></div>
       </div>
       <div class="ficha-actions">
         <button class="btn-save" onclick="descargarReceta(event)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
-        <button class="btn-outline" onclick="document.querySelectorAll('[data-page=receta] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
+        <button class="btn-outline" onclick="guardarBorradorHerramienta('receta')">Guardar borrador local</button>
+        <button class="btn-outline" onclick="restaurarBorradorHerramienta('receta')">Recuperar borrador</button>
+        <button class="btn-outline" onclick="limpiarHerramienta('receta')">Limpiar campos</button>
       </div>
+      <div class="tool-source">Los campos con * son obligatorios. Revisa manualmente dosis, vía, frecuencia, duración, contraindicaciones y firma antes de entregar. El borrador local no debe usarse en equipos compartidos.</div>
     </div>
   </div>
 
@@ -2049,8 +2074,8 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="s-card">
       <div class="s-card__title">Datos del paciente</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del paciente</label><input class="form-input" type="text" placeholder="Ej: Max"></div>
-        <div class="form-group"><label class="form-label">Especie</label><select class="form-input form-select"><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
+        <div class="form-group"><label class="form-label">Nombre del paciente *</label><input class="form-input" type="text" maxlength="120" required placeholder="Ej: Max"></div>
+        <div class="form-group"><label class="form-label">Especie *</label><select class="form-input form-select" required><option>Canino</option><option>Felino</option><option>Ave</option><option>Reptil</option><option>Otro</option></select></div>
         <div class="form-group"><label class="form-label">Raza</label><input class="form-input" type="text" placeholder="Ej: Labrador Retriever"></div>
         <div class="form-group"><label class="form-label">Edad</label><input class="form-input" type="text" placeholder="Ej: 3 años"></div>
       </div>
@@ -2058,30 +2083,34 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div class="s-card">
       <div class="s-card__title">Datos del propietario</div>
       <div class="ficha-section">
-        <div class="form-group"><label class="form-label">Nombre del propietario</label><input class="form-input" type="text" placeholder="Nombre completo"></div>
+        <div class="form-group"><label class="form-label">Nombre del propietario *</label><input class="form-input" type="text" maxlength="160" required placeholder="Nombre completo"></div>
         <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" type="tel" placeholder="+52 ..."></div>
       </div>
     </div>
     <div class="s-card">
       <div class="s-card__title">Procedimiento</div>
-      <div class="form-group"><label class="form-label">Procedimiento o cirugía a realizar</label><input class="form-input" type="text" placeholder="Ej: Ovariohisterectomía (esterilización)"></div>
-      <div class="form-group"><label class="form-label">Riesgos y complicaciones explicados al propietario</label><textarea class="form-input form-textarea" placeholder="Ej: Riesgos anestésicos, sangrado, infección, reacciones adversas..." style="min-height:100px"></textarea></div>
+      <div class="form-group"><label class="form-label">Procedimiento o cirugía a realizar *</label><input class="form-input" type="text" maxlength="500" required placeholder="Ej: Ovariohisterectomía (esterilización)"></div>
+      <div class="form-group"><label class="form-label">Riesgos y complicaciones explicados al propietario *</label><textarea class="form-input form-textarea" maxlength="4000" required placeholder="Personaliza riesgos anestésicos, del procedimiento y del paciente" style="min-height:100px"></textarea></div>
       <div class="form-group"><label class="form-label">Cuidados post-procedimiento indicados</label><textarea class="form-input form-textarea" placeholder="Reposo, collar isabelino, curaciones, medicación..."></textarea></div>
       <div class="calc-card__nota" style="margin-top:6px">Declaro que se me ha explicado, en lenguaje claro y comprensible, la naturaleza del procedimiento descrito, sus riesgos, beneficios y alternativas. He tenido oportunidad de resolver mis dudas y autorizo de manera libre e informada su realización.</div>
       <div class="ficha-section" style="margin-top:16px">
-        <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" type="date" id="consentFecha"></div>
-        <div class="form-group"><label class="form-label">Nombre y firma del propietario</label><input class="form-input" type="text" placeholder="Se firma en papel al imprimir"></div>
+        <div class="form-group"><label class="form-label" for="consentFecha">Fecha *</label><input class="form-input" type="date" id="consentFecha" required></div>
+        <div class="form-group"><label class="form-label">Nombre de quien autoriza *</label><input class="form-input" type="text" maxlength="160" required placeholder="Nombre completo; la firma se realiza en papel"></div>
       </div>
       <div class="ficha-actions">
         <button class="btn-save" onclick="descargarConsentimiento(event)"><svg class="icon" viewBox="0 0 24 24" style="width:16px;height:16px;stroke:white"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar PDF</button>
-        <button class="btn-outline" onclick="document.querySelectorAll('[data-page=consentimiento] .form-input').forEach(i=>{if(i.tagName==='SELECT')i.selectedIndex=0;else i.value=''})">Limpiar campos</button>
+        <button class="btn-outline" onclick="guardarBorradorHerramienta('consentimiento')">Guardar borrador local</button>
+        <button class="btn-outline" onclick="restaurarBorradorHerramienta('consentimiento')">Recuperar borrador</button>
+        <button class="btn-outline" onclick="limpiarHerramienta('consentimiento')">Limpiar campos</button>
       </div>
+      <div class="tool-source">Los campos con * son obligatorios. Esta plantilla debe adaptarse al procedimiento y revisarse legalmente para la jurisdicción y clínica que la utiliza. El borrador se almacena solo en este dispositivo.</div>
     </div>
   </div>
 
   <!-- ==================== TABLA VACUNACIÓN ==================== -->
   <div class="page-content" data-page="vacunacion">
-    <div class="page-header"><h1 class="page-header__title">Tabla de Vacunación</h1><p class="page-header__desc">Esquemas de vacunación actualizados por especie.</p></div>
+    <div class="page-header"><h1 class="page-header__title">Referencias de Vacunación</h1><p class="page-header__desc">Puntos de partida para construir un protocolo individual; no sustituyen normativa, ficha técnica ni evaluación de riesgo.</p></div>
+    <div class="calc-alert calc-alert--warn" style="margin:0 0 20px"><strong>Importante:</strong> no existe un esquema universal para todas las especies o regiones. Confirma disponibilidad legal, edad mínima del producto, estado sanitario, antecedentes y riesgo epidemiológico.</div>
 
     <div class="filter-tabs" id="vacVistaTabs" style="margin-bottom:20px">
       <button class="filter-tab active" onclick="showVacVista('esquema',this)">📋 Esquema general</button>
@@ -2111,7 +2140,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <div id="vac-felino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
       <tr><td><strong>Triple Felina (FVRCP)</strong></td><td>6-8 semanas</td><td>Cada 3-4 sem hasta 16 sem</td><td>Cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
       <tr><td><strong>Rabia</strong></td><td>12 semanas</td><td>1 año después</td><td>Anual o cada 3 años</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-      <tr><td><strong>Leucemia Felina (FeLV)</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Leucemia Felina (FeLV)</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Refuerzo al año; después según riesgo</td><td><span class="vac-dot vac-dot--req">Gatitos / riesgo</span></td></tr>
       <tr><td><strong>Chlamydia felis</strong></td><td>9 semanas</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
       <tr><td><strong>Bordetella bronchiseptica</strong></td><td>8 semanas</td><td>No necesario</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
     </tbody></table></div></div></div>
@@ -2126,9 +2155,10 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     </tbody></table></div></div></div>
     <div id="vac-equino" class="vac-panel" style="display:none"><div class="s-card" style="padding:0;overflow:hidden"><div class="vac-table-wrap"><table class="vac-table"><thead><tr><th>Vacuna</th><th>Primera dosis</th><th>Refuerzo</th><th>Frecuencia</th><th>Tipo</th></tr></thead><tbody>
       <tr><td><strong>Tétanos</strong></td><td>3-4 meses</td><td>4-6 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
-      <tr><td><strong>Influenza Equina</strong></td><td>6 meses</td><td>3-6 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Influenza Equina</strong></td><td>Según producto y riesgo</td><td>Según ficha técnica</td><td>Según exposición</td><td><span class="vac-dot vac-dot--opt">Basada en riesgo</span></td></tr>
       <tr><td><strong>Encefalomielitis (EEE/WEE/VEE)</strong></td><td>4-6 meses</td><td>3-4 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
       <tr><td><strong>Rabia</strong></td><td>6 meses</td><td>1 año después</td><td>Anual</td><td><span class="vac-dot vac-dot--req">Esencial</span></td></tr>
+      <tr><td><strong>Virus del Nilo Occidental</strong></td><td>Según producto y región</td><td>Serie inicial según ficha</td><td>Según riesgo regional</td><td><span class="vac-dot vac-dot--req">Core donde aplica</span></td></tr>
       <tr><td><strong>Rinoneumonitis (EHV-1/4)</strong></td><td>6 meses</td><td>4-6 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
       <tr><td><strong>Estrangles (S. equi)</strong></td><td>6-9 meses</td><td>3 sem después</td><td>Anual</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
     </tbody></table></div></div></div>
@@ -2163,9 +2193,10 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <tr><td><strong>Pasteurelosis</strong></td><td>8 semanas</td><td>3-4 sem después</td><td>Semestral</td><td><span class="vac-dot vac-dot--opt">No esencial</span></td></tr>
     </tbody></table></div></div></div>
     <div style="margin-top:16px;font-size:0.76rem;color:var(--gray-400);display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--purple-600)"></span> Esencial — recomendada para todos</span>
+      <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--purple-600)"></span> Core/esencial — dentro del alcance de la guía citada</span>
       <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--gray-300)"></span> No esencial — según riesgo y estilo de vida</span>
     </div>
+    <div class="tool-source">Fuentes base: <a href="https://www.aaha.org/resources/2022-aaha-canine-vaccination-guidelines/" target="_blank" rel="noopener noreferrer">AAHA caninos</a>, <a href="https://catvets.com/resource/aaha-aafp-feline-vaccination-guidelines/" target="_blank" rel="noopener noreferrer">AAFP felinos</a>, <a href="https://wsava.org/Global-Guidelines/Vaccination-Guidelines/" target="_blank" rel="noopener noreferrer">WSAVA 2024</a> y <a href="https://aaep.org/guidelines-resources/vaccination-guidelines/" target="_blank" rel="noopener noreferrer">AAEP equinos</a>. Las tablas de producción requieren adaptación por un MVZ conforme a la regulación sanitaria aplicable. Revisión: julio de 2026.</div>
     </div>
     <!-- /vacVista-esquema -->
 
@@ -2211,13 +2242,15 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="score-legend__item"><div class="score-legend__dot" style="background:#f59e0b"></div> Sobrepeso</div>
       <div class="score-legend__item"><div class="score-legend__dot" style="background:#ef4444"></div> Obesidad</div>
     </div>
+    <div id="scoreSelection" class="score-selection" role="status" aria-live="polite"></div>
+    <div class="calc-card__nota">La condición corporal estima reservas de grasa; no sustituye la evaluación de masa muscular. En perros y gatos, WSAVA considera 4–5/9 dentro del rango ideal. Palpa costillas y prominencias óseas además de observar la silueta.</div>
 
     <!-- CANINOS 1-9 -->
     <div id="score-canino" class="score-panel"><div class="score-grid">
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas, vértebras y huesos pélvicos visibles a distancia. Sin grasa palpable. Pérdida muscular severa.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Costillas fácilmente palpables con mínima grasa. Cintura muy pronunciada desde arriba.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura evidente. Pliegue abdominal visible.</div></div>
-      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Bajo peso ideal</div><div class="score-card__desc">Costillas palpables con leve cobertura grasa. Cintura visible. Pliegue abdominal presente.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Ideal, condición delgada</div><div class="score-card__desc">Costillas palpables con leve cobertura grasa. Cintura visible. Pliegue abdominal presente.</div></div>
       <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura observable desde arriba. Abdomen recogido de perfil.</div></div>
       <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Sobrepeso leve</div><div class="score-card__desc">Costillas palpables con ligero exceso de grasa. Cintura poco pronunciada. Pliegue abdominal mínimo.</div></div>
       <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Depósitos de grasa en lomo y base de cola. Cintura ausente.</div></div>
@@ -2230,7 +2263,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">1</div><div class="score-card__label">Emaciado</div><div class="score-card__desc">Costillas y columna prominentes. Sin grasa palpable. Cintura extrema. Masa muscular muy reducida.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">2</div><div class="score-card__label">Muy delgado</div><div class="score-card__desc">Costillas visibles en pelo corto. Cintura muy marcada. Abdomen tucked. Mínima grasa subcutánea.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">3</div><div class="score-card__label">Delgado</div><div class="score-card__desc">Costillas fácilmente palpables. Cintura evidente. Poca grasa abdominal. Forma del cuerpo esbelta.</div></div>
-      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Bajo peso ideal</div><div class="score-card__desc">Costillas palpables con leve cobertura. Cintura notable. Abdomen mínimo de grasa colgante.</div></div>
+      <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">4</div><div class="score-card__label">Ideal, condición delgada</div><div class="score-card__desc">Costillas palpables con leve cobertura. Cintura notable. Abdomen mínimo de grasa colgante.</div></div>
       <div class="score-card" style="border-left:3px solid #22c55e"><div class="score-card__num">5</div><div class="score-card__label">Ideal</div><div class="score-card__desc">Costillas palpables sin exceso de grasa. Cintura visible desde arriba. Abdomen sin exceso colgante.</div></div>
       <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">6</div><div class="score-card__label">Sobrepeso leve</div><div class="score-card__desc">Costillas palpables con esfuerzo moderado. Cintura poco definida. Grasa abdominal moderada.</div></div>
       <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">7</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Cintura ausente. Depósito graso abdominal evidente. Flancos redondeados.</div></div>
@@ -2294,11 +2327,12 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
       <div class="score-card" style="border-left:3px solid #f59e0b"><div class="score-card__num">4</div><div class="score-card__label">Sobrepeso</div><div class="score-card__desc">Costillas difíciles de palpar. Papada prominente (hembras). Depósitos grasos en abdomen y flancos.</div></div>
       <div class="score-card" style="border-left:3px solid #ef4444"><div class="score-card__num">5</div><div class="score-card__label">Obeso</div><div class="score-card__desc">Costillas no palpables. Papada muy grande. Pliegues de grasa visibles. Dificultad para acicalarse y moverse.</div></div>
     </div></div>
+    <div class="tool-source">Perros y gatos: <a href="https://wsava.org/global-guidelines/global-nutrition-guidelines/" target="_blank" rel="noopener noreferrer">herramientas de condición corporal WSAVA</a>. Las escalas de otras especies deben confirmarse con la metodología utilizada por la clínica o unidad productiva. Revisión: julio de 2026.</div>
   </div>
 
   <!-- ==================== CALCULADORAS CLÍNICAS ==================== -->
   <div class="page-content" data-page="calculadoras">
-    <div class="page-header"><h1 class="page-header__title">Calculadoras Clínicas</h1><p class="page-header__desc">Herramientas de apoyo para todo tipo de especies. Los resultados son de referencia — siempre confirma con tu criterio clínico.</p></div>
+    <div class="page-header"><h1 class="page-header__title">Calculadoras Clínicas</h1><p class="page-header__desc">Conversiones y estimaciones con alcance explícito, validación de entradas y resultados trazables. Confirma siempre con criterio clínico y ficha técnica.</p></div>
     <div class="filter-tabs" id="calcTabs">
       <button class="filter-tab active" onclick="showCalc('dosis',this)">💊 Dosis de Medicamentos</button>
       <button class="filter-tab" onclick="showCalc('fluidos',this)">💧 Fluidoterapia</button>
@@ -2308,7 +2342,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
     <!-- DOSIS DE MEDICAMENTOS -->
     <div id="calc-dosis" class="calc-panel">
       <div class="calc-card">
-        <p class="calc-card__nota">Esta calculadora solo hace la conversión matemática (peso × dosis, y mg → ml). La dosis en mg/kg la defines tú según el medicamento, la especie y tu criterio clínico o la ficha técnica del producto — no la sugerimos nosotros.</p>
+        <p class="calc-card__nota" id="dosisAyuda">Conversión matemática por dosis: peso × dosis prescrita y mg ÷ concentración. GlobalVet no recomienda fármacos ni dosis; confirma especie, vía, frecuencia, dosis máxima y ficha técnica antes de administrar.</p>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Especie</label>
             <select class="form-input form-select" id="dosisEspecie">
@@ -2317,114 +2351,119 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
               <option>Exótico / otro</option>
             </select>
           </div>
-          <div class="form-group"><label class="form-label">Peso del paciente (kg)</label><input class="form-input" type="number" step="0.01" id="dosisPeso" placeholder="Ej: 12.5"></div>
+          <div class="form-group"><label class="form-label" for="dosisPeso">Peso del paciente (kg)</label><input class="form-input" type="number" inputmode="decimal" min="0.001" max="20000" step="0.001" id="dosisPeso" placeholder="Ej: 12.5" aria-describedby="dosisAyuda"></div>
         </div>
-        <div class="form-group"><label class="form-label">Nombre del medicamento</label><input class="form-input" type="text" id="dosisMedicamento" placeholder="Ej: Meloxicam"></div>
+        <div class="form-group"><label class="form-label" for="dosisMedicamento">Nombre del medicamento</label><input class="form-input" type="text" id="dosisMedicamento" maxlength="120" autocomplete="off" placeholder="Ej: Meloxicam"></div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Dosis prescrita (mg por kg)</label><input class="form-input" type="number" step="0.001" id="dosisMgKg" placeholder="Ej: 0.2"></div>
-          <div class="form-group"><label class="form-label">Concentración del medicamento (mg por ml)</label><input class="form-input" type="number" step="0.01" id="dosisConcentracion" placeholder="Ej: 5"></div>
+          <div class="form-group"><label class="form-label" for="dosisMgKg">Dosis prescrita (mg/kg/dosis)</label><input class="form-input" type="number" inputmode="decimal" min="0.000001" max="100000" step="0.000001" id="dosisMgKg" placeholder="Ej: 0.2"></div>
+          <div class="form-group"><label class="form-label" for="dosisConcentracion">Concentración (mg/ml, opcional)</label><input class="form-input" type="number" inputmode="decimal" min="0.000001" max="100000" step="0.000001" id="dosisConcentracion" placeholder="Ej: 5"></div>
         </div>
         <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularDosis()">Calcular</button><button class="btn-clear" onclick="borrarDosis()">Borrar</button></div>
-        <div id="dosisResultado" class="calc-resultado" style="display:none"></div>
+        <div id="dosisResultado" class="calc-resultado" role="status" aria-live="polite" style="display:none"></div>
       </div>
     </div>
 
     <!-- FLUIDOTERAPIA -->
     <div id="calc-fluidos" class="calc-panel" style="display:none">
       <div class="calc-card">
-        <p class="calc-card__nota">Usa la fórmula estándar de reposición + mantenimiento. Ajusta la tasa de mantenimiento según la especie y el caso clínico — el valor sugerido (60 ml/kg/día) es solo un punto de partida general para pequeñas especies.</p>
+        <p class="calc-card__nota" id="fluidosAyuda">Alcance: perros y gatos. Suma déficit de deshidratación, mantenimiento indicado por el MVZ y pérdidas continuas. No sustituye la evaluación de perfusión, comorbilidades ni el monitoreo frecuente.</p>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Especie</label>
             <select class="form-input form-select" id="fluidosEspecie">
-              <option>Canino</option><option>Felino</option><option>Equino</option><option>Bovino</option>
-              <option>Porcino</option><option>Ovino/Caprino</option><option>Ave</option><option>Conejo</option>
-              <option>Exótico / otro</option>
+              <option>Canino</option><option>Felino</option>
             </select>
           </div>
-          <div class="form-group"><label class="form-label">Peso del paciente (kg)</label><input class="form-input" type="number" step="0.01" id="fluidosPeso" placeholder="Ej: 12.5"></div>
+          <div class="form-group"><label class="form-label" for="fluidosPeso">Peso del paciente (kg)</label><input class="form-input" type="number" inputmode="decimal" min="0.05" max="500" step="0.01" id="fluidosPeso" placeholder="Ej: 12.5" aria-describedby="fluidosAyuda"></div>
         </div>
         <div class="form-row">
-          <div class="form-group"><label class="form-label">Deshidratación estimada (%)</label><input class="form-input" type="number" step="1" id="fluidosDeshidratacion" placeholder="Ej: 8" value="0"></div>
-          <div class="form-group"><label class="form-label">Horas para corregir el déficit</label><input class="form-input" type="number" step="1" id="fluidosHoras" placeholder="Ej: 24" value="24"></div>
+          <div class="form-group"><label class="form-label" for="fluidosDeshidratacion">Deshidratación estimada (%)</label><input class="form-input" type="number" inputmode="decimal" min="0" max="15" step="0.5" id="fluidosDeshidratacion" placeholder="Ej: 8" value="0"></div>
+          <div class="form-group"><label class="form-label" for="fluidosHoras">Horas para corregir el déficit</label><input class="form-input" type="number" inputmode="numeric" min="1" max="72" step="1" id="fluidosHoras" placeholder="Ej: 24" value="24"></div>
         </div>
-        <div class="form-group"><label class="form-label">Tasa de mantenimiento (ml/kg/día)</label><input class="form-input" type="number" step="1" id="fluidosMantenimiento" value="60"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label" for="fluidosMantenimiento">Mantenimiento prescrito (ml/kg/día)</label><input class="form-input" type="number" inputmode="decimal" min="1" max="200" step="1" id="fluidosMantenimiento" value="60"></div>
+          <div class="form-group"><label class="form-label" for="fluidosPerdidas">Pérdidas continuas estimadas (ml/h)</label><input class="form-input" type="number" inputmode="decimal" min="0" max="10000" step="0.1" id="fluidosPerdidas" value="0"></div>
+        </div>
         <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularFluidos()">Calcular</button><button class="btn-clear" onclick="borrarFluidos()">Borrar</button></div>
-        <div id="fluidosResultado" class="calc-resultado" style="display:none"></div>
+        <div id="fluidosResultado" class="calc-resultado" role="status" aria-live="polite" style="display:none"></div>
+        <div class="tool-source">Referencia de seguridad: <a href="https://www.aaha.org/resources/2024-aaha-fluid-therapy-guidelines-for-dogs-and-cats/" target="_blank" rel="noopener noreferrer">AAHA Fluid Therapy Guidelines 2024</a>. Última revisión del contenido: julio de 2026.</div>
       </div>
     </div>
 
     <!-- GESTACIÓN -->
     <div id="calc-gestacion" class="calc-panel" style="display:none">
       <div class="calc-card">
-        <p class="calc-card__nota">Duración promedio de gestación por especie. Es un estimado — puede variar algunos días según la raza y el individuo.</p>
+        <p class="calc-card__nota" id="gestacionAyuda">Calcula una fecha promedio y una ventana orientativa. La fecha real depende del momento de ovulación, raza, camada e individuo; confirma mediante seguimiento reproductivo.</p>
         <div class="form-row">
           <div class="form-group"><label class="form-label">Especie</label>
             <select class="form-input form-select" id="gestacionEspecie">
-              <option value="63">Canino (≈63 días)</option>
-              <option value="65">Felino (≈65 días)</option>
-              <option value="340">Equino (≈340 días)</option>
-              <option value="283">Bovino (≈283 días)</option>
-              <option value="114">Porcino (≈114 días)</option>
-              <option value="150">Ovino (≈150 días)</option>
-              <option value="150">Caprino (≈150 días)</option>
-              <option value="31">Conejo (≈31 días)</option>
-              <option value="365">Elefante — referencia (≈365 días)</option>
+              <option value="63" data-min="58" data-max="72">Canino (≈63 días)</option>
+              <option value="65" data-min="63" data-max="67">Felino (≈65 días)</option>
+              <option value="335" data-min="320" data-max="360">Equino (≈11 meses)</option>
+              <option value="283" data-min="274" data-max="292">Bovino (≈9 meses)</option>
+              <option value="114" data-min="112" data-max="116">Porcino (≈114 días)</option>
+              <option value="150" data-min="145" data-max="155">Ovino (≈150 días)</option>
+              <option value="150" data-min="145" data-max="155">Caprino (≈150 días)</option>
+              <option value="31" data-min="30" data-max="32">Conejo (≈31 días)</option>
+              <option value="660" data-min="548" data-max="670">Elefante — referencia (≈660 días)</option>
             </select>
           </div>
-          <div class="form-group"><label class="form-label">Fecha de monta / cruza</label><input class="form-input" type="date" id="gestacionFecha"></div>
+          <div class="form-group"><label class="form-label" for="gestacionFecha">Fecha de monta / cruza</label><input class="form-input" type="date" id="gestacionFecha" aria-describedby="gestacionAyuda"></div>
         </div>
         <div style="display:flex;gap:10px"><button class="btn-save" onclick="calcularGestacion()">Calcular</button><button class="btn-clear" onclick="borrarGestacion()">Borrar</button></div>
-        <div id="gestacionResultado" class="calc-resultado" style="display:none"></div>
+        <div id="gestacionResultado" class="calc-resultado" role="status" aria-live="polite" style="display:none"></div>
+        <div class="tool-source">Periodos aproximados: <a href="https://www.merckvetmanual.com/multimedia/table/approximate-gestation-periods" target="_blank" rel="noopener noreferrer">Merck Veterinary Manual</a>; elefantes: <a href="https://nationalzoo.si.edu/animals/asian-elephant-faqs" target="_blank" rel="noopener noreferrer">Smithsonian National Zoo</a>. Última revisión: julio de 2026.</div>
       </div>
     </div>
   </div>
 
   <!-- ==================== GUÍA URGENCIAS ==================== -->
   <div class="page-content" data-page="urgencias">
-    <div class="page-header"><h1 class="page-header__title">Guía de Urgencias</h1><p class="page-header__desc">Protocolos paso a paso para emergencias veterinarias comunes.</p></div>
+    <div class="page-header"><h1 class="page-header__title">Guía de Urgencias — Perros y Gatos</h1><p class="page-header__desc">Listas de comprobación para personal veterinario entrenado. No son protocolos universales ni sustituyen el juicio clínico.</p></div>
+    <div class="calc-alert calc-alert--error" style="margin:0 0 18px"><strong>Emergencia:</strong> estabiliza primero, solicita apoyo y utiliza el protocolo vigente de tu hospital. Las dosis y maniobras dependen de especie, tamaño, estado y causa; registra tiempos y respuesta.</div>
     <div class="urg-list">
 
       <div class="urg-card"><div class="urg-card__header" onclick="this.parentElement.classList.toggle('open')"><div class="urg-card__header-left"><div class="urg-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg></div><div><div class="urg-card__title">Intoxicación</div><div class="urg-card__subtitle">Ingestión de sustancias tóxicas</div></div></div><svg class="urg-card__toggle icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M19 9l-7 7-7-7"/></svg></div><div class="urg-card__body"><div class="urg-card__content">
         <div class="urg-step"><div class="urg-step__num">1</div><div class="urg-step__text"><strong>Identificar la sustancia.</strong> Preguntar al propietario qué ingirió, cantidad y hace cuánto tiempo.</div></div>
         <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Estabilizar al paciente.</strong> Evaluar ABC (vía aérea, respiración, circulación). Monitorear signos vitales.</div></div>
-        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Descontaminación.</strong> Inducir emesis solo si la ingestión fue &lt;2 horas y no es corrosivo. Carbón activado 1-2 g/kg.</div></div>
-        <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Tratamiento de soporte.</strong> Fluidoterapia IV, protectores gástricos, antídoto específico si existe.</div></div>
+        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Consultar toxicología antes de descontaminar.</strong> No inducir emesis de forma automática: confirma agente, tiempo, especie, estado neurológico, riesgo de aspiración y contraindicaciones como corrosivos o hidrocarburos.</div></div>
+        <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Tratamiento específico y soporte.</strong> Usa antídoto, carbón activado o fluidoterapia únicamente cuando estén indicados para el agente y el paciente.</div></div>
         <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Monitoreo.</strong> Hematología, bioquímica hepática/renal a las 24-48 hrs. Hospitalizar si es necesario.</div></div>
       </div></div></div>
 
       <div class="urg-card"><div class="urg-card__header" onclick="this.parentElement.classList.toggle('open')"><div class="urg-card__header-left"><div class="urg-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div><div><div class="urg-card__title">Paro Cardiorrespiratorio</div><div class="urg-card__subtitle">Reanimación cardiopulmonar (RCP)</div></div></div><svg class="urg-card__toggle icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M19 9l-7 7-7-7"/></svg></div><div class="urg-card__body"><div class="urg-card__content">
         <div class="urg-step"><div class="urg-step__num">1</div><div class="urg-step__text"><strong>Confirmar paro.</strong> Verificar ausencia de pulso, respiración y respuesta a estímulos. No demorar >10 seg.</div></div>
-        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Compresiones torácicas.</strong> 100-120/min. Paciente en decúbito lateral derecho. Comprimir 1/3 del tórax.</div></div>
+        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Compresiones torácicas.</strong> 100-120/min durante ciclos completos de 2 minutos. Selecciona posición y punto de compresión según la conformación torácica; minimiza interrupciones.</div></div>
         <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Ventilación.</strong> Intubar. 1 ventilación cada 6 seg. Conectar oxígeno al 100%.</div></div>
-        <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Fármacos.</strong> Epinefrina 0.01 mg/kg IV cada 3-5 min. Atropina 0.04 mg/kg IV si bradicardia.</div></div>
-        <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Evaluar cada 2 min.</strong> Verificar ritmo. Ciclos de 2 min compresiones. Considerar desfibrilación si hay FV.</div></div>
+        <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>ALS conforme a RECOVER.</strong> Obtén acceso IV/IO, ECG y ETCO₂. Administra vasopresores y reversiones con la tabla de dosis vigente; atropina se considera una vez y temprano, no como tratamiento genérico de cualquier bradicardia.</div></div>
+        <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Evaluar cada 2 min.</strong> Pausa menos de 10 segundos para ritmo y pulso. Desfibrila ritmos chocables con la energía indicada y duplica después del primer choque según el algoritmo.</div></div>
       </div></div></div>
 
       <div class="urg-card"><div class="urg-card__header" onclick="this.parentElement.classList.toggle('open')"><div class="urg-card__header-left"><div class="urg-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div><div><div class="urg-card__title">Trauma / Politraumatismo</div><div class="urg-card__subtitle">Atropello, caída de altura, agresión</div></div></div><svg class="urg-card__toggle icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M19 9l-7 7-7-7"/></svg></div><div class="urg-card__body"><div class="urg-card__content">
         <div class="urg-step"><div class="urg-step__num">1</div><div class="urg-step__text"><strong>Triage primario.</strong> ABC: asegurar vía aérea, evaluar respiración y circulación. Controlar hemorragias activas.</div></div>
-        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Acceso venoso.</strong> Catéter IV calibre 18-20. Iniciar cristaloides 20 ml/kg en bolo si hay shock.</div></div>
-        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Analgesia.</strong> Metadona 0.2-0.5 mg/kg IV o Butorfanol 0.2 mg/kg IV. No demorar el manejo del dolor.</div></div>
+        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Acceso y reanimación titulada.</strong> Elige catéter, fluido y bolos según especie, tamaño, perfusión, hemorragia y comorbilidades. Reevalúa después de cada intervención; evita una tasa fija para todos.</div></div>
+        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Analgesia multimodal.</strong> No demorar el manejo del dolor. Selecciona fármaco, dosis y vía conforme al estado hemodinámico y protocolo hospitalario.</div></div>
         <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Diagnóstico.</strong> Radiografías de tórax y abdomen. FAST ecográfico para detectar líquido libre.</div></div>
         <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Estabilizar y planificar.</strong> Inmovilizar fracturas. Evaluar necesidad quirúrgica. Hospitalizar y monitorear.</div></div>
       </div></div></div>
 
       <div class="urg-card"><div class="urg-card__header" onclick="this.parentElement.classList.toggle('open')"><div class="urg-card__header-left"><div class="urg-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div><div><div class="urg-card__title">Dilatación-Vólvulo Gástrico (DVG)</div><div class="urg-card__subtitle">Torsión de estómago — emergencia quirúrgica</div></div></div><svg class="urg-card__toggle icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M19 9l-7 7-7-7"/></svg></div><div class="urg-card__body"><div class="urg-card__content">
         <div class="urg-step"><div class="urg-step__num">1</div><div class="urg-step__text"><strong>Reconocer signos.</strong> Abdomen distendido, arcadas improductivas, salivación, taquicardia, debilidad. Raza grande.</div></div>
-        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Estabilización hemodinámica.</strong> Dos catéteres IV calibre 18. Cristaloides en bolo 40-90 ml/kg/hr.</div></div>
-        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Descompresión.</strong> Intentar sonda orogástrica. Si no pasa, trocarización percutánea en flanco derecho.</div></div>
+        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Estabilización hemodinámica.</strong> Coloca accesos de gran calibre apropiados al paciente y administra bolos titulados a objetivos de perfusión, con reevaluación frecuente y control de arritmias.</div></div>
+        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Descompresión por personal entrenado.</strong> Intenta sonda orogástrica cuando sea seguro; si no es posible, utiliza la técnica de descompresión definida por el cirujano y el protocolo del hospital.</div></div>
         <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Radiografía.</strong> Confirmar DVG (signo de doble burbuja). Evaluar neumoperitoneo.</div></div>
         <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Cirugía urgente.</strong> Gastropexia incisional. Evaluar viabilidad gástrica y esplénica. No demorar >2-4 hrs.</div></div>
       </div></div></div>
 
       <div class="urg-card"><div class="urg-card__header" onclick="this.parentElement.classList.toggle('open')"><div class="urg-card__header-left"><div class="urg-card__icon"><svg class="icon" viewBox="0 0 24 24"><path d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg></div><div><div class="urg-card__title">Convulsiones / Status Epilepticus</div><div class="urg-card__subtitle">Crisis convulsiva prolongada o repetitiva</div></div></div><svg class="urg-card__toggle icon" viewBox="0 0 24 24" style="width:18px;height:18px"><path d="M19 9l-7 7-7-7"/></svg></div><div class="urg-card__body"><div class="urg-card__content">
         <div class="urg-step"><div class="urg-step__num">1</div><div class="urg-step__text"><strong>Proteger al paciente.</strong> Alejar de objetos. No introducir nada en la boca. Registrar duración y tipo.</div></div>
-        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Diazepam.</strong> 0.5-1 mg/kg IV (o rectal si no hay acceso). Repetir hasta 3 veces con 5 min de intervalo.</div></div>
-        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Si no responde.</strong> Fenobarbital 2-4 mg/kg IV lento. Propofol 1-2 mg/kg IV en bolo como último recurso.</div></div>
+        <div class="urg-step"><div class="urg-step__num">2</div><div class="urg-step__text"><strong>Tratar como status</strong> si dura 5 minutos o existen crisis repetidas sin recuperación. Administra el anticonvulsivo de primera línea, vía y dosis definidos por el protocolo para la especie y registra cada administración.</div></div>
+        <div class="urg-step"><div class="urg-step__num">3</div><div class="urg-step__text"><strong>Escalar de forma estructurada.</strong> Si persiste, usa el plan de segunda línea y prepara soporte de vía aérea, oxigenación, presión arterial y ventilación; los anestésicos requieren monitorización avanzada.</div></div>
         <div class="urg-step"><div class="urg-step__num">4</div><div class="urg-step__text"><strong>Monitorear temperatura.</strong> Hipertermia >40°C es común. Enfriar activamente si es necesario.</div></div>
         <div class="urg-step"><div class="urg-step__num">5</div><div class="urg-step__text"><strong>Estudios.</strong> Hemograma, bioquímica, glucosa, electrolitos. Considerar RM cerebral si primera crisis en adulto.</div></div>
       </div></div></div>
 
     </div>
+    <div class="tool-source">RCP: <a href="https://recoverinitiative.org/2024-guidelines/" target="_blank" rel="noopener noreferrer">RECOVER 2024</a>. Fluidoterapia y reevaluación: <a href="https://www.aaha.org/resources/2024-aaha-fluid-therapy-guidelines-for-dogs-and-cats/" target="_blank" rel="noopener noreferrer">AAHA 2024</a>. El resto de los checklists requiere aprobación documentada del responsable clínico de GlobalVet. Revisión editorial: julio de 2026.</div>
   </div>
 
   <!-- ==================== TÉRMINOS Y CONDICIONES ==================== -->
@@ -2576,6 +2615,7 @@ body.dark .logro-card__icon{background:rgba(255,255,255,0.05)}
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyD_28_ODOJWqzEgN4kagOf4lszt8Y1Zlog",
@@ -2663,7 +2703,107 @@ setInterval(function(){
 
 </script>
 <script>
+function initHerramientasForms(){
+  ['ficha','receta','consentimiento'].forEach(function(page){
+    var root=document.querySelector('div.page-content[data-page="'+page+'"]');
+    if(!root)return;
+    root.querySelectorAll('.form-input,.form-textarea').forEach(function(control,index){
+      if(!control.id)control.id='tool-'+page+'-'+index;
+      if(!control.name)control.name=page+'_'+index;
+      var group=control.closest('.form-group');
+      var label=group&&group.querySelector('.form-label');
+      if(label&&!label.htmlFor)label.htmlFor=control.id;
+      control.addEventListener('input',function(){control.classList.remove('field-error');control.removeAttribute('aria-invalid');});
+    });
+  });
+  document.querySelectorAll('.form-group').forEach(function(group,index){
+    var control=group.querySelector('input,select,textarea');
+    var label=group.querySelector('label');
+    if(!control||!label)return;
+    if(!control.id)control.id='globalvet-field-'+index;
+    if(!control.name)control.name=control.id;
+    label.htmlFor=control.id;
+  });
+  document.querySelectorAll('.vac-table').forEach(function(table,index){
+    if(table.querySelector('caption'))return;
+    var caption=document.createElement('caption');
+    caption.className='sr-only';
+    caption.textContent='Referencia de vacunación, tabla '+(index+1);
+    table.insertBefore(caption,table.firstChild);
+  });
+  var consentDate=document.getElementById('consentFecha');
+  if(consentDate&&!consentDate.value){
+    var now=new Date();
+    consentDate.value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-'+String(now.getDate()).padStart(2,'0');
+  }
+}
+function validarHerramienta(page){
+  var root=document.querySelector('div.page-content[data-page="'+page+'"]');
+  if(!root)return false;
+  var controls=Array.from(root.querySelectorAll('.form-input,.form-textarea'));
+  controls.forEach(function(c){c.classList.remove('field-error');});
+  var invalid=controls.filter(function(c){
+    var emptyRequired=c.required&&String(c.value||'').trim()==='';
+    var nativeInvalid=c.validity&&c.validity.valid===false;
+    return emptyRequired||nativeInvalid;
+  });
+  if(!invalid.length)return true;
+  invalid.forEach(function(c){c.classList.add('field-error');c.setAttribute('aria-invalid','true');});
+  invalid[0].focus();
+  if(typeof invalid[0].reportValidity==='function')invalid[0].reportValidity();
+  return false;
+}
+function toolDraftKey(page){
+  var user=firebase.auth().currentUser;
+  return 'globalvet-tool-draft-'+page+'-'+(user?user.uid:'local');
+}
+function mostrarMensajeHerramienta(page,message,isError){
+  var root=document.querySelector('div.page-content[data-page="'+page+'"]');
+  if(!root)return;
+  var old=root.querySelector('.tool-local-message');if(old)old.remove();
+  var el=document.createElement('div');
+  el.className='tool-local-message calc-alert '+(isError?'calc-alert--error':'calc-alert--warn');
+  el.setAttribute('role','status');
+  el.textContent=message;
+  var actions=root.querySelector('.ficha-actions');
+  if(actions)actions.insertAdjacentElement('afterend',el);
+}
+function guardarBorradorHerramienta(page){
+  try{
+    var controls=Array.from(document.querySelectorAll('div.page-content[data-page="'+page+'"] .form-input,div.page-content[data-page="'+page+'"] .form-textarea'));
+    var payload={savedAt:new Date().toISOString(),values:controls.map(function(c){return c.value;})};
+    localStorage.setItem(toolDraftKey(page),JSON.stringify(payload));
+    mostrarMensajeHerramienta(page,'Borrador guardado solamente en este dispositivo. Elimínalo al terminar si el equipo es compartido.',false);
+  }catch(err){mostrarMensajeHerramienta(page,'No se pudo guardar el borrador en este dispositivo.',true);}
+}
+function restaurarBorradorHerramienta(page){
+  try{
+    var raw=localStorage.getItem(toolDraftKey(page));
+    if(!raw){mostrarMensajeHerramienta(page,'No hay un borrador local guardado para esta herramienta.',true);return;}
+    var payload=JSON.parse(raw);
+    var controls=Array.from(document.querySelectorAll('div.page-content[data-page="'+page+'"] .form-input,div.page-content[data-page="'+page+'"] .form-textarea'));
+    controls.forEach(function(c,index){if(payload.values[index]!==undefined)c.value=payload.values[index];});
+    mostrarMensajeHerramienta(page,'Borrador local recuperado. Revísalo antes de generar el documento.',false);
+  }catch(err){mostrarMensajeHerramienta(page,'El borrador local no pudo recuperarse.',true);}
+}
+function limpiarHerramienta(page){
+  if(!window.confirm('¿Deseas borrar los campos y el borrador local de esta herramienta?'))return;
+  document.querySelectorAll('div.page-content[data-page="'+page+'"] .form-input,div.page-content[data-page="'+page+'"] .form-textarea').forEach(function(c){
+    if(c.tagName==='SELECT')c.selectedIndex=0;else c.value='';
+    c.classList.remove('field-error');c.removeAttribute('aria-invalid');
+  });
+  localStorage.removeItem(toolDraftKey(page));
+  if(page==='consentimiento')initHerramientasForms();
+  mostrarMensajeHerramienta(page,'Campos y borrador local eliminados.',false);
+}
+function safePdfFilename(prefix,name){
+  var clean=String(name||'Paciente').normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9_-]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'Paciente';
+  return prefix+'_'+clean+'_GlobalVet.pdf';
+}
+initHerramientasForms();
+
 function descargarFicha(e){
+  if(!validarHerramienta('ficha'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
   btn.textContent='Generando...';btn.disabled=true;
@@ -2705,10 +2845,12 @@ function descargarFicha(e){
       row('Hallazgos al examen fisico',v[16]);row('Diagnostico presuntivo',v[17]);
       row('Tratamiento indicado',v[18]);row('Observaciones',v[19]);
       footer();
-      doc.save('Ficha_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
+      doc.save(safePdfFilename('Ficha',v[0]));
+      mostrarMensajeHerramienta('ficha','PDF generado. Revisa la carpeta de descargas del navegador.',false);
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
       btn.innerHTML=origHTML;btn.disabled=false;
+      mostrarMensajeHerramienta('ficha','No se pudo generar el PDF; se abrió la vista de impresión como respaldo.',true);
       window.print();
     }
   }
@@ -2717,19 +2859,20 @@ function descargarFicha(e){
     generarPDF();
   }else{
     var s=document.createElement('script');
-    s.src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js';
+    s.src='https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
     s.onload=function(){generarPDF();};
     s.onerror=function(){
       var s2=document.createElement('script');
       s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
       s2.onload=function(){generarPDF();};
-      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;window.print();};
+      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;mostrarMensajeHerramienta('ficha','No se pudo cargar el generador PDF; se abrió la vista de impresión.',true);window.print();};
       document.head.appendChild(s2);
     };
     document.head.appendChild(s);
   }
 }
 function descargarReceta(e){
+  if(!validarHerramienta('receta'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
   btn.textContent='Generando...';btn.disabled=true;
@@ -2769,11 +2912,17 @@ function descargarReceta(e){
       row('Diagnostico',v[6]);row('Medicamentos prescritos',v[7]);row('Indicaciones adicionales',v[8]);row('Proxima cita / seguimiento',v[9]);
       y+=1.5;sec('Medico responsable');
       pair('Medico veterinario',v[10],'Cedula profesional',v[11]);
+      ck(24);y+=10;
+      doc.setDrawColor(0,0,0);doc.setLineWidth(0.3);doc.line(M,y,M+85,y);
+      doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,100,100);
+      doc.text('Firma del MVZ responsable',M,y+5);
       footer();
-      doc.save('Receta_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
+      doc.save(safePdfFilename('Receta',v[0]));
+      mostrarMensajeHerramienta('receta','PDF generado. Revisa la carpeta de descargas del navegador.',false);
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
       btn.innerHTML=origHTML;btn.disabled=false;
+      mostrarMensajeHerramienta('receta','No se pudo generar el PDF; se abrió la vista de impresión como respaldo.',true);
       window.print();
     }
   }
@@ -2782,13 +2931,13 @@ function descargarReceta(e){
     generarPDF();
   }else{
     var s=document.createElement('script');
-    s.src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js';
+    s.src='https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
     s.onload=function(){generarPDF();};
     s.onerror=function(){
       var s2=document.createElement('script');
       s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
       s2.onload=function(){generarPDF();};
-      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;window.print();};
+      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;mostrarMensajeHerramienta('receta','No se pudo cargar el generador PDF; se abrió la vista de impresión.',true);window.print();};
       document.head.appendChild(s2);
     };
     document.head.appendChild(s);
@@ -2796,6 +2945,7 @@ function descargarReceta(e){
 }
 
 function descargarConsentimiento(e){
+  if(!validarHerramienta('consentimiento'))return;
   var btn=e.target.closest('button');
   var origHTML=btn.innerHTML;
   btn.textContent='Generando...';btn.disabled=true;
@@ -2851,13 +3001,17 @@ function descargarConsentimiento(e){
       doc.setDrawColor(0,0,0);doc.setLineWidth(0.3);
       doc.line(M,y,M+85,y);
       doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(100,100,100);
-      doc.text('Firma del propietario',M,y+5);
+      doc.text('Firma de quien autoriza',M,y+5);
+      doc.setFont('helvetica','bold');doc.setTextColor(40,40,40);
+      doc.text(String(v[10]||'Nombre de quien autoriza'),M,y+10);
 
       footer();
-      doc.save('Consentimiento_'+(v[0]||'Paciente').replace(/\s/g,'_')+'_GlobalVet.pdf');
+      doc.save(safePdfFilename('Consentimiento',v[0]));
+      mostrarMensajeHerramienta('consentimiento','PDF generado. Revisa la carpeta de descargas del navegador.',false);
       btn.innerHTML=origHTML;btn.disabled=false;
     }catch(err){
       btn.innerHTML=origHTML;btn.disabled=false;
+      mostrarMensajeHerramienta('consentimiento','No se pudo generar el PDF; se abrió la vista de impresión como respaldo.',true);
       window.print();
     }
   }
@@ -2866,13 +3020,13 @@ function descargarConsentimiento(e){
     generarPDF();
   }else{
     var s=document.createElement('script');
-    s.src='https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js';
+    s.src='https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js';
     s.onload=function(){generarPDF();};
     s.onerror=function(){
       var s2=document.createElement('script');
       s2.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
       s2.onload=function(){generarPDF();};
-      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;window.print();};
+      s2.onerror=function(){btn.innerHTML=origHTML;btn.disabled=false;mostrarMensajeHerramienta('consentimiento','No se pudo cargar el generador PDF; se abrió la vista de impresión.',true);window.print();};
       document.head.appendChild(s2);
     };
     document.head.appendChild(s);
@@ -3086,6 +3240,41 @@ function showVacVista(vista,btn){
   btn.classList.add('active');
 }
 function showScore(type,btn){['canino','felino','bovino','equino','porcino','ovicap','aves','conejo'].forEach(function(s){var el=document.getElementById('score-'+s);if(el)el.style.display=s===type?'block':'none'});btn.closest('.filter-tabs').querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active')}
+function seleccionarScore(card){
+  var panel=card.closest('.score-panel');
+  var especie=panel?panel.id.replace('score-',''):'paciente';
+  var score=card.querySelector('.score-card__num').textContent.trim();
+  var label=card.querySelector('.score-card__label').textContent.trim();
+  document.querySelectorAll('.score-card').forEach(function(c){c.classList.remove('selected');c.setAttribute('aria-pressed','false');});
+  card.classList.add('selected');card.setAttribute('aria-pressed','true');
+  var out=document.getElementById('scoreSelection');
+  out.style.display='block';
+  out.innerHTML='<strong>Selección:</strong> '+escapeHtml(especie.charAt(0).toUpperCase()+especie.slice(1))+' · '+escapeHtml(score)+' — '+escapeHtml(label)+'. Registra también la condición muscular y la fecha en la ficha clínica.';
+}
+function initScoreCards(){
+  document.querySelectorAll('.score-card').forEach(function(card){
+    card.setAttribute('role','button');card.setAttribute('tabindex','0');card.setAttribute('aria-pressed','false');
+    card.addEventListener('click',function(){seleccionarScore(card);});
+    card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();seleccionarScore(card);}});
+  });
+}
+initScoreCards();
+function initUrgencyCards(){
+  document.querySelectorAll('.urg-card__header').forEach(function(header,index){
+    var body=header.parentElement.querySelector('.urg-card__body');
+    var bodyId='urgency-panel-'+index;
+    header.removeAttribute('onclick');
+    header.setAttribute('role','button');header.setAttribute('tabindex','0');header.setAttribute('aria-expanded','false');header.setAttribute('aria-controls',bodyId);
+    if(body){body.id=bodyId;body.setAttribute('role','region');}
+    function toggle(){
+      var open=header.parentElement.classList.toggle('open');
+      header.setAttribute('aria-expanded',open?'true':'false');
+    }
+    header.addEventListener('click',toggle);
+    header.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}});
+  });
+}
+initUrgencyCards();
 
 // ============ CALCULADORAS CLÍNICAS (dinámicas, todas las especies) ============
 function showCalc(type,btn){
@@ -3094,74 +3283,121 @@ function showCalc(type,btn){
   btn.classList.add('active');
 }
 
+function calcNumber(id,min,max,label,optional){
+  var input=document.getElementById(id);
+  var raw=input.value.trim();
+  input.classList.remove('field-error');
+  if(optional&&raw==='')return null;
+  var value=Number(raw);
+  if(!Number.isFinite(value)||value<min||value>max){
+    input.classList.add('field-error');
+    throw new Error(label+' debe estar entre '+min+' y '+max+'.');
+  }
+  return value;
+}
+function calcError(resEl,message){
+  resEl.style.display='block';
+  resEl.innerHTML='<div class="calc-alert calc-alert--error">'+escapeHtml(message)+'</div>';
+}
+function clinicalNumber(value,kind){
+  if(!Number.isFinite(value))return '—';
+  if(value===0)return '0';
+  if(kind==='volume'){
+    if(value>=10)return value.toFixed(1);
+    if(value>=1)return value.toFixed(2);
+    if(value>=0.1)return value.toFixed(3);
+    if(value>=0.01)return value.toFixed(3);
+    return value.toFixed(4);
+  }
+  if(Math.abs(value)>=100)return value.toFixed(0);
+  if(Math.abs(value)>=1)return value.toFixed(2);
+  return value.toFixed(3);
+}
+function addCalendarDays(date,days){
+  var result=new Date(date.getTime());
+  result.setDate(result.getDate()+days);
+  return result;
+}
+
 function calcularDosis(){
   var especie=document.getElementById('dosisEspecie').value;
-  var medicamento=document.getElementById('dosisMedicamento').value||'el medicamento';
-  var peso=parseFloat(document.getElementById('dosisPeso').value);
-  var mgKg=parseFloat(document.getElementById('dosisMgKg').value);
-  var concentracion=parseFloat(document.getElementById('dosisConcentracion').value);
+  var medicamento=document.getElementById('dosisMedicamento').value.trim()||'medicamento';
   var resEl=document.getElementById('dosisResultado');
-  if(!peso||!mgKg||peso<=0||mgKg<=0){
+  try{
+    var peso=calcNumber('dosisPeso',0.001,20000,'El peso');
+    var mgKg=calcNumber('dosisMgKg',0.000001,100000,'La dosis prescrita');
+    var concentracion=calcNumber('dosisConcentracion',0.000001,100000,'La concentración',true);
+    var dosisTotalMg=peso*mgKg;
+    if(!Number.isFinite(dosisTotalMg))throw new Error('El resultado excede el rango calculable. Revisa los datos.');
+    var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+escapeHtml(especie)+'</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Dosis total por administración</span><strong>'+clinicalNumber(dosisTotalMg)+' mg</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Medicamento</span><strong>'+escapeHtml(medicamento)+'</strong></div>';
+    if(concentracion!==null){
+      var volumenMl=dosisTotalMg/concentracion;
+      html+='<div class="calc-resultado__total">'+clinicalNumber(volumenMl,'volume')+' ml por administración</div>';
+      if(volumenMl<0.01){
+        html+='<div class="calc-alert calc-alert--warn"><strong>Microvolumen:</strong> verifica que el dispositivo pueda medir '+clinicalNumber(volumenMl,'volume')+' ml. Considera una dilución validada por farmacia o una presentación distinta; no redondees a cero.</div>';
+      }else if(volumenMl>50){
+        html+='<div class="calc-alert calc-alert--warn">Volumen elevado. Confirma concentración, vía, volumen máximo por sitio y necesidad de dividir la administración.</div>';
+      }
+    }else{
+      html+='<div class="calc-alert calc-alert--warn">Sin concentración solo puede calcularse la cantidad en mg. No se calculó volumen.</div>';
+    }
+    html+='<div class="tool-source">Resultado matemático por dosis. Confirma dosis máxima, vía, frecuencia, interacciones y ficha técnica antes de usar.</div>';
     resEl.style.display='block';
-    resEl.innerHTML='<span style="color:#dc2626">Completa al menos el peso y la dosis en mg/kg.</span>';
-    return;
-  }
-  var dosisTotalMg=peso*mgKg;
-  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especie+'</strong></div>';
-  html+='<div class="calc-resultado__linea"><span>Dosis total de '+medicamento+'</span><strong>'+dosisTotalMg.toFixed(3)+' mg</strong></div>';
-  if(concentracion&&concentracion>0){
-    var volumenMl=dosisTotalMg/concentracion;
-    html+='<div class="calc-resultado__total">'+volumenMl.toFixed(2)+' ml a administrar</div>';
-  }else{
-    html+='<div style="font-size:.8rem;color:var(--gray-400);margin-top:6px">Agrega la concentración del medicamento para calcular también el volumen en ml.</div>';
-  }
-  resEl.style.display='block';
-  resEl.innerHTML=html;
+    resEl.innerHTML=html;
+  }catch(err){calcError(resEl,err.message);}
 }
 
 function calcularFluidos(){
   var especie=document.getElementById('fluidosEspecie').value;
-  var peso=parseFloat(document.getElementById('fluidosPeso').value);
-  var deshidratacion=parseFloat(document.getElementById('fluidosDeshidratacion').value)||0;
-  var horas=parseFloat(document.getElementById('fluidosHoras').value)||24;
-  var mantenimientoKgDia=parseFloat(document.getElementById('fluidosMantenimiento').value)||60;
   var resEl=document.getElementById('fluidosResultado');
-  if(!peso||peso<=0){
+  try{
+    var peso=calcNumber('fluidosPeso',0.05,500,'El peso');
+    var deshidratacion=calcNumber('fluidosDeshidratacion',0,15,'La deshidratación');
+    var horas=calcNumber('fluidosHoras',1,72,'El tiempo de corrección');
+    var mantenimientoKgDia=calcNumber('fluidosMantenimiento',1,200,'El mantenimiento');
+    var perdidasMlHora=calcNumber('fluidosPerdidas',0,10000,'Las pérdidas continuas');
+    var deficitMl=peso*deshidratacion*10;
+    var mantenimientoMlDia=peso*mantenimientoKgDia;
+    var mantenimientoMlHora=mantenimientoMlDia/24;
+    var reposicionMlHora=deficitMl/horas;
+    var totalMlHora=reposicionMlHora+mantenimientoMlHora+perdidasMlHora;
+    if(!Number.isFinite(totalMlHora)||totalMlHora<0)throw new Error('No fue posible obtener una tasa válida. Revisa los datos.');
+    var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+escapeHtml(especie)+'</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Déficit estimado</span><strong>'+clinicalNumber(deficitMl)+' ml</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Reposición del déficit</span><strong>'+clinicalNumber(reposicionMlHora)+' ml/h</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Mantenimiento</span><strong>'+clinicalNumber(mantenimientoMlHora)+' ml/h</strong></div>';
+    html+='<div class="calc-resultado__linea"><span>Pérdidas continuas</span><strong>'+clinicalNumber(perdidasMlHora)+' ml/h</strong></div>';
+    html+='<div class="calc-resultado__total">Tasa inicial calculada: '+clinicalNumber(totalMlHora)+' ml/h</div>';
+    html+='<div class="calc-alert calc-alert--warn"><strong>Reevaluación obligatoria:</strong> esta suma no incluye reanimación por hipovolemia. Ajusta según perfusión, diuresis, peso, balance, electrolitos y riesgo de sobrecarga.</div>';
     resEl.style.display='block';
-    resEl.innerHTML='<span style="color:#dc2626">Completa el peso del paciente.</span>';
-    return;
-  }
-  // Déficit de reposición (ml) = peso(kg) x %deshidratación x 10
-  var deficitMl=peso*deshidratacion*10;
-  var mantenimientoMlDia=peso*mantenimientoKgDia;
-  var mantenimientoMlHora=mantenimientoMlDia/24;
-  var reposicionMlHora=deficitMl/horas;
-  var totalMlHora=reposicionMlHora+mantenimientoMlHora;
-  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especie+'</strong></div>';
-  html+='<div class="calc-resultado__linea"><span>Déficit total a reponer</span><strong>'+deficitMl.toFixed(0)+' ml</strong></div>';
-  html+='<div class="calc-resultado__linea"><span>Mantenimiento diario</span><strong>'+mantenimientoMlDia.toFixed(0)+' ml/día</strong></div>';
-  html+='<div class="calc-resultado__total">'+totalMlHora.toFixed(1)+' ml/hora (reposición + mantenimiento)</div>';
-  resEl.style.display='block';
-  resEl.innerHTML=html;
+    resEl.innerHTML=html;
+  }catch(err){calcError(resEl,err.message);}
 }
 
 function calcularGestacion(){
   var sel=document.getElementById('gestacionEspecie');
-  var dias=parseInt(sel.value);
-  var especieLabel=sel.options[sel.selectedIndex].text;
+  var selected=sel.options[sel.selectedIndex];
+  var dias=Number(selected.value);
+  var minDias=Number(selected.dataset.min||dias);
+  var maxDias=Number(selected.dataset.max||dias);
+  var especieLabel=selected.text;
   var fechaInput=document.getElementById('gestacionFecha').value;
   var resEl=document.getElementById('gestacionResultado');
-  if(!fechaInput){
-    resEl.style.display='block';
-    resEl.innerHTML='<span style="color:#dc2626">Selecciona la fecha de monta/cruza.</span>';
-    return;
-  }
-  var fechaMonta=new Date(fechaInput+'T00:00:00');
-  var fechaParto=new Date(fechaMonta.getTime()+dias*24*60*60*1000);
+  if(!fechaInput){calcError(resEl,'Selecciona la fecha de monta o cruza.');return;}
+  var parts=fechaInput.split('-').map(Number);
+  var fechaMonta=new Date(parts[0],parts[1]-1,parts[2],12,0,0);
+  if(parts.length!==3||Number.isNaN(fechaMonta.getTime())){calcError(resEl,'La fecha no es válida.');return;}
+  var fechaParto=addCalendarDays(fechaMonta,dias);
+  var fechaMin=addCalendarDays(fechaMonta,minDias);
+  var fechaMax=addCalendarDays(fechaMonta,maxDias);
   var opciones={day:'numeric',month:'long',year:'numeric'};
-  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+especieLabel+'</strong></div>';
-  html+='<div class="calc-resultado__linea"><span>Fecha de monta/cruza</span><strong>'+fechaMonta.toLocaleDateString('es-MX',opciones)+'</strong></div>';
-  html+='<div class="calc-resultado__total">Parto probable: '+fechaParto.toLocaleDateString('es-MX',opciones)+'</div>';
+  var html='<div class="calc-resultado__linea"><span>Especie</span><strong>'+escapeHtml(especieLabel)+'</strong></div>';
+  html+='<div class="calc-resultado__linea"><span>Fecha registrada</span><strong>'+fechaMonta.toLocaleDateString('es-MX',opciones)+'</strong></div>';
+  html+='<div class="calc-resultado__total">Fecha promedio: '+fechaParto.toLocaleDateString('es-MX',opciones)+'</div>';
+  if(minDias!==maxDias)html+='<div class="calc-resultado__linea"><span>Ventana orientativa</span><strong>'+fechaMin.toLocaleDateString('es-MX',opciones)+' – '+fechaMax.toLocaleDateString('es-MX',opciones)+'</strong></div>';
+  html+='<div class="calc-alert calc-alert--warn">La fecha de monta puede no coincidir con la ovulación. Usa esta ventana para planificación, no para decidir intervenciones obstétricas.</div>';
   resEl.style.display='block';
   resEl.innerHTML=html;
 }
@@ -3180,6 +3416,7 @@ function borrarFluidos(){
   document.getElementById('fluidosDeshidratacion').value='0';
   document.getElementById('fluidosHoras').value='24';
   document.getElementById('fluidosMantenimiento').value='60';
+  document.getElementById('fluidosPerdidas').value='0';
   var r=document.getElementById('fluidosResultado');r.style.display='none';r.innerHTML='';
 }
 function borrarGestacion(){
@@ -3194,75 +3431,37 @@ function borrarGestacion(){
 // marca cuándo cae cada evento a partir de la fecha de nacimiento.
 var ESQUEMAS_CALENDARIO={
   canino:[
-    {dias:15,tipo:'desparasitante',titulo:'1ª desparasitación interna'},
-    {dias:30,tipo:'desparasitante',titulo:'2ª desparasitación interna'},
-    {dias:45,tipo:'desparasitante',titulo:'3ª desparasitación interna'},
-    {dias:49,tipo:'vacuna',titulo:'1ª dosis vacuna múltiple (DHPP)'},
-    {dias:60,tipo:'desparasitante',titulo:'4ª desparasitación interna'},
-    {dias:77,tipo:'vacuna',titulo:'2ª dosis vacuna múltiple (DHPP)'},
-    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (mensual hasta los 6 meses)'},
-    {dias:98,tipo:'vacuna',titulo:'3ª dosis vacuna múltiple + Rabia'},
-    {dias:120,tipo:'desparasitante',titulo:'Desparasitación mensual'},
-    {dias:150,tipo:'desparasitante',titulo:'Desparasitación mensual'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación mensual (última del esquema cachorro)'},
-    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual vacuna múltiple + Rabia'},
-    {dias:365,tipo:'desparasitante',titulo:'Desparasitación (a partir de aquí, cada 3 meses de por vida)'}
+    {dias:42,tipo:'vacuna',titulo:'Inicio orientativo de vacuna múltiple (6 semanas)'},
+    {dias:70,tipo:'vacuna',titulo:'Siguiente dosis de vacuna múltiple (10 semanas)'},
+    {dias:84,tipo:'revision',titulo:'Revisar vacuna antirrábica según normativa y producto'},
+    {dias:98,tipo:'vacuna',titulo:'Siguiente dosis de vacuna múltiple (14 semanas)'},
+    {dias:112,tipo:'vacuna',titulo:'Dosis de vacuna múltiple a las 16 semanas o después'},
+    {dias:477,tipo:'revision',titulo:'Refuerzo dentro del año posterior a la serie inicial'}
   ],
   felino:[
-    {dias:15,tipo:'desparasitante',titulo:'1ª desparasitación interna'},
-    {dias:30,tipo:'desparasitante',titulo:'2ª desparasitación interna'},
-    {dias:45,tipo:'desparasitante',titulo:'3ª desparasitación interna'},
-    {dias:56,tipo:'vacuna',titulo:'1ª dosis triple felina'},
-    {dias:60,tipo:'desparasitante',titulo:'4ª desparasitación interna'},
-    {dias:84,tipo:'vacuna',titulo:'2ª dosis triple felina'},
-    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (mensual hasta los 6 meses)'},
-    {dias:112,tipo:'vacuna',titulo:'3ª dosis triple felina + Rabia'},
-    {dias:120,tipo:'desparasitante',titulo:'Desparasitación mensual'},
-    {dias:150,tipo:'desparasitante',titulo:'Desparasitación mensual'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación mensual (última del esquema cachorro)'},
-    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual triple felina + Rabia'},
-    {dias:365,tipo:'desparasitante',titulo:'Desparasitación (a partir de aquí, cada 3 meses de por vida)'}
+    {dias:56,tipo:'vacuna',titulo:'Inicio orientativo de FVRCP y FeLV (8 semanas)'},
+    {dias:84,tipo:'vacuna',titulo:'Segunda dosis FVRCP y FeLV (12 semanas)'},
+    {dias:84,tipo:'revision',titulo:'Revisar vacuna antirrábica según normativa y producto'},
+    {dias:112,tipo:'vacuna',titulo:'Dosis FVRCP a las 16 semanas o después'},
+    {dias:477,tipo:'revision',titulo:'Refuerzo dentro del año posterior a la serie inicial'}
   ],
   equino:[
-    {dias:60,tipo:'desparasitante',titulo:'1ª desparasitación'},
-    {dias:120,tipo:'vacuna',titulo:'1ª dosis Influenza/Tétanos'},
-    {dias:150,tipo:'vacuna',titulo:'2ª dosis Influenza/Tétanos (refuerzo)'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'},
-    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual Influenza/Tétanos/Encefalomielitis'}
+    {dias:1,tipo:'revision',titulo:'Definir protocolo individual con el MVZ según región, riesgo, edad materna y producto'}
   ],
   bovino:[
-    {dias:60,tipo:'desparasitante',titulo:'Desparasitación al destete'},
-    {dias:75,tipo:'vacuna',titulo:'1ª dosis Clostridiales'},
-    {dias:105,tipo:'vacuna',titulo:'2ª dosis Clostridiales (refuerzo)'},
-    {dias:150,tipo:'desparasitante',titulo:'Desparasitación (cada 3-4 meses)'},
-    {dias:240,tipo:'vacuna',titulo:'Vacunación Brucelosis (hembras, 3-8 meses)'},
-    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual del esquema'}
+    {dias:1,tipo:'revision',titulo:'Definir protocolo de hato conforme a campaña zoosanitaria, región y producto autorizado'}
   ],
   porcino:[
-    {dias:21,tipo:'vacuna',titulo:'1ª dosis Circovirus/Mycoplasma'},
-    {dias:42,tipo:'vacuna',titulo:'2ª dosis Circovirus/Mycoplasma (refuerzo)'},
-    {dias:70,tipo:'desparasitante',titulo:'1ª desparasitación'},
-    {dias:119,tipo:'desparasitante',titulo:'2ª desparasitación'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'}
+    {dias:1,tipo:'revision',titulo:'Definir programa por granja, estatus sanitario, flujo de producción y ficha técnica'}
   ],
   ovicap:[
-    {dias:60,tipo:'desparasitante',titulo:'1ª desparasitación'},
-    {dias:75,tipo:'vacuna',titulo:'1ª dosis Clostridiales'},
-    {dias:105,tipo:'vacuna',titulo:'2ª dosis Clostridiales (refuerzo)'},
-    {dias:150,tipo:'desparasitante',titulo:'Desparasitación (cada 2-3 meses)'},
-    {dias:365,tipo:'vacuna',titulo:'Refuerzo anual del esquema'}
+    {dias:1,tipo:'revision',titulo:'Definir protocolo del rebaño según región, riesgo, reproducción y producto autorizado'}
   ],
   aves:[
-    {dias:1,tipo:'vacuna',titulo:'Vacunación Marek (día 1, si aplica)'},
-    {dias:14,tipo:'vacuna',titulo:'Vacunación Newcastle/Bronquitis (según programa de granja)'},
-    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'}
+    {dias:1,tipo:'revision',titulo:'Definir programa por especie, propósito, inmunidad materna, granja y regulación sanitaria'}
   ],
   conejo:[
-    {dias:56,tipo:'vacuna',titulo:'1ª dosis Mixomatosis / Enf. Hemorrágica'},
-    {dias:90,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'},
-    {dias:180,tipo:'vacuna',titulo:'Refuerzo semestral Mixomatosis / Enf. Hemorrágica'},
-    {dias:180,tipo:'desparasitante',titulo:'Desparasitación (cada 3 meses)'}
+    {dias:1,tipo:'revision',titulo:'Confirmar disponibilidad legal, riesgo regional y ficha técnica de vacunas para conejo'}
   ]
 };
 
@@ -3275,23 +3474,28 @@ function generarCalendario(){
     resEl.innerHTML='<span style="color:#dc2626">Selecciona la fecha de nacimiento del paciente.</span>';
     return;
   }
-  var nacimiento=new Date(fechaInput+'T00:00:00');
+  var parts=fechaInput.split('-').map(Number);
+  var nacimiento=new Date(parts[0],parts[1]-1,parts[2],12,0,0);
+  if(parts.length!==3||Number.isNaN(nacimiento.getTime())){
+    calcError(resEl,'La fecha de nacimiento no es válida.');
+    return;
+  }
   var hoy=new Date();
   var esquema=ESQUEMAS_CALENDARIO[especie]||[];
   var opciones={day:'numeric',month:'short',year:'numeric'};
   var html='<div class="cal-timeline">';
   esquema.forEach(function(ev){
-    var fecha=new Date(nacimiento.getTime()+ev.dias*24*60*60*1000);
+    var fecha=addCalendarDays(nacimiento,ev.dias);
     var futuro=fecha>=hoy;
-    var tipoLabel=ev.tipo==='vacuna'?'Vacuna':'Desparasitante';
-    var tipoClase=ev.tipo==='vacuna'?'cal-item__tipo--vacuna':'cal-item__tipo--desparasitante';
+    var tipoLabel=ev.tipo==='vacuna'?'Vacuna':ev.tipo==='desparasitante'?'Antiparasitario':'Revisión clínica';
+    var tipoClase=ev.tipo==='vacuna'?'cal-item__tipo--vacuna':ev.tipo==='desparasitante'?'cal-item__tipo--desparasitante':'cal-item__tipo--revision';
     html+='<div class="cal-item'+(futuro?' futuro':'')+'"><div class="cal-item__card">'
       +'<div class="cal-item__fecha">'+fecha.toLocaleDateString('es-MX',opciones)+(futuro?' · Próximo':' · Ya pasó')+'</div>'
       +'<div class="cal-item__titulo">'+ev.titulo+'</div>'
       +'<span class="cal-item__tipo '+tipoClase+'">'+tipoLabel+'</span>'
       +'</div></div>';
   });
-  html+='</div>';
+  html+='</div><div class="tool-source">Calendario orientativo, no prescripción automática. Ajusta por antecedentes, riesgo, producto, normativa y examen clínico. Fuentes para perros y gatos: <a href="https://www.aaha.org/resources/2022-aaha-canine-vaccination-guidelines/" target="_blank" rel="noopener noreferrer">AAHA</a>, <a href="https://catvets.com/resource/aaha-aafp-feline-vaccination-guidelines/" target="_blank" rel="noopener noreferrer">AAFP</a> y <a href="https://wsava.org/Global-Guidelines/Vaccination-Guidelines/" target="_blank" rel="noopener noreferrer">WSAVA 2024</a>. Revisión: julio de 2026.</div>';
   resEl.style.display='block';
   resEl.innerHTML=html;
 }
@@ -5777,6 +5981,7 @@ window.addEventListener('beforeinstallprompt',function(){setTimeout(renderPwaSet
 
 // Render inicial cuando ya cargó todo
 setTimeout(renderPwaSettings,1500);
+
 </script>
 </body>
 </html>
