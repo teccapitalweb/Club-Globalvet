@@ -1,7 +1,7 @@
 // GlobalVet México — Service Worker
 // Cache offline básico de la shell de la app
 
-const CACHE_NAME = 'globalvet-v26';
+const CACHE_NAME = 'globalvet-v27';
 const PRECACHE_URLS = [
   './',
   './index.html',
