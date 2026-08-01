@@ -1,7 +1,7 @@
 {
   "libraryId": 717931,
   "cdnHostname": "vz-7513f06b-a7e.b-cdn.net",
-  "updatedAt": "2026-07-31",
+  "updatedAt": "2026-08-01",
   "activeMappings": [
     {"courseId":"I88BogsuOgLvqGpU2j21","course":"Necropsia Avícola: Aprende a Prevenir Pérdidas en tu Granja","class":1,"driveFileId":"1vblEraauCIVFibcrHq6BaFG1I7D2ObO1","bunnyVideoId":"fdefdd54-7cc3-4294-9cb0-b0dec5c85836"},
     {"courseId":"I88BogsuOgLvqGpU2j21","course":"Necropsia Avícola: Aprende a Prevenir Pérdidas en tu Granja","class":2,"driveFileId":"14HIgnrBwvWe46w_yqO6plo_-6GE7zxSU","bunnyVideoId":"21a314f1-02fd-4333-a852-f1e8f3806ffd"},
@@ -29,7 +29,17 @@
     {"courseId":"SyBpuneaSQdbWZnUlCgE","course":"Clínica de Reptiles: Diagnóstico y Tratamiento","class":5,"driveFileId":"1uuIr51-npfrgEPvYNS5yFexKbXGKw5iC","bunnyVideoId":"698b7d80-70f7-4b2b-b4f9-f6e7397078c8"},
     {"courseId":"211UM3lTKPNiRwaSzdN3","course":"Urgencias y Medicina Crítica en Perros y Gatos","class":1,"driveFileId":"15Mr6Eh2u0p0uzE8mOjA5sUIBiqNkp67D","bunnyVideoId":"fb1597e5-b330-465c-b5a7-8c0a90a43ad9"},
     {"courseId":"211UM3lTKPNiRwaSzdN3","course":"Urgencias y Medicina Crítica en Perros y Gatos","class":2,"driveFileId":"1YrYE595T6B7gMVDwiQtqXvKy2ghKCtov","bunnyVideoId":"c202b795-9ef1-4d21-8d4f-4a72c2b94de8","note":"La grabación reúne las clases 2 y 3"},
-    {"courseId":"211UM3lTKPNiRwaSzdN3","course":"Urgencias y Medicina Crítica en Perros y Gatos","class":3,"driveFileId":"1lhEK9rCpro6FSRBQknKBr1YzgjK20jcj","bunnyVideoId":"2c89cfa4-9541-432f-97bc-ff2ea4e38361","note":"La grabación reúne las clases 4 y 5"}
+    {"courseId":"211UM3lTKPNiRwaSzdN3","course":"Urgencias y Medicina Crítica en Perros y Gatos","class":3,"driveFileId":"1lhEK9rCpro6FSRBQknKBr1YzgjK20jcj","bunnyVideoId":"2c89cfa4-9541-432f-97bc-ff2ea4e38361","note":"La grabación reúne las clases 4 y 5"},
+    {"courseId":"ssF2WNUrL3ByBxYyB5p3","course":"Clínica Básica de Aves de Compañía","class":1,"driveFileId":"1JsyWlYN8rvR74Kvg8McJXwcnbQQfe6IX","bunnyVideoId":"1f22ef67-428e-4e1c-8e29-38244892497b"},
+    {"courseId":"ssF2WNUrL3ByBxYyB5p3","course":"Clínica Básica de Aves de Compañía","class":2,"driveFileId":"1qUkYZtksieCoZy_xCOpn59Ch0egDtZZY","bunnyVideoId":"fd48b90a-cf96-481a-aaf5-2078e2e821a1"},
+    {"courseId":"ssF2WNUrL3ByBxYyB5p3","course":"Clínica Básica de Aves de Compañía","class":3,"driveFileId":"1WKSJADvKrvgjDZJdMNhjllExaCh5kh_o","bunnyVideoId":"e55012c8-e42a-4c38-b6f9-07ee9f3faf6f"},
+    {"courseId":"ssF2WNUrL3ByBxYyB5p3","course":"Clínica Básica de Aves de Compañía","class":4,"driveFileId":"1P35JwOxfMrEs-wJkZu-gPWLz8j9eg_AW","bunnyVideoId":"22f5dd4e-8e7f-4129-b86c-8207ae3940c0"},
+    {"courseId":"ssF2WNUrL3ByBxYyB5p3","course":"Clínica Básica de Aves de Compañía","class":5,"driveFileId":"1bl2O451wHP3HahHGw9wTiS0bXZkqGUwN","bunnyVideoId":"cd472636-c1af-40f3-9088-833e9f51dfc7"},
+    {"courseId":"U1G9v03hHqplJArmU8bK","course":"Inocuidad y Calidad Alimentaria","class":1,"driveFileId":"11EQ0g9m-3bC5NqYzx3HEr2nMsw9C3HtP","bunnyVideoId":"1309500d-517e-4799-840d-1e8715a50710"},
+    {"courseId":"U1G9v03hHqplJArmU8bK","course":"Inocuidad y Calidad Alimentaria","class":2,"driveFileId":"1uJdcFFl767LGq2Bn5tEdkOeS_xC4tePt","bunnyVideoId":"04702b99-20fb-4a53-9d95-49564082015c"},
+    {"courseId":"U1G9v03hHqplJArmU8bK","course":"Inocuidad y Calidad Alimentaria","class":3,"driveFileId":"1nzExoVF4YvgOAaqW1iGukG2aS48SH7Zl","bunnyVideoId":"09a09318-c0f8-4a7e-98ff-677c104e454e"},
+    {"courseId":"U1G9v03hHqplJArmU8bK","course":"Inocuidad y Calidad Alimentaria","class":4,"driveFileId":"1taesNBLWIkV_I4KbSLvOSTqEcwJr-OLD","bunnyVideoId":"09b4440e-20b7-48ed-ba28-16926996b8b9"},
+    {"courseId":"U1G9v03hHqplJArmU8bK","course":"Inocuidad y Calidad Alimentaria","class":5,"driveFileId":"11w4vxHmg9QPPc6OMvglLYhh8eQ-qLmwh","bunnyVideoId":"b7449ae5-1840-41c6-a75b-ce26d22e4a90"}
   ],
   "hiddenCourseMappings": [
     {"courseId":"Gdv5cRPu2aZUypoUmE4C","course":"Implementación de POES y HACCP en Establecimientos","class":1,"driveFileId":"1_8Me4NeEisroXmqDjqGSxobWK034kBYD","bunnyVideoId":"54f31e55-fb4d-4aa3-a241-b65beac2c777","reason":"Curso ocultado del catálogo el 2026-07-31"},
