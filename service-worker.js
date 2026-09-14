@@ -1,10 +1,12 @@
 // GlobalVet México — Service Worker
 // Cache offline básico de la shell de la app
 
-const CACHE_NAME = 'globalvet-v33';
+const CACHE_NAME = 'globalvet-v34-course-tour';
 const PRECACHE_URLS = [
   './',
   './index.html',
+  './membership-tour.js?v=20260914',
+  './membership-tour.css?v=20260914',
   './manifest.json?v=globalvet-white-2',
   './globalvet-favicon-white.png',
   './globalvet-apple-touch-white.png',
